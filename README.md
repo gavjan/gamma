@@ -38,7 +38,9 @@ template/part1. Lista poprawek:
 ## Wymagamy
 
 Jako rozwiązanie części 1 zadania wymagamy:
+
 • stworzenia pliku `src/gamma.c` z implementacją modułu,
+
 • uzupełnienia dokumentacji w formacie doxygen tak, aby była przydatna dla programistów rozwijających moduł.
 
 Powinna być możliwość skompilowania rozwiązania w dwóch wersjach: release i debug. Wersję release

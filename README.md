@@ -25,9 +25,13 @@ Kolejne części zadania będą polegały na rozbudowywaniu tego silnika i dodan
 ## Dostarczamy
 
 • `src/gamma.h` – deklaracja interfejsu modułu wraz z jego dokumentacją w formacie doxygen,
+
 • `src/gamma_test.c` – przykład użycia modułu,
+
 • `CMakeLists.txt` – plik konfiguracyjny programu cmake,
+
 • `Doxyfile.in` – plik konfiguracyjny programu doxygen,
+
 • `MainPage.dox` – strona główna dokumentacji w formacie doxygen.
 
 Zastrzegamy sobie możliwość nanoszenia poprawek do tego szablonu. Będziemy je umieszczać w gałęzi

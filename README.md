@@ -24,28 +24,22 @@ Kolejne części zadania będą polegały na rozbudowywaniu tego silnika i dodan
 
 ## Dostarczamy
 
-• `src/gamma.h` – deklaracja interfejsu modułu wraz z jego dokumentacją w formacie doxygen,
-
-• `src/gamma_test.c` – przykład użycia modułu,
-
-• `CMakeLists.txt` – plik konfiguracyjny programu cmake,
-
-• `Doxyfile.in` – plik konfiguracyjny programu doxygen,
-
-• `MainPage.dox` – strona główna dokumentacji w formacie doxygen.
+- `src/gamma.h` – deklaracja interfejsu modułu wraz z jego dokumentacją w formacie doxygen,
+- `src/gamma_test.c` – przykład użycia modułu,
+- `CMakeLists.txt` – plik konfiguracyjny programu cmake,
+- `Doxyfile.in` – plik konfiguracyjny programu doxygen,
+- `MainPage.dox` – strona główna dokumentacji w formacie doxygen.
 
 Zastrzegamy sobie możliwość nanoszenia poprawek do tego szablonu. Będziemy je umieszczać w gałęzi
 template/part1. Lista poprawek:
-
-• na razie nie ma żadnych poprawek.
+- na razie nie ma żadnych poprawek.
 
 ## Wymagamy
 
 Jako rozwiązanie części 1 zadania wymagamy:
 
-• stworzenia pliku `src/gamma.c` z implementacją modułu,
-
-• uzupełnienia dokumentacji w formacie doxygen tak, aby była przydatna dla programistów rozwijających moduł.
+- stworzenia pliku `src/gamma.c` z implementacją modułu,
+- uzupełnienia dokumentacji w formacie doxygen tak, aby była przydatna dla programistów rozwijających moduł.
 
 Powinna być możliwość skompilowania rozwiązania w dwóch wersjach: release i debug. Wersję release
 kompiluje się za pomocą sekwencji poleceń:

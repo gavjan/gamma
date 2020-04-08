@@ -15,7 +15,13 @@
 /**
  * Struktura przechowująca stan gry.
  */
-typedef struct gamma gamma_t;
+typedef struct gamma {
+		uint32_t** arr;
+		uint32_t width;
+		uint32_t height;
+		uint32_t max_players;
+		uint32_t max_areas;
+} gamma_t;
 
 /** @brief Tworzy strukturę przechowującą stan gry.
  * Alokuje pamięć na nową strukturę przechowującą stan gry.

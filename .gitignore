@@ -4,6 +4,8 @@ cmake-build-debug/*
 cmake-build-release/*
 
 # Project specific
-forests
+release
+debug
+gamma
 *.o
 test_diff.sh

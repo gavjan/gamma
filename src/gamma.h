@@ -11,16 +11,18 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include "ufind.h"
 
 /**
  * Struktura przechowująca stan gry.
  */
 typedef struct gamma {
-		uint32_t** arr;
+		unode_t*** arr;
 		uint32_t width;
 		uint32_t height;
 		uint32_t max_players;
 		uint32_t max_areas;
+		uint64_t* player_area_count;
 } gamma_t;
 
 /** @brief Tworzy strukturę przechowującą stan gry.

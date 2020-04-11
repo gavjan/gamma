@@ -25,6 +25,7 @@ set(SOURCE_FILES
         src/gamma.h
         src/gamma_test.c src/ufind.c src/ufind.h)
 
+
 # Wskazujemy plik wykonywalny.
 add_executable(gamma ${SOURCE_FILES})
 

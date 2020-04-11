@@ -12,7 +12,10 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include "ufind.h"
-
+#define UP 0
+#define DOWN 1
+#define LEFT 2
+#define RIGHT 3
 /**
  * Struktura przechowująca stan gry.
  */
@@ -22,7 +25,10 @@ typedef struct gamma {
 		uint32_t height;
 		uint32_t max_players;
 		uint32_t max_areas;
-		uint64_t* player_area_count;
+		uint64_t free_fields;					///< counter for free fields
+		uint64_t* player_area_count;	///< array of counters for taken areas.
+		uint64_t* player_free_count;	///< array of counters for free adjacent fields.
+		uint64_t* player_field_count;	///< array of counters for taken fields.
 } gamma_t;
 
 /** @brief Tworzy strukturę przechowującą stan gry.

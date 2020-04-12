@@ -65,7 +65,7 @@ void add_if_missing(uint32_t player, uint32_t* change) {
 		}
 	}
 }
-void add_and_decrease_distinct(gamma_t* g, unode_t* master, unode_t** still_connected, int* adder) {
+void add_and_decrease_distinct(unode_t* master, unode_t** still_connected, int* adder) {
 	for(int i=0; i<4; i++) {
 		if(still_connected[i]==master)
 			return;
@@ -128,7 +128,7 @@ bool remove_field(gamma_t* g,uint32_t x, uint32_t y) {
 			del=g->arr[x][y+1];
 			g->arr[x][y+1]=master;
 			free(del);
-			add_and_decrease_distinct(g,ufind(master), still_connected, &adder);
+			add_and_decrease_distinct(ufind(master), still_connected, &adder);
 		}
 		if(adjacent_down(g, player, x, y)) {
 			master=new_unode(g->arr[x][y-1]->player);
@@ -136,7 +136,7 @@ bool remove_field(gamma_t* g,uint32_t x, uint32_t y) {
 			del=g->arr[x][y-1];
 			g->arr[x][y-1]=master;
 			free(del);
-			add_and_decrease_distinct(g,ufind(master), still_connected, &adder);
+			add_and_decrease_distinct(ufind(master), still_connected, &adder);
 		}
 		if(adjacent_left(g, player, x, y)) {
 			master=new_unode(g->arr[x-1][y]->player);
@@ -144,7 +144,7 @@ bool remove_field(gamma_t* g,uint32_t x, uint32_t y) {
 			del=g->arr[x-1][y];
 			g->arr[x-1][y]=master;
 			free(del);
-			add_and_decrease_distinct(g,ufind(master), still_connected, &adder);
+			add_and_decrease_distinct(ufind(master), still_connected, &adder);
 		}
 		if(adjacent_right(g, player, x, y)) {
 			master=new_unode(g->arr[x+1][y]->player);
@@ -152,7 +152,7 @@ bool remove_field(gamma_t* g,uint32_t x, uint32_t y) {
 			del=g->arr[x+1][y];
 			g->arr[x+1][y]=master;
 			free(del);
-			add_and_decrease_distinct(g,ufind(master), still_connected, &adder);
+			add_and_decrease_distinct(ufind(master), still_connected, &adder);
 		}
 		increase_adjacents(g,x,y);
 		assert(adder!=-1);

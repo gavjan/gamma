@@ -27,8 +27,10 @@ typedef struct gamma {
 		uint32_t max_areas;
 		uint64_t free_fields;					///< counter for free fields
 		uint64_t* player_area_count;	///< array of counters for taken areas.
-		uint64_t* player_free_count;	///< array of counters for free adjacent fields.
-		uint64_t* player_field_count;	///< array of counters for taken fields.
+		uint64_t* player_free_fields;	///< array of counters for free adjacent fields.
+		uint64_t* player_busy_fields;	///< array of counters for taken fields.
+		bool del_error_flag;
+		bool* did_golden_move;
 } gamma_t;
 
 /** @brief Tworzy strukturę przechowującą stan gry.

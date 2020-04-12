@@ -7,7 +7,7 @@
 typedef struct unode_t {
 		struct unode_t* parent;
 		uint32_t player;
-		int depth;
+		uint16_t depth;
 } unode_t;
 
 // Linked List with uNodes

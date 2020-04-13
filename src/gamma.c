@@ -217,6 +217,10 @@ gamma_t* gamma_new(uint32_t width, uint32_t height, uint32_t players, uint32_t a
 void gamma_delete(gamma_t* g) {
 	if(g==NULL) return;
 	for(uint32_t i=0; i<g->width; i++)
+		for(uint32_t j=0; j<g->height; j++)
+			if(g->arr[i][j]!=NULL)
+				free(g->arr[i][j]);
+	for(uint32_t i=0; i<g->width; i++)
 		free(g->arr[i]);
 	free(g->player_area_count);
 	free(g->player_busy_fields);
@@ -305,9 +309,9 @@ char* gamma_board(gamma_t* g) {
 	uint32_t i, j;
 	for(i = 0; i <  height; i++)
 		for (j = 0; j < width; j++)
-			*(board + i*(width+1) + j) = arr[height-i][j]!= NULL ? '0' + arr[height-i][j]->player : '.';
+			*(board + i*(width+1) + j) = arr[j][height-1-i]!= NULL ? '0' + arr[j][height-1-i]->player : '.';
 	for(i = 0; i <  height; i++)
 		*(board + i*(width+1) + width)='\n';
 	*(board + (height-1)*(width+1) + width + 1)='\0';
-	return NULL;
+	return board;
 }

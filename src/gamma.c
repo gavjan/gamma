@@ -279,5 +279,16 @@ bool gamma_golden_possible(gamma_t* g, uint32_t player) {
 }
 char* gamma_board(gamma_t* g) {
 	// TODO: Check Given Data
+	uint32_t height=g->height;
+	uint32_t width=g->width;
+	char* board = malloc((1+height*(width+1)) * sizeof(char));
+	unode_t*** arr=g->arr;
+	uint32_t i, j;
+	for(i = 0; i <  height; i++)
+		for (j = 0; j < width; j++)
+			*(board + i*(width+1) + j) = arr[height-i][j]!= NULL ? '0' + arr[height-i][j]->player : '.';
+	for(i = 0; i <  height; i++)
+		*(board + i*(width+1) + width)='\n';
+	*(board + (height-1)*(width+1) + width + 1)='\0';
 	return NULL;
 }

@@ -169,7 +169,7 @@ bool remove_field(gamma_t* g,uint32_t x, uint32_t y) {
 	return true;
 }
 gamma_t* gamma_new(uint32_t width, uint32_t height, uint32_t players, uint32_t areas) {
-	// TODO: Check Given Data
+	if(width==0 || height==0 || players==0 || areas==0) return NULL;
 	gamma_t* g;
 	uint64_t i;
 	g=malloc(sizeof(struct gamma));
@@ -199,7 +199,7 @@ gamma_t* gamma_new(uint32_t width, uint32_t height, uint32_t players, uint32_t a
 	return g;
 }
 void gamma_delete(gamma_t* g) {
-	// TODO: Check Given Data
+	if(g==NULL) return;
 	for(uint32_t i=0; i<g->width; i++)
 		free(g->arr[i]);
 	free(g->player_area_count);
@@ -210,7 +210,7 @@ void gamma_delete(gamma_t* g) {
 	free(g);
 }
 bool gamma_move(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
-	// TODO: Check Given Data: x<width, y<height, player<=players
+	if(g==NULL || x>=g->width || y>=g->height || player>g->max_players) return false;
 	bool has_adjacent_friends=has_friends(g, player, x, y);
 	if(g->arr[x][y]!=NULL) return false;
 	if(g->player_area_count[player]>=g->max_areas && !has_adjacent_friends && !g->del_error_flag)
@@ -250,7 +250,7 @@ bool gamma_move(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	return true;
 }
 bool gamma_golden_move(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
-	// TODO: Check Given Data
+	if(g==NULL || x>=g->width || y>=g->height || player>g->max_players) return false;
 	if(g->player_area_count[player]>=g->max_areas && !has_friends(g,player,x,y)) return false;
 	if(remove_field(g,x,y)) return false;
 	gamma_move(g,player,x,y);
@@ -258,18 +258,18 @@ bool gamma_golden_move(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	return true;
 }
 uint64_t gamma_busy_fields(gamma_t* g, uint32_t player) {
-	// TODO: Check Given Data
+	if(g==NULL || player>g->max_players) return false;
 	return g->player_busy_fields[player];
 }
 uint64_t gamma_free_fields(gamma_t* g, uint32_t player) {
-	// TODO: Check Given Data
+	if(g==NULL || player>g->max_players) return false;
 	assert(g->player_area_count[player]<g->max_areas);
 	if(g->player_area_count[player]==g->max_areas)
 		return g->player_free_fields[player];
 	return g->free_fields;
 }
 bool gamma_golden_possible(gamma_t* g, uint32_t player) {
-	// TODO: Check Given Data
+	if(g==NULL || player>g->max_players) return false;
 	if(g->did_golden_move[player]) return false;
 	uint32_t i;
 	for(i=1; i<g->max_players;i++)
@@ -278,7 +278,7 @@ bool gamma_golden_possible(gamma_t* g, uint32_t player) {
 	return false;
 }
 char* gamma_board(gamma_t* g) {
-	// TODO: Check Given Data
+	if(g==NULL) return false;
 	uint32_t height=g->height;
 	uint32_t width=g->width;
 	char* board = malloc((1+height*(width+1)) * sizeof(char));

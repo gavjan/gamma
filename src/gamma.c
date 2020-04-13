@@ -89,9 +89,16 @@ void decrease_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
 
 	for(int i=0; i<4; i++)
 		if(change[i]!=0) {
-			assert(g->player_free_fields[i]);
-			g->player_free_fields[i]--;
+			assert(g->player_free_fields[change[i]]);
+			g->player_free_fields[change[i]]--;
 		}
+}
+void decrease_player_free_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
+	uint32_t player=g->arr[x][y]->player;
+	if(free_adjacent_up(g, x, y)) g->player_free_fields[player]--;
+	if(free_adjacent_down(g, x, y)) g->player_free_fields[player]--;
+	if(free_adjacent_left(g, x, y)) g->player_free_fields[player]--;
+	if(free_adjacent_right(g, x, y)) g->player_free_fields[player]--;
 }
 void increase_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
 	uint32_t change[4]={0, 0, 0, 0};
@@ -100,7 +107,7 @@ void increase_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
 
 	for(int i=0; i<4; i++)
 		if(change[i]!=0)
-			g->player_free_fields[i]++;
+			g->player_free_fields[change[i]]++;
 }
 void reindex(gamma_t* g,uint32_t player,uint32_t x, uint32_t y, unode_t* master, char from) {
 	g->arr[x][y]->depth=1;
@@ -116,9 +123,15 @@ bool remove_field(gamma_t* g,uint32_t x, uint32_t y) {
 	unode_t* still_connected[4]={NULL,NULL,NULL,NULL};
 	int adder=-1;
 
+	decrease_player_free_adjacents(g,x,y);
+	increase_adjacents(g,x,y);
 	if(!has_friends(g,player,x,y)) {
 		free(g->arr[x][y]);
 		g->arr[x][y]=NULL;
+		g->free_fields++;
+		assert(g->player_busy_fields);
+		g->player_busy_fields[player]--;
+		g->player_area_count[player]--;
 		return true;
 	}
 	else {
@@ -154,17 +167,20 @@ bool remove_field(gamma_t* g,uint32_t x, uint32_t y) {
 			free(del);
 			add_and_decrease_distinct(ufind(master), still_connected, &adder);
 		}
-		increase_adjacents(g,x,y);
 		assert(adder!=-1);
 		free(g->arr[x][y]);
 		g->arr[x][y]=NULL;
-		if(g->max_players-g->player_area_count[player]<(unsigned)adder) {
+		g->free_fields++;
+		assert(g->player_busy_fields);
+		g->player_busy_fields[player]--;
+		if(g->max_areas-g->player_area_count[player] < (uint64_t)adder) {
+			g->player_area_count[player]+=adder;
 			g->del_error_flag=true;
 			gamma_move(g,player,x,y);
 			g->del_error_flag=false;
 			return false;
 		}
-		g->player_area_count[player]+=adder;
+		else g->player_area_count[player]+=adder;
 	}
 	return true;
 }
@@ -188,7 +204,7 @@ gamma_t* gamma_new(uint32_t width, uint32_t height, uint32_t players, uint32_t a
 		g->arr[i]=malloc(g->height*sizeof(unode_t*));
 
 	for(i=0; i<g->width; i++)
-		for(uint32_t j=0; j<g->height; i++)
+		for(uint32_t j=0; j<g->height; j++)
 			g->arr[i][j]=NULL;
 	for(i=0; i<=g->max_players; i++) {
 		g->player_area_count[i]=0;
@@ -247,23 +263,26 @@ bool gamma_move(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 		ujoin(g->arr[x][y], horizontal);
 	}
 	g->player_busy_fields[player]++;
+	g->free_fields--;
 	return true;
 }
 bool gamma_golden_move(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	if(g==NULL || x>=g->width || y>=g->height || player>g->max_players) return false;
+	if(g->arr[x][y]->player==player) return false;
 	if(g->player_area_count[player]>=g->max_areas && !has_friends(g,player,x,y)) return false;
-	if(remove_field(g,x,y)) return false;
+	if(!remove_field(g,x,y)) return false;
 	gamma_move(g,player,x,y);
 	g->did_golden_move[player]=true;
 	return true;
 }
 uint64_t gamma_busy_fields(gamma_t* g, uint32_t player) {
 	if(g==NULL || player>g->max_players) return false;
+	uint64_t tmp=g->player_busy_fields[player];
 	return g->player_busy_fields[player];
 }
 uint64_t gamma_free_fields(gamma_t* g, uint32_t player) {
 	if(g==NULL || player>g->max_players) return false;
-	assert(g->player_area_count[player]<g->max_areas);
+	assert(g->player_area_count[player]<=g->max_areas);
 	if(g->player_area_count[player]==g->max_areas)
 		return g->player_free_fields[player];
 	return g->free_fields;

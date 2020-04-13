@@ -254,7 +254,8 @@ bool gamma_golden_move(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	if(g->player_area_count[player]>=g->max_areas && !has_friends(g,player,x,y)) return false;
 	if(remove_field(g,x,y)) return false;
 	gamma_move(g,player,x,y);
-	return NULL;
+	g->did_golden_move[player]=true;
+	return true;
 }
 uint64_t gamma_busy_fields(gamma_t* g, uint32_t player) {
 	// TODO: Check Given Data

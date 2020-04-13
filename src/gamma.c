@@ -1,51 +1,51 @@
 #include "gamma.h"
 #include <stdlib.h>
 #include <assert.h>
-inline bool adjacent_up(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
+static inline bool adjacent_up(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	return (y+1<g->height && g->arr[x][y+1]!=NULL && g->arr[x][y+1]->player==player);
 }
-inline bool adjacent_down(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
+static inline bool adjacent_down(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	return (y>0 && g->arr[x][y-1]!=NULL && g->arr[x][y-1]->player==player);
 }
-inline bool adjacent_left(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
+static inline bool adjacent_left(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	return (x>0 && g->arr[x-1][y]!=NULL && g->arr[x-1][y]->player==player);
 }
-inline bool adjacent_right(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
+static inline bool adjacent_right(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	return (x+1<g->width && g->arr[x+1][y]!=NULL && g->arr[x+1][y]->player==player);
 }
-inline bool exists_up(gamma_t* g, uint32_t x, uint32_t y) {
+static inline bool exists_up(gamma_t* g, uint32_t x, uint32_t y) {
 	return (y+1<g->height && g->arr[x][y+1]!=NULL);
 }
-inline bool exists_down(gamma_t* g, uint32_t x, uint32_t y) {
+static inline bool exists_down(gamma_t* g, uint32_t x, uint32_t y) {
 	return (y>0 && g->arr[x][y-1]!=NULL);
 }
-inline bool exists_left(gamma_t* g, uint32_t x, uint32_t y) {
+static inline bool exists_left(gamma_t* g, uint32_t x, uint32_t y) {
 	return (x>0 && g->arr[x-1][y]!=NULL);
 }
-inline bool exists_right(gamma_t* g, uint32_t x, uint32_t y) {
+static inline bool exists_right(gamma_t* g, uint32_t x, uint32_t y) {
 	return (x+1<g->width && g->arr[x+1][y]!=NULL);
 }
-inline bool free_adjacent_up(gamma_t* g, uint32_t x, uint32_t y) {
+static inline bool free_adjacent_up(gamma_t* g, uint32_t x, uint32_t y) {
 	return (y+1<g->height && g->arr[x][y+1]==NULL);
 }
-inline bool free_adjacent_down(gamma_t* g, uint32_t x, uint32_t y) {
+static inline bool free_adjacent_down(gamma_t* g, uint32_t x, uint32_t y) {
 	return (y>0 && g->arr[x][y-1]==NULL);
 }
-inline bool free_adjacent_left(gamma_t* g, uint32_t x, uint32_t y) {
+static inline bool free_adjacent_left(gamma_t* g, uint32_t x, uint32_t y) {
 	return (x>0 && g->arr[x-1][y]==NULL);
 }
-inline bool free_adjacent_right(gamma_t* g, uint32_t x, uint32_t y) {
+static inline bool free_adjacent_right(gamma_t* g, uint32_t x, uint32_t y) {
 	return (x+1<g->width && g->arr[x+1][y]==NULL);
 }
 // Check if field x,y has adjacent fields belonging to player
-inline bool has_friends(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
+static inline bool has_friends(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	return adjacent_up(g, player, x, y) ||
 				 adjacent_down(g, player, x, y) ||
 				 adjacent_left(g, player, x, y) ||
 				 adjacent_right(g, player, x, y);
 }
 // Adds the player counter for fields he can move without increasing his area count
-inline void increase_if_no_friends(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
+static inline void increase_if_no_friends(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	if(!has_friends(g, player, x, y)) g->player_free_fields[player]++;
 }
 // increase_if_no_friends() on for all 4 neighbors
@@ -76,7 +76,7 @@ void add_and_decrease_distinct(unode_t* master, unode_t** still_connected, int* 
 		}
 	}
 }
-inline void add_existing_neighbors(gamma_t* g, uint32_t x, uint32_t y, uint32_t* change) {
+static inline void add_existing_neighbors(gamma_t* g, uint32_t x, uint32_t y, uint32_t* change) {
 	if(exists_up(g, x, y)) add_if_missing(g->arr[x][y+1]->player, change);
 	if(exists_down(g, x, y)) add_if_missing(g->arr[x][y-1]->player, change);
 	if(exists_left(g, x, y)) add_if_missing(g->arr[x-1][y]->player, change);

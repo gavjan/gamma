@@ -13,10 +13,10 @@
  * @brief Structure storing a Union Find node
  */
 typedef struct unode_t {
-		struct unode_t* parent;	///< parent of this node
-		uint32_t player;				///< player to which this node belongs
-		uint16_t depth;					///< depth for current node. 1 on creation
-		bool visited;						///< flag for visiting the current node
+		struct unode_t* parent;  ///< parent of this node
+		uint32_t player;        ///< player to which this node belongs
+		uint16_t depth;          ///< depth for current node. 1 on creation
+		bool visited;            ///< flag for visiting the current node
 } unode_t;
 
 /** @brief Returns a new unode_t

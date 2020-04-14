@@ -9,3 +9,4 @@ debug
 gamma
 *.o
 test_diff.sh
+test

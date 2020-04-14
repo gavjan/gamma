@@ -223,6 +223,7 @@ bool remove_field(gamma_t* g,uint32_t x, uint32_t y) {
 	else {
 		if(adjacent_up(g, player, x, y)) {
 			master=new_unode(g->arr[x][y+1]->player);
+			if(master==NULL) return false;
 			g->arr[x][y+1]->visited=master->visited=true;
 			reindex(g, player, x, y+1, master,DOWN);
 			g->arr[x][y+1]->visited=master->visited=false;
@@ -233,6 +234,7 @@ bool remove_field(gamma_t* g,uint32_t x, uint32_t y) {
 		}
 		if(adjacent_down(g, player, x, y)) {
 			master=new_unode(g->arr[x][y-1]->player);
+			if(master==NULL) return false;
 			g->arr[x][y-1]->visited=master->visited=true;
 			reindex(g, player, x, y-1, master,UP);
 			g->arr[x][y-1]->visited=master->visited=false;
@@ -243,6 +245,7 @@ bool remove_field(gamma_t* g,uint32_t x, uint32_t y) {
 		}
 		if(adjacent_left(g, player, x, y)) {
 			master=new_unode(g->arr[x-1][y]->player);
+			if(master==NULL) return false;
 			g->arr[x-1][y]->visited=master->visited=true;
 			reindex(g, player, x-1, y, master,RIGHT);
 			g->arr[x-1][y]->visited=master->visited=false;
@@ -253,6 +256,7 @@ bool remove_field(gamma_t* g,uint32_t x, uint32_t y) {
 		}
 		if(adjacent_right(g, player, x, y)) {
 			master=new_unode(g->arr[x+1][y]->player);
+			if(master==NULL) return false;
 			g->arr[x+1][y]->visited=master->visited=true;
 			reindex(g, player, x+1, y, master,LEFT);
 			g->arr[x+1][y]->visited=master->visited=false;
@@ -357,9 +361,11 @@ bool gamma_move(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	if(!has_adjacent_friends) {
 		g->player_area_count[player]++;
 		g->arr[x][y]=new_unode(player);
+		if(g->arr[x][y]==NULL) return false;
 	}
 	else {
 		g->arr[x][y]=new_unode(player);
+		if(g->arr[x][y]==NULL) return false;
 		unode_t* up=adjacent_up(g, player, x, y) ? ufind(g->arr[x][y+1]) : NULL;
 		unode_t* down=adjacent_down(g, player, x, y) ? ufind(g->arr[x][y-1]) : NULL;
 		unode_t* left=adjacent_left(g, player, x, y) ? ufind(g->arr[x-1][y]) : NULL;
@@ -423,6 +429,7 @@ char* gamma_board(gamma_t* g) {
 	uint32_t height=g->height;
 	uint32_t width=g->width;
 	char* board = malloc((1+height*(width+1)) * sizeof(char));
+	if(board==NULL) return false;
 	unode_t*** arr=g->arr;
 	uint32_t i, j;
 	for(i = 0; i <  height; i++)

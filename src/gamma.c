@@ -1,6 +1,7 @@
 #include "gamma.h"
 #include <stdlib.h>
 #include <assert.h>
+#include "safe_malloc.h"
 static inline bool adjacent_up(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	return (y+1<g->height && g->arr[x][y+1]!=NULL && g->arr[x][y+1]->player==player);
 }
@@ -126,8 +127,7 @@ bool remove_field(gamma_t* g,uint32_t x, uint32_t y) {
 	decrease_player_free_adjacents(g,x,y);
 	increase_adjacents(g,x,y);
 	if(!has_friends(g,player,x,y)) {
-		free(g->arr[x][y]);
-		g->arr[x][y]=NULL;
+		g->arr[x][y]=safe_free(g->arr[x][y]);
 		g->free_fields++;
 		assert(g->player_busy_fields);
 		g->player_busy_fields[player]--;
@@ -140,7 +140,7 @@ bool remove_field(gamma_t* g,uint32_t x, uint32_t y) {
 			reindex(g, player, x, y+1, master,DOWN);
 			del=g->arr[x][y+1];
 			g->arr[x][y+1]=master;
-			free(del);
+			safe_free(del);
 			add_and_decrease_distinct(ufind(master), still_connected, &adder);
 		}
 		if(adjacent_down(g, player, x, y)) {
@@ -148,7 +148,7 @@ bool remove_field(gamma_t* g,uint32_t x, uint32_t y) {
 			reindex(g, player, x, y-1, master,UP);
 			del=g->arr[x][y-1];
 			g->arr[x][y-1]=master;
-			free(del);
+			safe_free(del);
 			add_and_decrease_distinct(ufind(master), still_connected, &adder);
 		}
 		if(adjacent_left(g, player, x, y)) {
@@ -156,7 +156,7 @@ bool remove_field(gamma_t* g,uint32_t x, uint32_t y) {
 			reindex(g, player, x-1, y, master,RIGHT);
 			del=g->arr[x-1][y];
 			g->arr[x-1][y]=master;
-			free(del);
+			safe_free(del);
 			add_and_decrease_distinct(ufind(master), still_connected, &adder);
 		}
 		if(adjacent_right(g, player, x, y)) {
@@ -164,12 +164,11 @@ bool remove_field(gamma_t* g,uint32_t x, uint32_t y) {
 			reindex(g, player, x+1, y, master,LEFT);
 			del=g->arr[x+1][y];
 			g->arr[x+1][y]=master;
-			free(del);
+			safe_free(del);
 			add_and_decrease_distinct(ufind(master), still_connected, &adder);
 		}
 		assert(adder!=-1);
-		free(g->arr[x][y]);
-		g->arr[x][y]=NULL;
+		g->arr[x][y]=safe_free(g->arr[x][y]);
 		g->free_fields++;
 		assert(g->player_busy_fields);
 		g->player_busy_fields[player]--;
@@ -189,6 +188,7 @@ gamma_t* gamma_new(uint32_t width, uint32_t height, uint32_t players, uint32_t a
 	gamma_t* g;
 	uint64_t i;
 	g=malloc(sizeof(struct gamma));
+	if(g==NULL) return NULL;
 	g->width=width;
 	g->height=height;
 	g->free_fields=width*height;
@@ -196,12 +196,36 @@ gamma_t* gamma_new(uint32_t width, uint32_t height, uint32_t players, uint32_t a
 	g->max_players=players;
 	g->del_error_flag=false;
 	g->arr=malloc(g->width*sizeof(unode_t**));
+	if(g->arr==NULL) return safe_free(g);
+	for(i=0; i<g->width; i++)
+		g->arr[i]=malloc(g->height*sizeof(unode_t*));
+	for(i=0; i<g->width; i++) {
+		if(g->arr[i]==NULL) {
+			for(uint32_t j=0; j<g->width; j++)
+				safe_free(g->arr[i]);
+			safe_free(g->arr);
+			return safe_free(g);
+		}
+	}
+
 	g->did_golden_move=malloc((g->max_players+1)*sizeof(bool));
 	g->player_area_count=malloc((g->max_players+1)*sizeof(uint64_t));
 	g->player_free_fields=malloc((g->max_players+1)*sizeof(uint64_t));
 	g->player_busy_fields=malloc((g->max_players+1)*sizeof(uint64_t));
-	for(i=0; i<g->width; i++)
-		g->arr[i]=malloc(g->height*sizeof(unode_t*));
+	if(
+	g->did_golden_move==NULL ||
+	g->player_area_count==NULL ||
+	g->player_free_fields==NULL ||
+	g->player_busy_fields==NULL) {
+		for(uint32_t j=0; j<g->width; j++)
+			safe_free(g->arr[i]);
+		safe_free(g->arr);
+		safe_free(g->did_golden_move);
+		safe_free(g->player_area_count);
+		safe_free(g->player_free_fields);
+		safe_free(g->player_busy_fields);
+		return safe_free(g);
+	}
 
 	for(i=0; i<g->width; i++)
 		for(uint32_t j=0; j<g->height; j++)
@@ -218,16 +242,15 @@ void gamma_delete(gamma_t* g) {
 	if(g==NULL) return;
 	for(uint32_t i=0; i<g->width; i++)
 		for(uint32_t j=0; j<g->height; j++)
-			if(g->arr[i][j]!=NULL)
-				free(g->arr[i][j]);
+				safe_free(g->arr[i][j]);
 	for(uint32_t i=0; i<g->width; i++)
-		free(g->arr[i]);
-	free(g->player_area_count);
-	free(g->player_busy_fields);
-	free(g->player_free_fields);
-	free(g->did_golden_move);
-	free(g->arr);
-	free(g);
+		safe_free(g->arr[i]);
+	safe_free(g->player_area_count);
+	safe_free(g->player_busy_fields);
+	safe_free(g->player_free_fields);
+	safe_free(g->did_golden_move);
+	safe_free(g->arr);
+	safe_free(g);
 }
 bool gamma_move(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	if(g==NULL || x>=g->width || y>=g->height || player>g->max_players) return false;
@@ -281,7 +304,6 @@ bool gamma_golden_move(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 }
 uint64_t gamma_busy_fields(gamma_t* g, uint32_t player) {
 	if(g==NULL || player>g->max_players) return false;
-	uint64_t tmp=g->player_busy_fields[player];
 	return g->player_busy_fields[player];
 }
 uint64_t gamma_free_fields(gamma_t* g, uint32_t player) {
@@ -309,7 +331,8 @@ char* gamma_board(gamma_t* g) {
 	uint32_t i, j;
 	for(i = 0; i <  height; i++)
 		for (j = 0; j < width; j++)
-			*(board + i*(width+1) + j) = arr[j][height-1-i]!= NULL ? '0' + arr[j][height-1-i]->player : '.';
+			*(board + i*(width+1) + j) = arr[j][height-1-i]!= NULL ?
+							'0' + arr[j][height-1-i]->player : '.';
 	for(i = 0; i <  height; i++)
 		*(board + i*(width+1) + width)='\n';
 	*(board + (height-1)*(width+1) + width + 1)='\0';

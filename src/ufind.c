@@ -2,7 +2,7 @@
 #include <stdlib.h>
 unode_t* new_unode(uint32_t player) {
 	unode_t* p;
-	if((p=(unode_t*)malloc(sizeof(unode_t)))==NULL)
+	if((p=malloc(sizeof(unode_t)))==NULL)
 		return NULL;
 	p->player=player;
 	p->parent=NULL;
@@ -33,34 +33,4 @@ bool ujoin(unode_t* a, unode_t* b) {
 		}
 	}
 	return root_a!=root_b;
-}
-bool free_unode(unode_t* element, ulist_t** l) {
-	if(element==NULL)
-		return true;
-	if(element->depth==1)
-		free(element);
-	else if(!prepend_unode(element, l))
-		return false;
-	return true;
-}
-bool prepend_unode(unode_t* p, ulist_t** head) {
-	ulist_t* new;
-	new=(ulist_t*)malloc(sizeof(ulist_t));
-	if(new==NULL) return false;
-	new->u=p;
-	new->next=*head;
-	*head=new;
-	return true;
-}
-void free_ulist(ulist_t* head) {
-	ulist_t* tmp;
-	unode_t* u;
-	while(head!=NULL) {
-		tmp=head;
-		head=head->next;
-		u=tmp->u;
-		tmp->u=NULL;
-		free(u);
-		free(tmp);
-	}
 }

@@ -132,6 +132,15 @@ void decrease_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
 			g->player_free_fields[change[i]]--;
 		}
 }
+
+bool free_has_friends(gamma_t* g, uint32_t player, uint32_t x, uint32_t y, char from) {
+	if(g->arr[x][y]!=NULL) return true;
+	return
+	(adjacent_up(g, player, x, y) && from!=UP) ||
+	(adjacent_down(g, player, x, y) && from!=DOWN) ||
+	(adjacent_left(g, player, x, y) && from!=LEFT) ||
+	(adjacent_right(g, player, x, y) && from!=RIGHT);
+}
 /** @brief Decrease player's free locations
  * When removing lonesome friends we decrease player's free field locations
  * @param [in, out] g - pointer to the structure that stores the game state,
@@ -142,10 +151,10 @@ void decrease_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
  */
 void decrease_player_free_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
 	uint32_t player=g->arr[x][y]->player;
-	if(free_adjacent_up(g, x, y)) g->player_free_fields[player]--;
-	if(free_adjacent_down(g, x, y)) g->player_free_fields[player]--;
-	if(free_adjacent_left(g, x, y)) g->player_free_fields[player]--;
-	if(free_adjacent_right(g, x, y)) g->player_free_fields[player]--;
+	if(free_adjacent_up(g, x, y) && !free_has_friends(g, player, x, y+1, DOWN)) g->player_free_fields[player]--;
+	if(free_adjacent_down(g, x, y) && !free_has_friends(g, player, x, y-1, UP)) g->player_free_fields[player]--;
+	if(free_adjacent_left(g, x, y) && !free_has_friends(g, player, x-1, y, RIGHT)) g->player_free_fields[player]--;
+	if(free_adjacent_right(g, x, y) && !free_has_friends(g, player, x+1, y, LEFT)) g->player_free_fields[player]--;
 }
 /** @brief Increase player's free locations
  * When moving to a location add neighboring free locations to our count
@@ -338,7 +347,7 @@ void gamma_delete(gamma_t* g) {
 	safe_free(g);
 }
 bool gamma_move(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
-	if(g==NULL || x>=g->width || y>=g->height || player>g->max_players) return false;
+	if(g==NULL || x>=g->width || y>=g->height || player>g->max_players || player==0) return false;
 	bool has_adjacent_friends=has_friends(g, player, x, y);
 	if(g->arr[x][y]!=NULL) return false;
 	if(g->player_area_count[player]>=g->max_areas && !has_adjacent_friends && !g->del_error_flag)
@@ -379,7 +388,7 @@ bool gamma_move(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	return true;
 }
 bool gamma_golden_move(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
-	if(g==NULL || x>=g->width || y>=g->height || player>g->max_players) return false;
+	if(g==NULL || x>=g->width || y>=g->height || player>g->max_players || player==0) return false;
 	if(g->did_golden_move[player]) return false;
 	if(g->arr[x][y]==NULL) return false;
 	if(g->arr[x][y]->player==player) return false;
@@ -390,18 +399,18 @@ bool gamma_golden_move(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	return true;
 }
 uint64_t gamma_busy_fields(gamma_t* g, uint32_t player) {
-	if(g==NULL || player>g->max_players) return false;
+	if(g==NULL || player>g->max_players || player==0) return false;
 	return g->player_busy_fields[player];
 }
 uint64_t gamma_free_fields(gamma_t* g, uint32_t player) {
-	if(g==NULL || player>g->max_players) return false;
+	if(g==NULL || player>g->max_players || player==0) return false;
 	assert(g->player_area_count[player]<=g->max_areas);
 	if(g->player_area_count[player]==g->max_areas)
 		return g->player_free_fields[player];
 	return g->free_fields;
 }
 bool gamma_golden_possible(gamma_t* g, uint32_t player) {
-	if(g==NULL || player>g->max_players) return false;
+	if(g==NULL || player>g->max_players || player==0) return false;
 	if(g->did_golden_move[player]) return false;
 	uint32_t i;
 	for(i=1; i<=g->max_players;i++)

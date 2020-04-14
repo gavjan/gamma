@@ -2,7 +2,7 @@
 
 trap ctrl_c INT
 function ctrl_c() {
-  make clean;
+  rm -f gamma *.o vgcore.*
   rm -f src/"${base}"
   printf "\n\n--\n number of tests that didn't pass: "
   if [ "$counter" -eq 0 ]; then
@@ -19,7 +19,10 @@ GREEN='\033[0;32m'
 NC='\033[0m' # No Color
 #FILES="${DIR}/*.c"
 FILES=$(find "$DIR" -type f -name "*.c")
-make gamma
+gcc -Wall -Wextra -std=c11 -O2 -c src/gamma_test.c
+gcc -Wall -Wextra -std=c11 -O2 -c src/gamma.c
+gcc -Wall -Wextra -std=c11 -O2 -c src/safe_malloc.c
+gcc -Wall -Wextra -std=c11 -O2 -c src/ufind.c
 counter=0
 for f in $FILES; do
   base=$(basename "${f}")

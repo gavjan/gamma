@@ -22,6 +22,6 @@ for f in $FILES; do
   else
     echo -e "${RED} ${name} didn't pass ${NC}"
   fi
-  rm -f "${name}.o" ${base}
+  rm -f "${name}.o" "src/${base}"
 done
 rm gamma *.o vgcore.*

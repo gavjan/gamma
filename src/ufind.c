@@ -7,6 +7,7 @@ unode_t* new_unode(uint32_t player) {
 	p->player=player;
 	p->parent=NULL;
 	p->depth=1;
+	p->visited=false;
 	return p;
 }
 unode_t* ufind(unode_t* element) {

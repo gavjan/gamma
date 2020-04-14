@@ -8,6 +8,7 @@ typedef struct unode_t {
 		struct unode_t* parent;
 		uint32_t player;
 		uint16_t depth;
+		bool visited;
 } unode_t;
 
 // Linked List with uNodes

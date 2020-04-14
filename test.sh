@@ -5,7 +5,11 @@ function ctrl_c() {
   make clean;
   rm -f src/"${base}"
   printf "\n\n--\n number of tests that didn't pass: "
-  echo -e "${RED}$counter"
+  if [ "$counter" -eq 0 ]; then
+    echo -e "${GREEN}0"
+  else
+    echo -e "${RED} $counter"
+  fi
   exit 0
 }
 

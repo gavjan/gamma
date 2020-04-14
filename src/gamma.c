@@ -187,7 +187,7 @@ gamma_t* gamma_new(uint32_t width, uint32_t height, uint32_t players, uint32_t a
 	if(width==0 || height==0 || players==0 || areas==0) return NULL;
 	gamma_t* g;
 	uint64_t i;
-	g=malloc(sizeof(struct gamma));
+	g=malloc(sizeof(gamma_t));
 	if(g==NULL) return NULL;
 	g->width=width;
 	g->height=height;

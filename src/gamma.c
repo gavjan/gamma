@@ -49,13 +49,27 @@ static inline bool has_friends(gamma_t* g, uint32_t player, uint32_t x, uint32_t
 static inline void increase_if_no_friends(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	if(!has_friends(g, player, x, y)) g->player_free_fields[player]++;
 }
-// increase_if_no_friends() on for all 4 neighbors
+/** @brief increase_if_no_friends() on for all 4 neighbors
+ * Increase adjacent free space count
+ * @param [in, out] g - pointer to the structure that stores the game state,
+ * @param [in] player - player number, positive number does not exceed value
+ * @p players from the @ref gamma_new function,
+ * @param [in] x - column number, positive number less than value
+ * @p width from the @ref gamma_new function,
+ * @param [in] y - line number, positive number less than value
+ * @p height from the @ref gamma_new function.
+ */
 void add_free_adjacents(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	if(free_adjacent_up(g, x, y)) increase_if_no_friends(g, player, x, y+1);
 	if(free_adjacent_down(g, x, y)) increase_if_no_friends(g, player, x, y-1);
 	if(free_adjacent_left(g, x, y)) increase_if_no_friends(g, player, x-1, y);
 	if(free_adjacent_right(g, x, y)) increase_if_no_friends(g, player, x+1, y);
 }
+/** @brief Add a player to the list if we are missing that player
+ * @param [in] player - player number, positive number does not exceed value
+ * @p players from the @ref gamma_new function,
+ * @param [in] change - list of players for change
+ */
 void add_if_missing(uint32_t player, uint32_t* change) {
 	for(int i=0; i<4; i++) {
 		if(change[i]==player)
@@ -66,6 +80,12 @@ void add_if_missing(uint32_t player, uint32_t* change) {
 		}
 	}
 }
+/** @brief Add area count if the area will be separated after removal of a field
+ * @param [in] master - new master field
+ * @param [in] still_connected - list of areas that are still connected
+ * @param [in] adder - how many areas will be added
+ * @p height from the @ref gamma_new function.
+ */
 void add_and_decrease_distinct(unode_t* master, unode_t** still_connected, int* adder) {
 	for(int i=0; i<4; i++) {
 		if(ufind(still_connected[i])==ufind(master))
@@ -77,12 +97,30 @@ void add_and_decrease_distinct(unode_t* master, unode_t** still_connected, int* 
 		}
 	}
 }
+/** @brief add_if_missing() for all 4 neighbors
+ * Add neighbors in distinct areas
+ * @param [in, out] g - pointer to the structure that stores the game state,
+ * @param [in] player - player number, positive number does not exceed value
+ * @p players from the @ref gamma_new function,
+ * @param [in] x - column number, positive number less than value
+ * @p width from the @ref gamma_new function,
+ * @param [in] y - line number, positive number less than value
+ * @p height from the @ref gamma_new function.
+ * @param [in] change - list of players for change
+ */
 static inline void add_existing_neighbors(gamma_t* g, uint32_t x, uint32_t y, uint32_t* change) {
 	if(exists_up(g, x, y)) add_if_missing(g->arr[x][y+1]->player, change);
 	if(exists_down(g, x, y)) add_if_missing(g->arr[x][y-1]->player, change);
 	if(exists_left(g, x, y)) add_if_missing(g->arr[x-1][y]->player, change);
 	if(exists_right(g, x, y)) add_if_missing(g->arr[x+1][y]->player, change);
 }
+/** @brief Decrease potential free locations for neighbors
+ * @param [in, out] g - pointer to the structure that stores the game state,
+ * @param [in] x - column number, positive number less than value
+ * @p width from the @ref gamma_new function,
+ * @param [in] y - line number, positive number less than value
+ * @p height from the @ref gamma_new function.
+ */
 void decrease_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
 	uint32_t change[4]={0, 0, 0, 0};
 
@@ -94,6 +132,14 @@ void decrease_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
 			g->player_free_fields[change[i]]--;
 		}
 }
+/** @brief Decrease player's free locations
+ * When removing lonesome friends we decrease player's free field locations
+ * @param [in, out] g - pointer to the structure that stores the game state,
+ * @param [in] x - column number, positive number less than value
+ * @p width from the @ref gamma_new function,
+ * @param [in] y - line number, positive number less than value
+ * @p height from the @ref gamma_new function.
+ */
 void decrease_player_free_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
 	uint32_t player=g->arr[x][y]->player;
 	if(free_adjacent_up(g, x, y)) g->player_free_fields[player]--;
@@ -101,6 +147,14 @@ void decrease_player_free_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
 	if(free_adjacent_left(g, x, y)) g->player_free_fields[player]--;
 	if(free_adjacent_right(g, x, y)) g->player_free_fields[player]--;
 }
+/** @brief Increase player's free locations
+ * When moving to a location add neighboring free locations to our count
+ * @param [in, out] g - pointer to the structure that stores the game state,
+ * @param [in] x - column number, positive number less than value
+ * @p width from the @ref gamma_new function,
+ * @param [in] y - line number, positive number less than value
+ * @p height from the @ref gamma_new function.
+ */
 void increase_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
 	uint32_t change[4]={0, 0, 0, 0};
 
@@ -110,6 +164,16 @@ void increase_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
 		if(change[i]!=0)
 			g->player_free_fields[change[i]]++;
 }
+/** @brief Reindex an area
+ * When removing a field we might potentially be breaking an area into two
+ * @param [in, out] g - pointer to the structure that stores the game state,
+ * @param [in] x - column number, positive number less than value
+ * @p width from the @ref gamma_new function,
+ * @param [in] y - line number, positive number less than value
+ * @p height from the @ref gamma_new function.
+ * @param [in] master - new master field
+ * @param [in] from - direction we are coming from
+ */
 void reindex(gamma_t* g,uint32_t player,uint32_t x, uint32_t y, unode_t* master, char from) {
 	if(g->arr[x][y]->visited) return;
 	g->arr[x][y]->visited=true;
@@ -121,6 +185,16 @@ void reindex(gamma_t* g,uint32_t player,uint32_t x, uint32_t y, unode_t* master,
 	if(from!=RIGHT && adjacent_right(g, player, x, y)) reindex(g, player, x+1, y, master, LEFT);
 	g->arr[x][y]->visited=false;
 }
+/** @brief Remove a field
+ * Removing a field is used for making a golden move
+ * @param [in, out] g - pointer to the structure that stores the game state,
+ * @param [in] x - column number, positive number less than value
+ * @p width from the @ref gamma_new function,
+ * @param [in] y - line number, positive number less than value
+ * @p height from the @ref gamma_new function.
+ * @return Value @p true if the field was removed @p false,
+ * otherwise.
+ */
 bool remove_field(gamma_t* g,uint32_t x, uint32_t y) {
 	uint32_t player=g->arr[x][y]->player;
 	unode_t* master, * del;

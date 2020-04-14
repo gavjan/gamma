@@ -1,9 +1,8 @@
 /** @file
- * Interfejs klasy przechowującej stan gry gamma
+ * Header file providing functions for Gamma
  *
- * @author Marcin Peczarski <marpe@mimuw.edu.pl>
- * @copyright Uniwersytet Warszawski
- * @date 18.03.2020
+ * @author Gevorg Chobanyan
+ * @date 11.04.2020
  */
 
 #ifndef GAMMA_H
@@ -12,118 +11,130 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include "ufind.h"
+/**
+ * @brief Macro for direction up
+ */
 #define UP 0
+/**
+ * @brief Macro for direction down
+ */
 #define DOWN 1
+/**
+ * @brief Macro for direction left
+ */
 #define LEFT 2
+/**
+ * @brief Macro for direction right
+ */
 #define RIGHT 3
 /**
- * Struktura przechowująca stan gry.
+ * @brief Structure storing the game state
  */
 typedef struct gamma {
-		unode_t*** arr;
-		uint32_t width;
-		uint32_t height;
-		uint32_t max_players;
-		uint32_t max_areas;
-		uint64_t free_fields;					///< counter for free fields
-		uint64_t* player_area_count;	///< array of counters for taken areas.
-		uint64_t* player_free_fields;	///< array of counters for free adjacent fields.
-		uint64_t* player_busy_fields;	///< array of counters for taken fields.
-		bool del_error_flag;
-		bool* did_golden_move;
+		unode_t*** arr;								///< Two dimensional array for storing the board state
+		uint32_t width;								///< Width of the board
+		uint32_t height;							///< Height of the board
+		uint32_t max_players;					///< Maximum number of players allowed
+		uint32_t max_areas;						///< Maximum number of areas a player can possess
+		uint64_t free_fields;					///< Counter for free fields
+		uint64_t* player_area_count;	///< Array of counters for taken areas
+		uint64_t* player_free_fields;	///< Array of counters for free adjacent fields
+		uint64_t* player_busy_fields;	///< Array of counters for taken fields
+		bool del_error_flag;					///< Error flag used when Golden Move fails
+		bool* did_golden_move;				///< Track of which player has already made a Golden move
 } gamma_t;
 
-/** @brief Tworzy strukturę przechowującą stan gry.
- * Alokuje pamięć na nową strukturę przechowującą stan gry.
- * Inicjuje tę strukturę tak, aby reprezentowała początkowy stan gry.
- * @param[in] width   – szerokość planszy, liczba dodatnia,
- * @param[in] height  – wysokość planszy, liczba dodatnia,
- * @param[in] players – liczba graczy, liczba dodatnia,
- * @param[in] areas   – maksymalna liczba obszarów,
- *                      jakie może zająć jeden gracz, liczba dodatnia.
- * @return Wskaźnik na utworzoną strukturę lub NULL, gdy nie udało się
- * zaalokować pamięci lub któryś z parametrów jest niepoprawny.
+/** @brief Creates a structure that stores the game state.
+ * Allocates memory to a new structure that stores the game state.
+ * Initializes this structure to represent the initial state of the game.
+ * @param [in] width - board width, positive number,
+ * @param [in] height - board height, positive number,
+ * @param [in] players - number of players, positive number,
+ * @param [in] areas - maximum number of areas,
+ * one player can take, a positive number.
+ * @return A pointer to the created structure or NULL when failed
+ * allocate memory or one of the parameters is incorrect.
  */
 gamma_t* gamma_new(uint32_t width, uint32_t height,
                    uint32_t players, uint32_t areas);
 
-/** @brief Usuwa strukturę przechowującą stan gry.
- * Usuwa z pamięci strukturę wskazywaną przez @p g.
- * Nic nie robi, jeśli wskaźnik ten ma wartość NULL.
- * @param[in] g       – wskaźnik na usuwaną strukturę.
+/** @brief Removes the structure that stores the game state.
+ * Removes from memory the structure indicated by @p g.
+ * Does nothing if this indicator is NULL.
+ * @param [in] g - pointer to the removed structure.
  */
 void gamma_delete(gamma_t *g);
 
-/** @brief Wykonuje ruch.
- * Ustawia pionek gracza @p player na polu (@p x, @p y).
- * @param[in,out] g   – wskaźnik na strukturę przechowującą stan gry,
- * @param[in] player  – numer gracza, liczba dodatnia niewiększa od wartości
- *                      @p players z funkcji @ref gamma_new,
- * @param[in] x       – numer kolumny, liczba nieujemna mniejsza od wartości
- *                      @p width z funkcji @ref gamma_new,
- * @param[in] y       – numer wiersza, liczba nieujemna mniejsza od wartości
- *                      @p height z funkcji @ref gamma_new.
- * @return Wartość @p true, jeśli ruch został wykonany, a @p false,
- * gdy ruch jest nielegalny lub któryś z parametrów jest niepoprawny.
+/** @brief Makes a move.
+ * Sets the @p player player's pawn in the field (@p x, @p y).
+ * @param [in, out] g - pointer to the structure that stores the game state,
+ * @param [in] player - player number, positive number does not exceed value
+ * @p players from the @ref gamma_new function,
+ * @param [in] x - column number, positive number less than value
+ * @p width from the @ref gamma_new function,
+ * @param [in] y - line number, positive number less than value
+ * @p height from the @ref gamma_new function.
+ * @return Value @p true if the move was made and @p false,
+ * when the move is illegal or one of the parameters is incorrect.
  */
 bool gamma_move(gamma_t *g, uint32_t player, uint32_t x, uint32_t y);
 
-/** @brief Wykonuje złoty ruch.
- * Ustawia pionek gracza @p player na polu (@p x, @p y) zajętym przez innego
- * gracza, usuwając pionek innego gracza.
- * @param[in,out] g   – wskaźnik na strukturę przechowującą stan gry,
- * @param[in] player  – numer gracza, liczba dodatnia niewiększa od wartości
- *                      @p players z funkcji @ref gamma_new,
- * @param[in] x       – numer kolumny, liczba nieujemna mniejsza od wartości
- *                      @p width z funkcji @ref gamma_new,
- * @param[in] y       – numer wiersza, liczba nieujemna mniejsza od wartości
- *                      @p height z funkcji @ref gamma_new.
- * @return Wartość @p true, jeśli ruch został wykonany, a @p false,
- * gdy gracz wykorzystał już swój złoty ruch, ruch jest nielegalny
- * lub któryś z parametrów jest niepoprawny.
+/** @brief Makes a golden move.
+ * Sets the player pawn @p player on the field (@p x, @p y) occupied by another
+ * player by removing another player's pawn.
+ * @param [in, out] g - pointer to the structure that stores the game state,
+ * @param [in] player - player number, positive number does not exceed value
+ * @p players from the @ref gamma_new function,
+ * @param [in] x - column number, positive number less than value
+ * @p width from the @ref gamma_new function,
+ * @param [in] y - line number, positive number less than value
+ * @p height from the @ref gamma_new function.
+ * @return Value @p true if the move was made and @p false,
+ * once the player has used his golden move, the move is illegal
+ * or one of the parameters is invalid.
  */
 bool gamma_golden_move(gamma_t *g, uint32_t player, uint32_t x, uint32_t y);
 
-/** @brief Podaje liczbę pól zajętych przez gracza.
- * Podaje liczbę pól zajętych przez gracza @p player.
- * @param[in] g       – wskaźnik na strukturę przechowującą stan gry,
- * @param[in] player  – numer gracza, liczba dodatnia niewiększa od wartości
- *                      @p players z funkcji @ref gamma_new.
- * @return Liczba pól zajętych przez gracza lub zero,
- * jeśli któryś z parametrów jest niepoprawny.
+/** @brief Returns the number of fields occupied by the player.
+ * Return the number of fields occupied by the player @p player.
+ * @param [in] g - pointer to the structure that stores the game state,
+ * @param [in] player - player number, positive number does not exceed value
+ * @p players from the @ref gamma_new function.
+ * @return Number of fields occupied by the player or zero,
+ * if any of the parameters is incorrect.
  */
 uint64_t gamma_busy_fields(gamma_t *g, uint32_t player);
 
-/** @brief Podaje liczbę pól, jakie jeszcze gracz może zająć.
- * Podaje liczbę wolnych pól, na których w danym stanie gry gracz @p player może
- * postawić swój pionek w następnym ruchu.
- * @param[in] g       – wskaźnik na strukturę przechowującą stan gry,
- * @param[in] player  – numer gracza, liczba dodatnia niewiększa od wartości
- *                      @p players z funkcji @ref gamma_new.
- * @return Liczba pól, jakie jeszcze może zająć gracz lub zero,
- * jeśli któryś z parametrów jest niepoprawny.
+/** @brief Return the number of fields that the player can still take.
+ * Returns the number of free fields on which in the given game state the player @p player can
+ * put your pawn in the next move.
+ * @param [in] g - pointer to the structure that stores the game state,
+ * @param [in] player - player number, positive number does not exceed value
+ * @p players from the @ref gamma_new function.
+ * @return Number of fields that the player can still take or zero,
+ * if any of the parameters is incorrect.
  */
 uint64_t gamma_free_fields(gamma_t *g, uint32_t player);
 
-/** @brief Sprawdza, czy gracz może wykonać złoty ruch.
- * Sprawdza, czy gracz @p player jeszcze nie wykonał w tej rozgrywce złotego
- * ruchu i jest przynajmniej jedno pole zajęte przez innego gracza.
- * @param[in] g       – wskaźnik na strukturę przechowującą stan gry,
- * @param[in] player  – numer gracza, liczba dodatnia niewiększa od wartości
- *                      @p players z funkcji @ref gamma_new.
- * @return Wartość @p true, jeśli gracz jeszcze nie wykonał w tej rozgrywce
- * złotego ruchu i jest przynajmniej jedno pole zajęte przez innego gracza,
- * a @p false w przeciwnym przypadku.
+/** @brief Checks if the player can make a golden move.
+ * Checks if the @p player has not made a golden move in this game yet
+ * and there is at least one space occupied by another player.
+ * @param [in] g - pointer to the structure that stores the game state,
+ * @param [in] player - player number, positive number does not exceed value
+ * @p players from the @ref gamma_new function.
+ * @return Value @p true if the player has not yet done in this game
+ * golden move and there is at least one space occupied by another player,
+ * a @p false otherwise.
  */
 bool gamma_golden_possible(gamma_t *g, uint32_t player);
 
-/** @brief Daje napis opisujący stan planszy.
- * Alokuje w pamięci bufor, w którym umieszcza napis zawierający tekstowy
- * opis aktualnego stanu planszy. Przykład znajduje się w pliku gamma_test.c.
- * Funkcja wywołująca musi zwolnić ten bufor.
- * @param[in] g       – wskaźnik na strukturę przechowującą stan gry.
- * @return Wskaźnik na zaalokowany bufor zawierający napis opisujący stan
- * planszy lub NULL, jeśli nie udało się zaalokować pamięci.
+/** @brief Gives an inscription describing the status of the board.
+ * Allocates a buffer in memory in which it places a string containing text
+ * description of the current state of the board. An example can be found in the gamma_test.c file.
+ * The calling function must free this buffer.
+ * @param [in] g - pointer to the structure that stores the game state.
+ * @return A pointer to an allocated buffer containing a string describing the state
+ * board or NULL if memory allocation failed.
  */
 char* gamma_board(gamma_t *g);
 

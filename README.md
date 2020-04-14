@@ -32,7 +32,7 @@ Kolejne części zadania będą polegały na rozbudowywaniu tego silnika i dodan
 
 Zastrzegamy sobie możliwość nanoszenia poprawek do tego szablonu. Będziemy je umieszczać w gałęzi
 template/part1. Lista poprawek:
-- na razie nie ma żadnych poprawek.
+- poprawna wartość parametru areas w funkcji gamma_new jest liczbą dodatnią.
 
 ## Wymagamy
 

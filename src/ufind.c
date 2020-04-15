@@ -1,3 +1,8 @@
+/** @file
+ * Source file for Union Find Data Structure function implementations
+ * @author Gevorg Chobanyan
+ * @date 18.03.2020
+ */
 #include "ufind.h"
 #include <stdlib.h>
 unode_t* new_unode(uint32_t player) {

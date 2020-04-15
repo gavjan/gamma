@@ -2,6 +2,7 @@
  * Header file for Union Find Data Structure
  *
  * @author Gevorg Chobanyan
+ * @copyright Uniwersytet Warszawski
  * @date 11.04.2020
  */
 #ifndef GAMMA_UFIND_H

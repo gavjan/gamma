@@ -1,7 +1,7 @@
 /** @file
- * Przykładowe użycie silnika gry gamma
+ * Example use of the gamma game engine
  *
- * @author Marcin Peczarski <marpe@mimuw.edu.pl>
+ * @author Gevorg Chobanyan
  * @copyright Uniwersytet Warszawski
  * @date 18.03.2020
  */

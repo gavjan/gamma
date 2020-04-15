@@ -1,3 +1,8 @@
+/** @file
+ * Source file providing functions' implementations for Gamma
+ * @author Gevorg Chobanyan
+ * @date 18.03.2020
+ */
 #include "gamma.h"
 #include <stdlib.h>
 #include <assert.h>

@@ -31,8 +31,8 @@ for f in $FILES; do
   cp "${f}" ./src
   gcc -Wall -Wextra -std=c11 -O2 -c "src/${base}"
   gcc  -o "$name" "${name}.o" gamma.o safe_malloc.o ufind.o
-  #valgrind --error-exitcode=15 --leak-check=full --show-leak-kinds=all -q ./gamma
-  ./"$name"
+  valgrind --error-exitcode=15 --leak-check=full --show-leak-kinds=all -q ./"$name"
+  #./"$name"
   if [ $? -eq 0 ]; then
     echo -e "${GREEN} ${f} passed${NC}"
   else

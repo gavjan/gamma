@@ -7,50 +7,174 @@
 #include <stdlib.h>
 #include <assert.h>
 #include "safe_malloc.h"
+/** @brief Check if field up from current field belongs to @p player
+ * @param [in, out] g - pointer to the structure that stores the game state,
+ * @param [in] player - player number, positive number does not exceed value
+ * @p players from the @ref gamma_new function,
+ * @param [in] x - column number, positive number less than value
+ * @p width from the @ref gamma_new function,
+ * @param [in] y - line number, positive number less than value
+ * @p height from the @ref gamma_new function.
+ * @return Value @p true if up adjacent node belongs to @player @p false, otherwise
+ */
 static inline bool adjacent_up(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	return (y+1<g->height && g->arr[x][y+1]!=NULL && g->arr[x][y+1]->player==player);
 }
+/** @brief Check if field down from current field belongs to @p player
+ * @param [in, out] g - pointer to the structure that stores the game state,
+ * @param [in] player - player number, positive number does not exceed value
+ * @p players from the @ref gamma_new function,
+ * @param [in] x - column number, positive number less than value
+ * @p width from the @ref gamma_new function,
+ * @param [in] y - line number, positive number less than value
+ * @p height from the @ref gamma_new function.
+ * @return Value @p true if down adjacent node belongs to @player @p false, otherwise
+ */
 static inline bool adjacent_down(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	return (y>0 && g->arr[x][y-1]!=NULL && g->arr[x][y-1]->player==player);
 }
+/** @brief Check if field left from current field belongs to @p player
+ * @param [in, out] g - pointer to the structure that stores the game state,
+ * @param [in] player - player number, positive number does not exceed value
+ * @p players from the @ref gamma_new function,
+ * @param [in] x - column number, positive number less than value
+ * @p width from the @ref gamma_new function,
+ * @param [in] y - line number, positive number less than value
+ * @p height from the @ref gamma_new function.
+ * @return Value @p true if left adjacent node belongs to @player @p false, otherwise
+ */
 static inline bool adjacent_left(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	return (x>0 && g->arr[x-1][y]!=NULL && g->arr[x-1][y]->player==player);
 }
+/** @brief Check if field right from current field belongs to @p player
+ * @param [in, out] g - pointer to the structure that stores the game state,
+ * @param [in] player - player number, positive number does not exceed value
+ * @p players from the @ref gamma_new function,
+ * @param [in] x - column number, positive number less than value
+ * @p width from the @ref gamma_new function,
+ * @param [in] y - line number, positive number less than value
+ * @p height from the @ref gamma_new function.
+ * @return Value @p true if right adjacent node belongs to @player @p false, otherwise
+ */
 static inline bool adjacent_right(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	return (x+1<g->width && g->arr[x+1][y]!=NULL && g->arr[x+1][y]->player==player);
 }
+/** @brief Check if field up from current field exists
+ * @param [in, out] g - pointer to the structure that stores the game state,
+ * @param [in] x - column number, positive number less than value
+ * @p width from the @ref gamma_new function,
+ * @param [in] y - line number, positive number less than value
+ * @p height from the @ref gamma_new function.
+ * @return Value @p true if the field at right us exists @p false, otherwise
+ */
 static inline bool exists_up(gamma_t* g, uint32_t x, uint32_t y) {
 	return (y+1<g->height && g->arr[x][y+1]!=NULL);
 }
+/** @brief Check if field down from current field exists
+ * @param [in, out] g - pointer to the structure that stores the game state,
+ * @param [in] x - column number, positive number less than value
+ * @p width from the @ref gamma_new function,
+ * @param [in] y - line number, positive number less than value
+ * @p height from the @ref gamma_new function.
+ * @return Value @p true if the field at right us exists @p false, otherwise
+ */
 static inline bool exists_down(gamma_t* g, uint32_t x, uint32_t y) {
 	return (y>0 && g->arr[x][y-1]!=NULL);
 }
+/** @brief Check if field left from current field exists
+ * @param [in, out] g - pointer to the structure that stores the game state,
+ * @param [in] x - column number, positive number less than value
+ * @p width from the @ref gamma_new function,
+ * @param [in] y - line number, positive number less than value
+ * @p height from the @ref gamma_new function.
+ * @return Value @p true if the field at right us exists @p false, otherwise
+ */
 static inline bool exists_left(gamma_t* g, uint32_t x, uint32_t y) {
 	return (x>0 && g->arr[x-1][y]!=NULL);
 }
+/** @brief Check if field right from current field exists
+ * @param [in, out] g - pointer to the structure that stores the game state,
+ * @param [in] x - column number, positive number less than value
+ * @p width from the @ref gamma_new function,
+ * @param [in] y - line number, positive number less than value
+ * @p height from the @ref gamma_new function.
+ * @return Value @p true if the field at right us exists @p false, otherwise
+ */
 static inline bool exists_right(gamma_t* g, uint32_t x, uint32_t y) {
 	return (x+1<g->width && g->arr[x+1][y]!=NULL);
 }
+/** @brief Check if field up from current field is free
+ * @param [in, out] g - pointer to the structure that stores the game state,
+ * @param [in] x - column number, positive number less than value
+ * @p width from the @ref gamma_new function,
+ * @param [in] y - line number, positive number less than value
+ * @p height from the @ref gamma_new function.
+ * @return Value @p true if the fi ateld up us free @p false, otherwise
+ */
 static inline bool free_adjacent_up(gamma_t* g, uint32_t x, uint32_t y) {
 	return (y+1<g->height && g->arr[x][y+1]==NULL);
 }
+/** @brief Check if field down from current field is free
+ * @param [in, out] g - pointer to the structure that stores the game state,
+ * @param [in] x - column number, positive number less than value
+ * @p width from the @ref gamma_new function,
+ * @param [in] y - line number, positive number less than value
+ * @p height from the @ref gamma_new function.
+ * @return Value @p true if the fiel atd down us free @p false, otherwise
+ */
 static inline bool free_adjacent_down(gamma_t* g, uint32_t x, uint32_t y) {
 	return (y>0 && g->arr[x][y-1]==NULL);
 }
+/** @brief Check if field left from current field is free
+ * @param [in, out] g - pointer to the structure that stores the game state,
+ * @param [in] x - column number, positive number less than value
+ * @p width from the @ref gamma_new function,
+ * @param [in] y - line number, positive number less than value
+ * @p height from the @ref gamma_new function.
+ * @return Value @p true if the fiel atd left us free @p false, otherwise
+ */
 static inline bool free_adjacent_left(gamma_t* g, uint32_t x, uint32_t y) {
 	return (x>0 && g->arr[x-1][y]==NULL);
 }
+/** @brief Check if field right from current field is free
+ * @param [in, out] g - pointer to the structure that stores the game state,
+ * @param [in] x - column number, positive number less than value
+ * @p width from the @ref gamma_new function,
+ * @param [in] y - line number, positive number less than value
+ * @p height from the @ref gamma_new function.
+ * @return Value @p true if the field at right us free @p false, otherwise
+ */
 static inline bool free_adjacent_right(gamma_t* g, uint32_t x, uint32_t y) {
 	return (x+1<g->width && g->arr[x+1][y]==NULL);
 }
-// Check if field x,y has adjacent fields belonging to player
+/** @brief Check if field @p x,@p y has adjacent fields belonging to @p player
+ * @param [in, out] g - pointer to the structure that stores the game state,
+ * @param [in] player - player number, positive number does not exceed value
+ * @p players from the @ref gamma_new function,
+ * @param [in] x - column number, positive number less than value
+ * @p width from the @ref gamma_new function,
+ * @param [in] y - line number, positive number less than value
+ * @p height from the @ref gamma_new function.
+ * @return Value @p true if the current field has at least
+ * one adjacent field belonging to @p player @p false, otherwise
+ */
 static inline bool has_friends(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	return adjacent_up(g, player, x, y) ||
 				 adjacent_down(g, player, x, y) ||
 				 adjacent_left(g, player, x, y) ||
 				 adjacent_right(g, player, x, y);
 }
-// Adds the player counter for fields he can move without increasing his area count
+/** @brief Increase potential field count that @p player can visit
+ * Adds the @p player counter for fields he can move without increasing
+ * his area count
+ * @param [in, out] g - pointer to the structure that stores the game state,
+ * @param [in] player - player number, positive number does not exceed value
+ * @p players from the @ref gamma_new function,
+ * @param [in] x - column number, positive number less than value
+ * @p width from the @ref gamma_new function,
+ * @param [in] y - line number, positive number less than value
+ * @p height from the @ref gamma_new function.
+ */
 static inline void increase_if_no_friends(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	if(!has_friends(g, player, x, y)) g->player_free_fields[player]++;
 }
@@ -137,7 +261,18 @@ void decrease_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
 			g->player_free_fields[change[i]]--;
 		}
 }
-
+/** @brief Check if a free field has friends
+ * Check if a free field has adjacent fields belonging to @p player
+ * @param [in, out] g - pointer to the structure that stores the game state,
+ * @param [in] player - player number, positive number does not exceed value
+ * @p players from the @ref gamma_new function,
+ * @param [in] x - column number, positive number less than value
+ * @p width from the @ref gamma_new function,
+ * @param [in] y - line number, positive number less than value
+ * @p height from the @ref gamma_new function.
+ * @return Value @p true if the current free field has at least
+ * one adjacent field belonging to @p player @p false, otherwise
+ */
 bool free_has_friends(gamma_t* g, uint32_t player, uint32_t x, uint32_t y, char from) {
 	if(g->arr[x][y]!=NULL) return true;
 	return
@@ -181,6 +316,8 @@ void increase_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
 /** @brief Reindex an area
  * When removing a field we might potentially be breaking an area into two
  * @param [in, out] g - pointer to the structure that stores the game state,
+ * @param [in] player - player number, positive number does not exceed value
+ * @p players from the @ref gamma_new function,
  * @param [in] x - column number, positive number less than value
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value

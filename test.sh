@@ -4,6 +4,7 @@ trap ctrl_c INT
 function ctrl_c() {
   rm -f gamma *.o vgcore.*
   rm -f src/"${base}"
+  rm "$name"
   printf "\n\n--\n number of tests that didn't pass: "
   if [ "$counter" -eq 0 ]; then
     echo -e "${GREEN}0"
@@ -29,15 +30,16 @@ for f in $FILES; do
   name="${base::-2}"
   cp "${f}" ./src
   gcc -Wall -Wextra -std=c11 -O2 -c "src/${base}"
-  gcc  -o gamma "${name}.o" gamma.o safe_malloc.o ufind.o
+  gcc  -o "$name" "${name}.o" gamma.o safe_malloc.o ufind.o
   #valgrind --error-exitcode=15 --leak-check=full --show-leak-kinds=all -q ./gamma
-  ./gamma
+  ./"$name"
   if [ $? -eq 0 ]; then
     echo -e "${GREEN} ${f} passed${NC}"
   else
     counter=$((counter+1))
     echo -e "${RED} ${f} didn't pass ${NC}"
   fi
+  rm "$name"
   rm -f "${name}.o" "src/${base}"
 done
 ctrl_c

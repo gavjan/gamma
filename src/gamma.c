@@ -15,7 +15,7 @@
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
  * @p height from the @ref gamma_new function.
- * @return Value @p true if up adjacent node belongs to @player @p false, otherwise
+ * @return Value @p true if up adjacent node belongs to @p player @p false, otherwise
  */
 static inline bool adjacent_up(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	return (y+1<g->height && g->arr[x][y+1]!=NULL && g->arr[x][y+1]->player==player);
@@ -28,7 +28,7 @@ static inline bool adjacent_up(gamma_t* g, uint32_t player, uint32_t x, uint32_t
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
  * @p height from the @ref gamma_new function.
- * @return Value @p true if down adjacent node belongs to @player @p false, otherwise
+ * @return Value @p true if down adjacent node belongs to @p player @p false, otherwise
  */
 static inline bool adjacent_down(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	return (y>0 && g->arr[x][y-1]!=NULL && g->arr[x][y-1]->player==player);
@@ -41,7 +41,7 @@ static inline bool adjacent_down(gamma_t* g, uint32_t player, uint32_t x, uint32
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
  * @p height from the @ref gamma_new function.
- * @return Value @p true if left adjacent node belongs to @player @p false, otherwise
+ * @return Value @p true if left adjacent node belongs to @p player @p false, otherwise
  */
 static inline bool adjacent_left(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	return (x>0 && g->arr[x-1][y]!=NULL && g->arr[x-1][y]->player==player);
@@ -54,7 +54,7 @@ static inline bool adjacent_left(gamma_t* g, uint32_t player, uint32_t x, uint32
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
  * @p height from the @ref gamma_new function.
- * @return Value @p true if right adjacent node belongs to @player @p false, otherwise
+ * @return Value @p true if right adjacent node belongs to @p player @p false, otherwise
  */
 static inline bool adjacent_right(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	return (x+1<g->width && g->arr[x+1][y]!=NULL && g->arr[x+1][y]->player==player);
@@ -229,8 +229,6 @@ void add_and_decrease_distinct(unode_t* master, unode_t** still_connected, int* 
 /** @brief add_if_missing() for all 4 neighbors
  * Add neighbors in distinct areas
  * @param [in, out] g - pointer to the structure that stores the game state,
- * @param [in] player - player number, positive number does not exceed value
- * @p players from the @ref gamma_new function,
  * @param [in] x - column number, positive number less than value
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
@@ -270,6 +268,7 @@ void decrease_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
  * @p height from the @ref gamma_new function.
+ * @param [in] from - direction we are coming from
  * @return Value @p true if the current free field has at least
  * one adjacent field belonging to @p player @p false, otherwise
  */

@@ -6,39 +6,59 @@ if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release")
 endif ()
 
-# Nie chcemy oglądać komunikatów o procentowym postępie kompilacji.
+# We don't want to see messages about the percentage of build progress.
 set_property(GLOBAL PROPERTY RULE_MESSAGES OFF)
 
-# Chcemy zobaczyć polecenia wywołane przez make.
+# We want to see the commands called by make.
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
-# Ustawiamy wspólne opcje kompilowania dla wszystkich wariantów projektu.
+# We set common compilation options for all project variants.
 set(CMAKE_C_FLAGS "-std=c11 -Wall -Wextra")
-# Domyślne opcje dla wariantów Release i Debug są sensowne.
-# Jeśli to konieczne, ustawiamy tu inne.
-# set(CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG")
-# set(CMAKE_C_FLAGS_DEBUG "-g")
+# Default options for Release and Debug variants make sense.
+# If necessary, set different here.
+# set (CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG")
+# set (CMAKE_C_FLAGS_DEBUG "-g")
 
-# Wskazujemy pliki źródłowe.
+# We indicate source files.
 set(SOURCE_FILES
         src/gamma.c
         src/gamma.h
         src/gamma_test.c src/ufind.c src/ufind.h src/safe_malloc.c src/safe_malloc.h)
 
 
-# Wskazujemy plik wykonywalny.
+# We indicate the executable file.
 add_executable(gamma ${SOURCE_FILES})
 
-# Dodajemy obsługę Doxygena: sprawdzamy, czy jest zainstalowany i jeśli tak to:
+# We add Doxgen support: check if it is installed and if so:
 find_package(Doxygen)
 if (DOXYGEN_FOUND)
-    # Wskazujemy lokalizacją pliku konfiguracyjnego i podajemy jego docelową lokalizację w folderze, gdzie następuje kompilacja.
+    # We indicate the location of the configuration file and give its destination in the folder where the compilation takes place.
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
-    # Dodajemy cel doc: użycie make doc spowoduje wywołanie doxygena z odpowiednim plikiem konfiguracyjnym w folderze kompilacji.
-    # Na wyjście zostanie wypisany odpowiedni komentarz.
+    # We add the doc target: using make doc will call doxygen with the appropriate configuration file in the build folder.
+    # An appropriate comment will be written to the output.
     add_custom_target(doc
         ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Generating API documentation with Doxygen"
     )
 endif (DOXYGEN_FOUND)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -221,12 +221,11 @@ bool remove_field(gamma_t* g, uint32_t x, uint32_t y) {
 		return true;
 	}
 	else {
+		g->arr[x][y]->visited=true;
 		if(adjacent_up(g, player, x, y)) {
 			master=new_unode(g->arr[x][y+1]->player);
 			if(master==NULL) return false;
-			g->arr[x][y+1]->visited=master->visited=true;
 			reindex(g, player, x, y+1, master, DOWN);
-			g->arr[x][y+1]->visited=master->visited=false;
 			del=g->arr[x][y+1];
 			g->arr[x][y+1]=master;
 			safe_free(del);
@@ -235,9 +234,7 @@ bool remove_field(gamma_t* g, uint32_t x, uint32_t y) {
 		if(adjacent_down(g, player, x, y)) {
 			master=new_unode(g->arr[x][y-1]->player);
 			if(master==NULL) return false;
-			g->arr[x][y-1]->visited=master->visited=true;
 			reindex(g, player, x, y-1, master, UP);
-			g->arr[x][y-1]->visited=master->visited=false;
 			del=g->arr[x][y-1];
 			g->arr[x][y-1]=master;
 			safe_free(del);
@@ -246,9 +243,7 @@ bool remove_field(gamma_t* g, uint32_t x, uint32_t y) {
 		if(adjacent_left(g, player, x, y)) {
 			master=new_unode(g->arr[x-1][y]->player);
 			if(master==NULL) return false;
-			g->arr[x-1][y]->visited=master->visited=true;
 			reindex(g, player, x-1, y, master, RIGHT);
-			g->arr[x-1][y]->visited=master->visited=false;
 			del=g->arr[x-1][y];
 			g->arr[x-1][y]=master;
 			safe_free(del);
@@ -257,14 +252,13 @@ bool remove_field(gamma_t* g, uint32_t x, uint32_t y) {
 		if(adjacent_right(g, player, x, y)) {
 			master=new_unode(g->arr[x+1][y]->player);
 			if(master==NULL) return false;
-			g->arr[x+1][y]->visited=master->visited=true;
 			reindex(g, player, x+1, y, master, LEFT);
-			g->arr[x+1][y]->visited=master->visited=false;
 			del=g->arr[x+1][y];
 			g->arr[x+1][y]=master;
 			safe_free(del);
 			add_and_decrease_distinct(ufind(master), still_connected, &adder);
 		}
+		g->arr[x][y]->visited=false;
 		assert(adder!=-1);
 		g->arr[x][y]=safe_free(g->arr[x][y]);
 		g->free_fields++;

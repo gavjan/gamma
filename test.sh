@@ -12,23 +12,26 @@ function ctrl_c() {
   fi
   exit 0
 }
-
+function compile() {
+  gcc -Wall -Wextra -std=c11 -O2 -c src/gamma.c
+  gcc -Wall -Wextra -std=c11 -O2 -c src/safe_malloc.c
+  gcc -Wall -Wextra -std=c11 -O2 -c src/ufind.c
+}
 DIR="$1"
 RED='\033[1;31m'
 GREEN='\033[0;32m'
 NC='\033[0m' # No Color
 #FILES="${DIR}/*.c"
 FILES=$(find "$DIR" -type f -name "*.c")
-gcc -Wall -Wextra -std=c11 -O2 -c src/gamma_test.c
-gcc -Wall -Wextra -std=c11 -O2 -c src/gamma.c
-gcc -Wall -Wextra -std=c11 -O2 -c src/safe_malloc.c
-gcc -Wall -Wextra -std=c11 -O2 -c src/ufind.c
 counter=0
 for f in $FILES; do
   base=$(basename "${f}")
   name="${base::-2}"
   cp "${f}" ./src
   gcc -Wall -Wextra -std=c11 -O2 -c "src/${base}"
+  if [ ! -f "gamma.o" ] || [ ! -f "safe_malloc.o" ] || [ ! -f "ufind.o" ] ; then
+    compile
+  fi
   gcc  -o "$name" "${name}.o" gamma.o safe_malloc.o ufind.o
   valgrind --error-exitcode=15 --leak-check=full --show-leak-kinds=all -q ./"$name"
   #./"$name"

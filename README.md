@@ -88,3 +88,6 @@ identyfikator commitu finalnej wersji rozwiązania, na przykład:
 
 Rozwiązanie należy zatwierdzić (`git commit`) i wysłać do repozytorium (`git push`) przed terminem podanym
 w Moodle'u.
+
+## Testy
+Oficjalne i nieoficjalne testy można znaleźć [tutaj.](https://github.com/gavjan/gamma/releases/tag/part1_test)

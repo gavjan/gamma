@@ -17,28 +17,29 @@ void err(uint64_t line) {
 void reach_line_end() {
 	int c;
 	while((c=getchar())!='\n' && c!=EOF);
+	if(c==EOF) ungetc(c,stdin);
 }
 bool nothing_but_white_left() {
 	int c;
-	while(isspace(c=getchar())) {
-		//TODO:: hi cunt finish me
+	while(isspace(c=getchar()) && c!='\n') ;
+	if(c=='\n' || c==EOF) {
+		ungetc(c,stdin);
+		return true;
 	}
-	if(c=='\n' )
-	ungetc(c,stdin);
+	return false;
 }
 // Take next token
-bool get_next_token(uint32_t* token) {
+bool get_next_token(Command* command, uint32_t* token) {
 	char number[UINT32_MAX_LENGTH+1];
 	int c;
-	while(isspace(c=getchar())) ;
+	while(isspace(c=getchar()) && c!='\n') ;
 	ungetc(c,stdin);
 	size_t pos=0;
-	getchar();
 
-	while(!isspace(c=getchar()) && c!='\n') {
-		if(!isdigit(c) || pos>UINT32_MAX_LENGTH) { //TODO:: Fix MAX_LENGTH
-			if(c==EOF) ungetc(c,stdin);
-			return false;
+	while(!(isspace(c=getchar()) && c!='\n')) {
+		if(!isdigit(c) || pos>UINT32_MAX_LENGTH) {
+			if(c==EOF || c=='\n') ungetc(c,stdin);
+			return (*command).type=UNRECOGNIZED;
 		}
 		number[pos]=(char)c;
 		pos++;
@@ -47,50 +48,58 @@ bool get_next_token(uint32_t* token) {
 
 	errno=0;
 	*token=strtoul(number,NULL,10);
-	if(errno==ERANGE) return false;
-	return pos!=0;
+	if(errno==ERANGE || pos==0)
+		return (*command).type=UNRECOGNIZED;
+	return true;
 }
 
 int check_first_char() {
 	int c = getchar();
 	if(c=='B') {return BATCH_MODE;}
-	else if(c=='I') {return INTER_MODE;}
-	else if(c=='m') {return MOVE;}
-	else if(c=='g') {return GOLDEN_MOVE;}
-	else if(c=='b') {return BUSY_FIELDS;}
-	else if(c=='f') {return FREE_FIELDS;}
-	else if(c=='q') {return GOLDEN_POSSIBLE;}
-	else if(c=='p') {return BOARD;}
+	if(c=='I') {return INTER_MODE;}
+	if(c=='m') {return MOVE;}
+	if(c=='g') {return GOLDEN_MOVE;}
+	if(c=='b') {return BUSY_FIELDS;}
+	if(c=='f') {return FREE_FIELDS;}
+	if(c=='q') {return GOLDEN_POSSIBLE;}
+	if(c=='p') {return BOARD;}
+
 	return UNRECOGNIZED;
 }
 
 // Separate command into tokens correctly
 Command parse_command() {
-	uint32_t token;
 	Command command={UNRECOGNIZED,0,0,0,0,0,0,0};
 	command.type=check_first_char();
-	if(command.type==BOARD && nothing_but_white_left()) return command;
+	if(command.type==UNRECOGNIZED)
+		return command;
 
-	if(isspace(fpeek())) {
-		if(!get_next_token(&token)) {
-			command.type=UNRECOGNIZED;
+	if(command.type==BOARD) {
+		command.type=nothing_but_white_left() ? BOARD : UNRECOGNIZED;
+		return command;
+	}
+
+	if(isspace(fpeek()) && fpeek()!='\n') {
+		if(command.type==BATCH_MODE || command.type==INTER_MODE) {
+			if(!get_next_token(&command,&command.width) ||
+			!get_next_token(&command,&command.height) ||
+			!get_next_token(&command,&command.players) ||
+			!get_next_token(&command,&command.areas) ||
+			!nothing_but_white_left()) {}
 			return command;
 		}
-		if(line[start]=='\0')
-			return command;
-		if(!get_next_token(&token)) {
-			command.type=UNRECOGNIZED;
-			return command;
-		}
-		if(line[start]=='\0')
-			return command;
-		if(!get_next_token(&token) ||
-			 (command.type==PRINT && *command.animal!='\0')) {
-			command.type=UNRECOGNIZED;
+		else if(command.type==MOVE || command.type==GOLDEN_MOVE){
+			if(!get_next_token(&command,&command.player) ||
+			!get_next_token(&command,&command.x) ||
+			!get_next_token(&command,&command.y) ||
+			!nothing_but_white_left()) {}
 			return command;
 		}
-		if(line[start]=='\0')
+		else {
+			if(!get_next_token(&command,&command.player) ||
+				 !nothing_but_white_left()) {}
 			return command;
+		}
 	}
 	command.type=UNRECOGNIZED;
 	return command;

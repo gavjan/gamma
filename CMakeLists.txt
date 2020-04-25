@@ -23,8 +23,15 @@ set(CMAKE_C_FLAGS "-std=c11 -Wall -Wextra")
 set(SOURCE_FILES
         src/gamma.c
         src/gamma.h
-        src/gamma_test.c src/ufind.c src/ufind.h src/safe_malloc.c src/safe_malloc.h)
-
+        src/main.c
+        src/ufind.c
+        src/ufind.h
+        src/safe_malloc.c
+        src/safe_malloc.h
+        src/parser.c
+        src/parser.h
+        src/handler.c
+        src/handler.h)
 
 # We indicate the executable file.
 add_executable(gamma ${SOURCE_FILES})

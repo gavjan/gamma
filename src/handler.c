@@ -7,10 +7,13 @@ bool handle_command(gamma_t** g, Command command) {
 	switch(command.type) {
 		case BATCH_MODE:
 			if(*g!=NULL) return false;
-			return *g=gamma_new(command.width,command.height,
-												 command.players,command.areas);;
+			return (*g=gamma_new(command.width,command.height,
+												 command.players,command.areas));
 
 		case INTER_MODE:
+			if(*g!=NULL || command.width == 0 || command.height == 0 ||
+			command.players == 0 || command.areas == 0)
+				return false;
 			printf("Interactive mode: press Enter to start\n"
 					"\nJust kidding, bye.");
 			return true;

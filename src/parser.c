@@ -29,7 +29,7 @@ bool nothing_but_white_left() {
 	return false;
 }
 // Take next token
-bool get_next_token(Command* command, uint32_t* token) {
+bool get_next_token(uint32_t* token) {
 	char number[UINT32_MAX_LENGTH+1];
 	int c;
 	while(isspace(c=getchar()) && c!='\n') ;
@@ -43,17 +43,15 @@ bool get_next_token(Command* command, uint32_t* token) {
 				break;
 			}
 			else
-				return ((*command).type=UNRECOGNIZED);
+				return false;
 		}
 		number[pos]=(char)c;
 		pos++;
 	}
 	number[pos]='\0';
-
-	errno=0;
-	*token=strtoul(number,NULL,10);
-	if(errno==ERANGE || pos==0)
-		return ((*command).type=UNRECOGNIZED);
+	uint64_t ans=strtoull(number,NULL,10);
+	if(ans>UINT32_MAX || pos==0) return false;
+	*token=ans;
 	return true;
 }
 
@@ -85,23 +83,29 @@ Command parse_command() {
 
 	if(isspace(fpeek()) && fpeek()!='\n') {
 		if(command.type==BATCH_MODE || command.type==INTER_MODE) {
-			if(!get_next_token(&command,&command.width) ||
-			!get_next_token(&command,&command.height) ||
-			!get_next_token(&command,&command.players) ||
-			!get_next_token(&command,&command.areas) ||
-			!nothing_but_white_left()) {}
+			if(!get_next_token(&command.width) ||
+			!get_next_token(&command.height) ||
+			!get_next_token(&command.players) ||
+			!get_next_token(&command.areas) ||
+			!nothing_but_white_left()) {
+				command.type=UNRECOGNIZED;
+			}
 			return command;
 		}
 		else if(command.type==MOVE || command.type==GOLDEN_MOVE){
-			if(!get_next_token(&command,&command.player) ||
-			!get_next_token(&command,&command.x) ||
-			!get_next_token(&command,&command.y) ||
-			!nothing_but_white_left()) {}
+			if(!get_next_token(&command.player) ||
+			!get_next_token(&command.x) ||
+			!get_next_token(&command.y) ||
+			!nothing_but_white_left()) {
+				command.type=UNRECOGNIZED;
+			}
 			return command;
 		}
 		else {
-			if(!get_next_token(&command,&command.player) ||
-				 !nothing_but_white_left()) {}
+			if(!get_next_token(&command.player) ||
+				 !nothing_but_white_left()) {
+				command.type=UNRECOGNIZED;
+			}
 			return command;
 		}
 	}

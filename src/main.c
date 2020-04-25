@@ -22,7 +22,7 @@ int main() {
 			}
 			else {
 				if(command.type == BATCH_MODE)
-					printf("OK %lu", line_num);
+					printf("OK %lu\n", line_num);
 				if(command.type == INTER_MODE)
 					break;
 			}

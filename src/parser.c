@@ -38,8 +38,12 @@ bool get_next_token(Command* command, uint32_t* token) {
 
 	while(!(isspace(c=getchar()) && c!='\n')) {
 		if(!isdigit(c) || pos>UINT32_MAX_LENGTH) {
-			if(c==EOF || c=='\n') ungetc(c,stdin);
-			return (*command).type=UNRECOGNIZED;
+			if(c==EOF || c=='\n') {
+				ungetc(c,stdin);
+				break;
+			}
+			else
+				return ((*command).type=UNRECOGNIZED);
 		}
 		number[pos]=(char)c;
 		pos++;
@@ -49,7 +53,7 @@ bool get_next_token(Command* command, uint32_t* token) {
 	errno=0;
 	*token=strtoul(number,NULL,10);
 	if(errno==ERANGE || pos==0)
-		return (*command).type=UNRECOGNIZED;
+		return ((*command).type=UNRECOGNIZED);
 	return true;
 }
 

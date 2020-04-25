@@ -1,5 +1,5 @@
-#ifndef FORESTS_PARSER_H
-#define FORESTS_PARSER_H
+#ifndef GAMMA_PARSER_H
+#define GAMMA_PARSER_H
 
 #include <stdint.h>
 
@@ -35,4 +35,4 @@ void reach_line_end();
 
 int fpeek();
 
-#endif //FORESTS_PARSER_H
+#endif //GAMMA_PARSER_H

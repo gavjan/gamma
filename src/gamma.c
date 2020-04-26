@@ -575,11 +575,11 @@ bool gamma_golden_possible(gamma_t* g, uint32_t player) {
 	return false;
 }
 char* gamma_board(gamma_t* g) {
-	if(g == NULL) return false;
+	if(g == NULL) return NULL;
 	uint32_t height = g->height;
 	uint32_t width = g->width;
 	char* board = malloc((1+height*(width+1))*sizeof(char));
-	if(board == NULL) return false;
+	if(board == NULL) return NULL;
 	unode_t*** arr = g->arr;
 	uint32_t i, j;
 	for(i = 0; i < height; i++)

@@ -1,8 +1,10 @@
 #include "handler.h"
 #include "gamma.h"
+#include "safe_malloc.h"
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <assert.h>
 bool handle_command(gamma_t** g, Command command) {
 	switch(command.type) {
 		case BATCH_MODE:
@@ -47,7 +49,10 @@ bool handle_command(gamma_t** g, Command command) {
 
 		case BOARD:
 			if(*g==NULL) return false;
-			printf("%s", gamma_board(*g));
+			char* b=gamma_board(*g);
+			assert(b);
+			printf("%s",b);
+			safe_free(b);
 			return true;
 	}
 	return false;

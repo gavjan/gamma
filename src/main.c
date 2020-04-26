@@ -12,13 +12,10 @@ int main() {
 	uint64_t line_num=0;
 	while((first_char=fpeek())!=EOF) {
 		line_num++;
-		if(first_char == '\n' || first_char == '#')
-			reach_line_end();
-		else {
+		if(first_char != '\n' && first_char != '#') {
 			command=parse_command();
 			if(command.type == UNRECOGNIZED || !handle_command(&g,command)) {
 				err(line_num);
-				reach_line_end();
 			}
 			else {
 				if(command.type == BATCH_MODE)
@@ -27,6 +24,7 @@ int main() {
 					break;
 			}
 		}
+		reach_line_end();
 	}
 	gamma_delete(g);
 	exit(0);

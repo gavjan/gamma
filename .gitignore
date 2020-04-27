@@ -11,3 +11,4 @@ gamma
 test_diff.sh
 test/*
 test_build/*
+build/*

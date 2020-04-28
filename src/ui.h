@@ -4,6 +4,7 @@
 #include <termios.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include "gamma.h"
 #define KEY_UP 1
 #define KEY_DOWN 2
 #define KEY_RIGHT 3
@@ -27,4 +28,6 @@ typedef struct game {
 		struct termios original_terminal;
 		struct termios new_terminal;
 } game_t;
+
+bool start_interactive(gamma_t* g);
 #endif //GAMMA_UI_H

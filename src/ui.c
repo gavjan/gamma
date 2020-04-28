@@ -79,8 +79,8 @@ void make_golden_move(game_t* t, gamma_t* g) {
 	// Skip or end the game
 	skip_or_over(g, t);
 }
-int main() {
-	gamma_t* g = gamma_new(4, 3, 2, 8);
+bool start_interactive(gamma_t* g) {
+	if(g==NULL) return false;
 	game_t t = init_board(g);
 
 	while(!t.game_over) {
@@ -115,5 +115,5 @@ int main() {
 	for(uint32_t i = 1; i <= t.max_players; i++)
 		printf("PLAYER %u %lu\n", i, gamma_busy_fields(g, i));
 	restore_console(&t);
-	return 0;
+	return true;
 }

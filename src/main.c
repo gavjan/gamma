@@ -5,7 +5,7 @@
 #include "gamma.h"
 #include "handler.h"
 
-int main2() {
+int main() {
 	gamma_t* g=NULL;
 	Command command;
 	int first_char;

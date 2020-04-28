@@ -1,6 +1,7 @@
 #include "handler.h"
 #include "gamma.h"
 #include "safe_malloc.h"
+#include "ui.h"
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -13,11 +14,16 @@ bool handle_command(gamma_t** g, Command command) {
 												 command.players,command.areas));
 
 		case INTER_MODE:
-			if(*g!=NULL || command.width == 0 || command.height == 0 ||
-			command.players == 0 || command.areas == 0)
+			if(*g!=NULL) return false;
+			*g=gamma_new(command.width,command.height,
+									 command.players,command.areas);
+			if(*g==NULL) return false;
+
+			if(!start_interactive(*g)) {
+				gamma_delete(*g);
+				*g=NULL;
 				return false;
-			printf("Interactive mode: press Enter to start\n"
-					"\nJust kidding, bye.");
+			}
 			return true;
 
 		case MOVE:

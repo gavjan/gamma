@@ -26,6 +26,9 @@ int getch(void) {
 
 int get_key() {
 	int c = getch();
+	if(c==99 || c==67) return KEY_C;
+	if(c==103 || c==71) return KEY_G;
+	if(c==32) return KEY_SPACE;
 	if(c==27 && getch()==91) {
 		c=getch();
 		if(c==65) return KEY_UP;
@@ -52,13 +55,13 @@ int main() {
 				printf("Right\n");
 				break;
 			case KEY_SPACE:
-				printf("Right\n");
+				printf("Space\n");
 				break;
 			case KEY_G:
-				printf("Right\n");
+				printf("G\n");
 				break;
 			case KEY_C:
-				printf("Right\n");
+				printf("C\n");
 				break;
 		}
 

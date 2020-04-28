@@ -16,22 +16,14 @@ int getch(void) {
 	return ch;
 }
 #define UNKNOWN 0
-#define KEY_UP 65
-#define KEY_DOWN 66
-#define KEY_RIGHT 67
-#define KEY_LEFT 68
+#define KEY_UP 1
+#define KEY_DOWN 2
+#define KEY_RIGHT 3
+#define KEY_LEFT 4
+#define KEY_SPACE 5
+#define KEY_G 6
+#define KEY_C 7
 
-
-int detect_key(int* buff, int ptr) {
-	ptr=(ptr+1)%3;
-	if(buff[(ptr+1)%3]==27 && buff[(ptr+2)%3]==91) {
-		if(buff[(ptr+3)%3]==65) return KEY_UP;
-		if(buff[(ptr+3)%3]==66) return KEY_DOWN;
-		if(buff[(ptr+3)%3]==67) return KEY_RIGHT;
-		if(buff[(ptr+3)%3]==68) return KEY_LEFT;
-	}
-	return UNKNOWN;
-}
 int get_key() {
 	int c = getch();
 	if(c==27 && getch()==91) {
@@ -45,7 +37,6 @@ int get_key() {
 }
 
 int main() {
-	int c = 0;
 	while(1) {
 		switch(get_key()) {
 			case KEY_UP:
@@ -58,6 +49,15 @@ int main() {
 				printf("Left\n");
 				break;
 			case KEY_RIGHT:
+				printf("Right\n");
+				break;
+			case KEY_SPACE:
+				printf("Right\n");
+				break;
+			case KEY_G:
+				printf("Right\n");
+				break;
+			case KEY_C:
 				printf("Right\n");
 				break;
 		}

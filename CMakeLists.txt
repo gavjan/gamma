@@ -32,8 +32,11 @@ set(SOURCE_FILES
         src/parser.h
         src/handler.c
         src/handler.h
-
-        src/keys.c)
+        src/ansi_escapes.c
+        src/ansi_escapes.h
+        src/ui.c
+        src/ui.h
+        )
 
 # We indicate the executable file.
 add_executable(gamma ${SOURCE_FILES})

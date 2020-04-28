@@ -591,3 +591,11 @@ char* gamma_board(gamma_t* g) {
 	*(board+(height-1)*(width+1)+width+1) = '\0';
 	return board;
 }
+bool gamma_game_over(gamma_t* g) {
+	uint32_t max_players=g->max_players;
+	for(uint32_t i=1;i<=max_players;i++)
+		if(gamma_free_fields(g,i)!=0 && gamma_golden_possible(g,i))
+			return false;
+
+	return true;
+}

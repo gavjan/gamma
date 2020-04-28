@@ -138,4 +138,12 @@ bool gamma_golden_possible(gamma_t* g, uint32_t player);
  */
 char* gamma_board(gamma_t* g);
 
+/** @brief Check if game is over.
+ * Check if no more moves are possible by any player.
+ * @param [in] g - pointer to the structure that stores the game state.
+ * @return Value @p true if at least one player can still make
+ * a move and @p false otherwise.
+ */
+bool gamma_game_over(gamma_t* g);
+
 #endif /* GAMMA_H */

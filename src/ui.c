@@ -4,6 +4,7 @@
 #include <termios.h>
 #include "ansi_escapes.h"
 #include "gamma.h"
+#include "safe_malloc.h"
 
 void insert_char(int c) {
 	putchar(c);
@@ -28,6 +29,7 @@ game_t init_board(gamma_t* g) {
 	move_to(1, 1);
 	char* board = gamma_board(g);
 	printf("%s", board);
+	safe_free(board);
 	move_to(g->height+1, 1);
 	printf("PLAYER 1 0 %d\n", g->height*g->width);
 	move_to(1, 1);
@@ -105,6 +107,9 @@ bool start_interactive(gamma_t* g) {
 				break;
 			case KEY_C:
 				skip_move(&t, g);
+				break;
+			case EOF:
+				t.game_over=true;
 				break;
 		}
 	}

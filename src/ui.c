@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <termios.h>
-#include <assert.h>
 #include "ansi_escapes.h"
 #include "gamma.h"
 #include "safe_malloc.h"

@@ -6,8 +6,8 @@ if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release")
 endif ()
 
-# We don't want to see messages about the percentage of build progress.
-set_property(GLOBAL PROPERTY RULE_MESSAGES OFF)
+# We want to see messages about the percentage of build progress.
+set_property(GLOBAL PROPERTY RULE_MESSAGES ON)
 
 # We want to see the commands called by make.
 set(CMAKE_VERBOSE_MAKEFILE ON)
@@ -15,9 +15,8 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 # We set common compilation options for all project variants.
 set(CMAKE_C_FLAGS "-std=c11 -Wall -Wextra")
 # Default options for Release and Debug variants make sense.
-# If necessary, set different here.
-# set (CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG")
-# set (CMAKE_C_FLAGS_DEBUG "-g")
+set (CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG")
+set (CMAKE_C_FLAGS_DEBUG "-g")
 
 # We indicate source files.
 set(SOURCE_FILES
@@ -41,12 +40,13 @@ set(SOURCE_FILES
 # We indicate the executable file.
 add_executable(gamma ${SOURCE_FILES})
 
-# We add Doxgen support: check if it is installed and if so:
+# We add Doxygen support: check if it is installed:
 find_package(Doxygen)
 if (DOXYGEN_FOUND)
-    # We indicate the location of the configuration file and give its destination in the folder where the compilation takes place.
+    # We indicate the location of the configuration file and give its destination in the folder where
+    # the compilation takes place.
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
-    # We add the doc target: using make doc will call doxygen with the appropriate configuration file in the build folder.
+    # We add the doc target: using make doc will call doxygen with the appropriate configuration file.
     # An appropriate comment will be written to the output.
     add_custom_target(doc
         ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile

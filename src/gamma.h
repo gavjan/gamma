@@ -42,6 +42,8 @@ typedef struct gamma {
 		uint64_t* player_busy_fields;  ///< Array of counters for taken fields
 		bool del_error_flag;          ///< Error flag used when Golden Move fails
 		bool* did_golden_move;        ///< Track of which player has already made a Golden move
+		bool game_over;								///< Game Over Flag
+		bool status_changed;								///< Flag that indicates if the game status has changed
 } gamma_t;
 
 /** @brief Creates a structure that stores the game state.

@@ -5,6 +5,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "gamma.h"
+#define GOLDEN true
+#define NOT_GOLDEN false
 #define KEY_UP 1
 #define KEY_DOWN 2
 #define KEY_RIGHT 3

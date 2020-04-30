@@ -440,6 +440,8 @@ gamma_t* gamma_new(uint32_t width, uint32_t height, uint32_t players, uint32_t a
 	g->max_areas = areas;
 	g->max_players = players;
 	g->del_error_flag = false;
+	g->game_over = false;
+	g->status_changed = true;
 	g->arr = malloc(g->width*sizeof(unode_t**));
 	if(g->arr == NULL) return safe_free(g);
 	for(i = 0; i < g->width; i++)
@@ -539,6 +541,7 @@ bool gamma_move(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	}
 	g->player_busy_fields[player]++;
 	g->free_fields--;
+	g->status_changed = true;
 	return true;
 }
 bool gamma_golden_move(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
@@ -551,6 +554,7 @@ bool gamma_golden_move(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 		return false;
 	if(!remove_field(g, x, y)) return false;
 	gamma_move(g, player, x, y);
+	g->status_changed = true;
 	g->did_golden_move[player] = true;
 	return true;
 }
@@ -592,10 +596,14 @@ char* gamma_board(gamma_t* g) {
 	return board;
 }
 bool gamma_game_over(gamma_t* g) {
-	uint32_t max_players=g->max_players;
-	for(uint32_t i=1;i<=max_players;i++)
-		if(gamma_free_fields(g,i)!=0 && gamma_golden_possible(g,i))
-			return false;
-
-	return true;
+	if(g == NULL) return true;
+	if(g->status_changed) {
+		g->status_changed=false;
+		uint32_t max_players=g->max_players;
+		for(uint32_t i=1;i<=max_players;i++)
+			if(gamma_free_fields(g,i)!=0 || gamma_golden_possible(g,i))
+				return false;
+		g->game_over=true;
+	}
+	return g->game_over;
 }

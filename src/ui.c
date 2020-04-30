@@ -86,30 +86,30 @@ bool start_interactive(gamma_t* g) {
 	while(!t.game_over) {
 		switch(get_key(&t)) {
 			case KEY_UP:
-				if(t.cur_j < t.width) {
-					cursor_right();
-					t.cur_j++;
-				}
-				break;
-
-			case KEY_DOWN:
-				if(t.cur_j > 1) {
-					cursor_left();
-					t.cur_j--;
-				}
-				break;
-
-			case KEY_LEFT:
 				if(t.cur_i > 1) {
 					cursor_up();
 					t.cur_i--;
 				}
 				break;
 
-			case KEY_RIGHT:
+			case KEY_DOWN:
 				if(t.cur_i < t.height) {
 					cursor_down();
 					t.cur_i++;
+				}
+				break;
+
+			case KEY_LEFT:
+				if(t.cur_j > 1) {
+					cursor_left();
+					t.cur_j--;
+				}
+				break;
+
+			case KEY_RIGHT:
+				if(t.cur_j < t.width) {
+					cursor_right();
+					t.cur_j++;
 				}
 				break;
 

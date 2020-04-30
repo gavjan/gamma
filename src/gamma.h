@@ -31,19 +31,19 @@
  * @brief Structure storing the game state
  */
 typedef struct gamma {
-		unode_t*** arr;                ///< Two dimensional array for storing the board state
-		uint32_t width;                ///< Width of the board
+		unode_t*** arr;               ///< Two dimensional array for storing the board state
+		uint32_t width;               ///< Width of the board
 		uint32_t height;              ///< Height of the board
-		uint32_t max_players;          ///< Maximum number of players allowed
-		uint32_t max_areas;            ///< Maximum number of areas a player can possess
-		uint64_t free_fields;          ///< Counter for free fields
+		uint32_t max_players;         ///< Maximum number of players allowed
+		uint32_t max_areas;           ///< Maximum number of areas a player can possess
+		uint64_t free_fields;         ///< Counter for free fields
 		uint64_t* player_area_count;  ///< Array of counters for taken areas
-		uint64_t* player_free_fields;  ///< Array of counters for free adjacent fields
-		uint64_t* player_busy_fields;  ///< Array of counters for taken fields
+		uint64_t* player_free_fields; ///< Array of counters for free adjacent fields
+		uint64_t* player_busy_fields; ///< Array of counters for taken fields
 		bool del_error_flag;          ///< Error flag used when Golden Move fails
 		bool* did_golden_move;        ///< Track of which player has already made a Golden move
-		bool game_over;								///< Game Over Flag
-		bool status_changed;								///< Flag that indicates if the game status has changed
+		bool game_over;               ///< Game Over Flag
+		bool status_changed;          ///< Flag that indicates if the game status has changed
 } gamma_t;
 
 /** @brief Creates a structure that stores the game state.
@@ -132,7 +132,7 @@ bool gamma_golden_possible(gamma_t* g, uint32_t player);
 
 /** @brief Gives an inscription describing the status of the board.
  * Allocates a buffer in memory in which it places a string containing text
- * description of the current state of the board. An example can be found in the gamma_test.c file.
+ * description of the current state of the board.
  * The calling function must free this buffer.
  * @param [in] g - pointer to the structure that stores the game state.
  * @return A pointer to an allocated buffer containing a string describing the state

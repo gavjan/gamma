@@ -6,15 +6,15 @@
 #include "handler.h"
 
 int main() {
-	gamma_t* g=NULL;
+	gamma_t* g = NULL;
 	Command command;
 	int first_char;
-	uint64_t line_num=0;
-	while((first_char=fpeek())!=EOF) {
+	uint64_t line_num = 0;
+	while((first_char = fpeek()) != EOF) {
 		line_num++;
 		if(first_char != '\n' && first_char != '#') {
-			command=parse_command();
-			if(command.type == UNRECOGNIZED || !handle_command(&g,command)) {
+			command = parse_command();
+			if(command.type == UNRECOGNIZED || !handle_command(&g, command)) {
 				err(line_num);
 			}
 			else {

@@ -25,14 +25,16 @@ typedef struct command {
 		uint32_t areas;
 } Command;
 
-// Function that writes ERROR.
+// Write ERROR with the line number of the error to the standard diagnostic output
 void err(uint64_t line);
 
 // Handle a command
 Command parse_command();
 
+// Reach to the end of the line
 void reach_line_end();
 
+// Check the first character of the input stream without taking it from the input stream
 int fpeek();
 
 #endif //GAMMA_PARSER_H

@@ -3,8 +3,6 @@
 #include <termios.h>
 #include <unistd.h>
 #include <stdio.h>
-
-
 int get_key(game_t* t) {
 	int c = getch(t);
 	if(c == EOF) return EOF;
@@ -37,7 +35,6 @@ void setup_console(game_t* t) {
 	t->new_terminal.c_lflag &= ~(ICANON|ECHO);
 	tcsetattr(STDIN_FILENO, TCSANOW, &(t->new_terminal));
 }
-
 void restore_console(game_t* t) {
 	// Reset colors
 	printf("\x1b[0m");
@@ -48,23 +45,18 @@ void restore_console(game_t* t) {
 void clear_screen() {
 	printf("\x1b[%dJ", CLEAR_ALL);
 }
-
 void clear_line() {
 	printf("\x1b[%dK", CLEAR_ALL);
 }
-
 void cursor_up() {
 	printf("\x1b[%dA", MOVE_BY_ONE);
 }
-
 void cursor_down() {
 	printf("\x1b[%dB", MOVE_BY_ONE);
 }
-
 void cursor_right() {
 	printf("\x1b[%dC", MOVE_BY_ONE);
 }
-
 void cursor_left() {
 	printf("\x1b[%dD", MOVE_BY_ONE);
 }

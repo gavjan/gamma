@@ -14,10 +14,6 @@
 #define KEY_SPACE 5
 #define KEY_G 6
 #define KEY_C 7
-#define move_right() if(t.cur_j<t.width) {cursor_right(); t.cur_j++; }
-#define move_left() if(t.cur_j>1) {cursor_left(); t.cur_j--; }
-#define move_up() if(t.cur_i>1) {cursor_up(); t.cur_i--; }
-#define move_down() if(t.cur_i<t.height) {cursor_down(); t.cur_i++; }
 
 typedef struct game {
 		uint32_t cur_i;
@@ -31,5 +27,6 @@ typedef struct game {
 		struct termios new_terminal;
 } game_t;
 
+// Start Interactive Game Mode
 bool start_interactive(gamma_t* g);
 #endif //GAMMA_UI_H

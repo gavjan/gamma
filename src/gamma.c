@@ -598,12 +598,12 @@ char* gamma_board(gamma_t* g) {
 bool gamma_game_over(gamma_t* g) {
 	if(g == NULL) return true;
 	if(g->status_changed) {
-		g->status_changed=false;
-		uint32_t max_players=g->max_players;
-		for(uint32_t i=1;i<=max_players;i++)
-			if(gamma_free_fields(g,i)!=0 || gamma_golden_possible(g,i))
+		g->status_changed = false;
+		uint32_t max_players = g->max_players;
+		for(uint32_t i = 1; i <= max_players; i++)
+			if(gamma_free_fields(g, i) != 0 || gamma_golden_possible(g, i))
 				return false;
-		g->game_over=true;
+		g->game_over = true;
 	}
 	return g->game_over;
 }

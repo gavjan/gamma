@@ -41,5 +41,5 @@ void cursor_right();
 // Move the cursor left
 void cursor_left();
 
-// Move to specified locaton
+// Move to specified location
 void move_to(int row, int col);

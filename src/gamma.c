@@ -120,7 +120,7 @@ static inline bool free_adjacent_up(gamma_t* g, uint32_t x, uint32_t y) {
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
  * @p height from the @ref gamma_new function.
- * @return Value @p true if the fiel atd down us free @p false, otherwise
+ * @return Value @p true if the field at down is free @p false, otherwise
  */
 static inline bool free_adjacent_down(gamma_t* g, uint32_t x, uint32_t y) {
 	return (y > 0 && g->arr[x][y-1] == NULL);
@@ -131,7 +131,7 @@ static inline bool free_adjacent_down(gamma_t* g, uint32_t x, uint32_t y) {
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
  * @p height from the @ref gamma_new function.
- * @return Value @p true if the fiel atd left us free @p false, otherwise
+ * @return Value @p true if the field at left is free @p false, otherwise
  */
 static inline bool free_adjacent_left(gamma_t* g, uint32_t x, uint32_t y) {
 	return (x > 0 && g->arr[x-1][y] == NULL);

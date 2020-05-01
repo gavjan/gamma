@@ -7,6 +7,25 @@
 #include <stdlib.h>
 #include <assert.h>
 #include "safe_malloc.h"
+/**
+ * @brief Macro for direction up
+ */
+#define UP 0
+/**
+ * @brief Macro for direction down
+ */
+#define DOWN 1
+/**
+ * @brief Macro for direction left
+ */
+#define LEFT 2
+/**
+ * @brief Macro for direction right
+ */
+#define RIGHT 3
+/**
+ * @brief Structure storing the game state
+ */
 /** @brief Check if field up from current field belongs to @p player
  * @param [in, out] g - pointer to the structure that stores the game state,
  * @param [in] player - player number, positive number does not exceed value
@@ -188,7 +207,7 @@ static inline void increase_if_no_friends(gamma_t* g, uint32_t player, uint32_t 
  * @param [in] y - line number, positive number less than value
  * @p height from the @ref gamma_new function.
  */
-void add_free_adjacents(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
+static void add_free_adjacents(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	if(free_adjacent_up(g, x, y)) increase_if_no_friends(g, player, x, y+1);
 	if(free_adjacent_down(g, x, y)) increase_if_no_friends(g, player, x, y-1);
 	if(free_adjacent_left(g, x, y)) increase_if_no_friends(g, player, x-1, y);
@@ -199,7 +218,7 @@ void add_free_adjacents(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
  * @p players from the @ref gamma_new function,
  * @param [in] change - list of players for change
  */
-void add_if_missing(uint32_t player, uint32_t* change) {
+static void add_if_missing(uint32_t player, uint32_t* change) {
 	for(int i = 0; i < 4; i++) {
 		if(change[i] == player)
 			break;
@@ -215,7 +234,7 @@ void add_if_missing(uint32_t player, uint32_t* change) {
  * @param [in] adder - how many areas will be added
  * @p height from the @ref gamma_new function.
  */
-void add_and_decrease_distinct(unode_t* master, unode_t** still_connected, int* adder) {
+static void add_and_decrease_distinct(unode_t* master, unode_t** still_connected, int* adder) {
 	for(int i = 0; i < 4; i++) {
 		if(ufind(still_connected[i]) == ufind(master))
 			return;
@@ -252,7 +271,7 @@ static inline void add_existing_neighbors(gamma_t* g, uint32_t x, uint32_t y, ui
  * @param [in] y - line number, positive number less than value
  * @p height from the @ref gamma_new function.
  */
-void decrease_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
+static void decrease_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
 	uint32_t change[4] = {0, 0, 0, 0};
 
 	add_existing_neighbors(g, x, y, change);
@@ -276,7 +295,7 @@ void decrease_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
  * @return Value @p true if the current free field has at least
  * one adjacent field belonging to @p player @p false, otherwise
  */
-bool free_has_friends(gamma_t* g, uint32_t player, uint32_t x, uint32_t y, char from) {
+static bool free_has_friends(gamma_t* g, uint32_t player, uint32_t x, uint32_t y, char from) {
 	if(g->arr[x][y] != NULL) return true;
 	return
 					(adjacent_up(g, player, x, y) && from != UP) ||
@@ -292,7 +311,7 @@ bool free_has_friends(gamma_t* g, uint32_t player, uint32_t x, uint32_t y, char 
  * @param [in] y - line number, positive number less than value
  * @p height from the @ref gamma_new function.
  */
-void decrease_player_free_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
+static void decrease_player_free_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
 	uint32_t player = g->arr[x][y]->player;
 	if(free_adjacent_up(g, x, y) && !free_has_friends(g, player, x, y+1, DOWN))
 		g->player_free_fields[player]--;
@@ -311,7 +330,7 @@ void decrease_player_free_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
  * @param [in] y - line number, positive number less than value
  * @p height from the @ref gamma_new function.
  */
-void increase_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
+static void increase_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
 	uint32_t change[4] = {0, 0, 0, 0};
 
 	add_existing_neighbors(g, x, y, change);
@@ -332,7 +351,7 @@ void increase_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
  * @param [in] master - new master field
  * @param [in] from - direction we are coming from
  */
-void reindex(gamma_t* g, uint32_t player, uint32_t x, uint32_t y, unode_t* master, char from) {
+static void reindex(gamma_t* g, uint32_t player, uint32_t x, uint32_t y, unode_t* master, char from) {
 	if(g->arr[x][y]->visited) return;
 	g->arr[x][y]->visited = true;
 	g->arr[x][y]->depth = 1;
@@ -357,7 +376,7 @@ void reindex(gamma_t* g, uint32_t player, uint32_t x, uint32_t y, unode_t* maste
  * @return Value @p true if the field was removed @p false,
  * otherwise.
  */
-bool remove_field(gamma_t* g, uint32_t x, uint32_t y) {
+static bool remove_field(gamma_t* g, uint32_t x, uint32_t y) {
 	uint32_t player = g->arr[x][y]->player;
 	unode_t* master, * del;
 	unode_t* still_connected[4] = {NULL, NULL, NULL, NULL};
@@ -432,20 +451,18 @@ gamma_t* gamma_new(uint32_t width, uint32_t height, uint32_t players, uint32_t a
 	if(width == 0 || height == 0 || players == 0 || areas == 0) return NULL;
 	gamma_t* g;
 	uint64_t i;
-	g = malloc(sizeof(gamma_t));
+	g = calloc(sizeof(gamma_t),1);
 	if(g == NULL) return NULL;
 	g->width = width;
 	g->height = height;
 	g->free_fields = width*height;
 	g->max_areas = areas;
 	g->max_players = players;
-	g->del_error_flag = false;
-	g->game_over = false;
 	g->status_changed = true;
-	g->arr = malloc(g->width*sizeof(unode_t**));
+	g->arr = calloc(g->width,sizeof(unode_t**));
 	if(g->arr == NULL) return safe_free(g);
 	for(i = 0; i < g->width; i++)
-		g->arr[i] = malloc(g->height*sizeof(unode_t*));
+		g->arr[i] = calloc(g->height,sizeof(unode_t*));
 	for(i = 0; i < g->width; i++) {
 		if(g->arr[i] == NULL) {
 			for(uint32_t j = 0; j < g->width; j++)
@@ -455,10 +472,10 @@ gamma_t* gamma_new(uint32_t width, uint32_t height, uint32_t players, uint32_t a
 		}
 	}
 
-	g->did_golden_move = malloc((g->max_players+1)*sizeof(bool));
-	g->player_area_count = malloc((g->max_players+1)*sizeof(uint64_t));
-	g->player_free_fields = malloc((g->max_players+1)*sizeof(uint64_t));
-	g->player_busy_fields = malloc((g->max_players+1)*sizeof(uint64_t));
+	g->did_golden_move = calloc((g->max_players+1),sizeof(bool));
+	g->player_area_count = calloc((g->max_players+1),sizeof(uint64_t));
+	g->player_free_fields = calloc((g->max_players+1),sizeof(uint64_t));
+	g->player_busy_fields = calloc((g->max_players+1),sizeof(uint64_t));
 	if(
 					g->did_golden_move == NULL ||
 					g->player_area_count == NULL ||
@@ -477,12 +494,6 @@ gamma_t* gamma_new(uint32_t width, uint32_t height, uint32_t players, uint32_t a
 	for(i = 0; i < g->width; i++)
 		for(uint32_t j = 0; j < g->height; j++)
 			g->arr[i][j] = NULL;
-	for(i = 0; i <= g->max_players; i++) {
-		g->player_area_count[i] = 0;
-		g->player_free_fields[i] = 0;
-		g->player_busy_fields[i] = 0;
-		g->did_golden_move[i] = false;
-	}
 	return g;
 }
 void gamma_delete(gamma_t* g) {
@@ -582,7 +593,7 @@ char* gamma_board(gamma_t* g) {
 	if(g == NULL) return NULL;
 	uint32_t height = g->height;
 	uint32_t width = g->width;
-	char* board = malloc((1+height*(width+1))*sizeof(char));
+	char* board = calloc(1+height*(width+1),sizeof(char));
 	if(board == NULL) return NULL;
 	unode_t*** arr = g->arr;
 	uint32_t i, j;

@@ -7,25 +7,6 @@
 #include <stdlib.h>
 #include <assert.h>
 #include "safe_malloc.h"
-/**
- * @brief Macro for direction up
- */
-#define UP 0
-/**
- * @brief Macro for direction down
- */
-#define DOWN 1
-/**
- * @brief Macro for direction left
- */
-#define LEFT 2
-/**
- * @brief Macro for direction right
- */
-#define RIGHT 3
-/**
- * @brief Structure storing the game state
- */
 /** @brief Check if field up from current field belongs to @p player
  * @param [in, out] g - pointer to the structure that stores the game state,
  * @param [in] player - player number, positive number does not exceed value

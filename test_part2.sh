@@ -56,17 +56,17 @@ for f in $FILES; do
   err="${err}err"
 
   valgrind --error-exitcode=15 --leak-check=full --show-leak-kinds=all -q "$REAL_PROG" <"$f" >"$EXEC".out 2>"$EXEC".err
+  #"$REAL_PROG" <"$f" >"$EXEC".out 2>"$EXEC".err
 
   # Reset progress bar
   printf "\r                                                \r"
-
   DIFF1="$(diff "$out" "$EXEC".out)"
   DIFF2="$(diff "$err" "$EXEC".err)"
   if [ "$DIFF1" ] || [ "$DIFF2" ]; then
     err_counter=$((err_counter+1))
-    echo -e "${RED} ${f} didn't pass ${NC}"
+    printf "${RED} ${f} didn't pass ${NC}\n"
   else
-    echo -e "${GREEN} ${f} passed${NC}"
+    printf "${GREEN} ${f} passed${NC}\n"
   fi
 
   progress_bar ${progress_count} ${progress_max}

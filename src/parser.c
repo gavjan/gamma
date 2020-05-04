@@ -50,7 +50,8 @@ bool get_next_token(uint32_t* token) {
 	}
 	number[pos] = '\0';
 	uint64_t ans = strtoull(number, NULL, 10);
-	if(ans > UINT32_MAX || pos == 0 || number[0]=='0') return false;
+	if(number[0]=='0' && ans!=0) return false;
+	if(ans > UINT32_MAX || pos == 0) return false;
 	*token = ans;
 	return true;
 }

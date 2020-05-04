@@ -5,13 +5,12 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <assert.h>
 bool handle_command(gamma_t** g, Command command) {
 	switch(command.type) {
 		case BATCH_MODE:
 			if(*g != NULL) return false;
 			return (*g = gamma_new(command.width, command.height,
-														 command.players, command.areas));
+														 command.players, command.areas)) != NULL;
 
 		case INTER_MODE:
 			if(*g != NULL) return false;
@@ -37,13 +36,13 @@ bool handle_command(gamma_t** g, Command command) {
 			return true;
 
 		case BUSY_FIELDS:
-			if(*g == NULL || command.player > (*g)->max_players || command.player == 0)
+			if(*g == NULL)
 				return false;
 			printf("%lu\n", gamma_busy_fields(*g, command.player));
 			return true;
 
 		case FREE_FIELDS:
-			if(*g == NULL || command.player > (*g)->max_players || command.player == 0)
+			if(*g == NULL)
 				return false;
 			printf("%lu\n", gamma_free_fields(*g, command.player));
 			return true;
@@ -56,7 +55,7 @@ bool handle_command(gamma_t** g, Command command) {
 		case BOARD:
 			if(*g == NULL) return false;
 			char* b = gamma_board(*g);
-			assert(b);
+			if(b==NULL) return false;
 			printf("%s", b);
 			safe_free(b);
 			return true;

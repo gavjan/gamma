@@ -7,7 +7,7 @@
 #include <stdlib.h>
 unode_t* new_unode(uint32_t player) {
 	unode_t* p;
-	if((p = calloc(sizeof(unode_t),1)) == NULL)
+	if((p = calloc(sizeof(unode_t), 1)) == NULL)
 		return NULL;
 	p->player = player;
 	p->parent = NULL;

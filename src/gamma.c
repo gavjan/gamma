@@ -432,7 +432,7 @@ gamma_t* gamma_new(uint32_t width, uint32_t height, uint32_t players, uint32_t a
 	if(width == 0 || height == 0 || players == 0 || areas == 0) return NULL;
 	gamma_t* g;
 	uint64_t i;
-	g = calloc(sizeof(gamma_t),1);
+	g = calloc(sizeof(gamma_t), 1);
 	if(g == NULL) return NULL;
 	g->width = width;
 	g->height = height;
@@ -440,10 +440,10 @@ gamma_t* gamma_new(uint32_t width, uint32_t height, uint32_t players, uint32_t a
 	g->max_areas = areas;
 	g->max_players = players;
 	g->status_changed = true;
-	g->arr = calloc(g->width,sizeof(unode_t**));
+	g->arr = calloc(g->width, sizeof(unode_t**));
 	if(g->arr == NULL) return safe_free(g);
 	for(i = 0; i < g->width; i++)
-		g->arr[i] = calloc(g->height,sizeof(unode_t*));
+		g->arr[i] = calloc(g->height, sizeof(unode_t*));
 	for(i = 0; i < g->width; i++) {
 		if(g->arr[i] == NULL) {
 			for(uint32_t j = 0; j < g->width; j++)
@@ -453,10 +453,10 @@ gamma_t* gamma_new(uint32_t width, uint32_t height, uint32_t players, uint32_t a
 		}
 	}
 
-	g->did_golden_move = calloc((g->max_players+1),sizeof(bool));
-	g->player_area_count = calloc((g->max_players+1),sizeof(uint64_t));
-	g->player_free_fields = calloc((g->max_players+1),sizeof(uint64_t));
-	g->player_busy_fields = calloc((g->max_players+1),sizeof(uint64_t));
+	g->did_golden_move = calloc((g->max_players+1), sizeof(bool));
+	g->player_area_count = calloc((g->max_players+1), sizeof(uint64_t));
+	g->player_free_fields = calloc((g->max_players+1), sizeof(uint64_t));
+	g->player_busy_fields = calloc((g->max_players+1), sizeof(uint64_t));
 	if(
 					g->did_golden_move == NULL ||
 					g->player_area_count == NULL ||
@@ -574,7 +574,7 @@ char* gamma_board(gamma_t* g) {
 	if(g == NULL) return NULL;
 	uint32_t height = g->height;
 	uint32_t width = g->width;
-	char* board = calloc(1+height*(width+1),sizeof(char));
+	char* board = calloc(1+height*(width+1), sizeof(char));
 	if(board == NULL) return NULL;
 	unode_t*** arr = g->arr;
 	uint32_t i, j;

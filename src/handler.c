@@ -60,7 +60,7 @@ bool handle_command(gamma_t** g, Command command) {
 		case BOARD:
 			if(*g == NULL) return false;
 			char* b = gamma_board(*g);
-			if(b==NULL) return false;
+			if(b == NULL) return false;
 			printf("%s", b);
 			safe_free(b);
 			return true;

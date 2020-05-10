@@ -1,3 +1,8 @@
+/** @file
+ * Source file providing handler function implementation.
+ * @author Gevorg Chobanyan
+ * @date 27.04.2020
+ */
 #include "handler.h"
 #include "gamma.h"
 #include "safe_malloc.h"

@@ -1,10 +1,16 @@
+/** @file
+ * Main file for taking and parsing the input data
+ * @author Gevorg Chobanyan
+ * @date 27.04.2020
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include "parser.h"
 #include "gamma.h"
 #include "handler.h"
-
+/** @brief infinite loop in main() that waits for input
+ */
 int main() {
 	gamma_t* g = NULL;
 	Command command;

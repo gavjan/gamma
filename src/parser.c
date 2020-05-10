@@ -1,3 +1,9 @@
+/** @file
+ * Source file for input parsing functions
+ *
+ * @author Gevorg Chobanyan
+ * @date 27.04.2020
+ */
 #include "parser.h"
 #include <ctype.h>
 #include <stdbool.h>
@@ -18,7 +24,10 @@ void reach_line_end() {
 	while((c = getchar()) != '\n' && c != EOF);
 	if(c == EOF) ungetc(c, stdin);
 }
-// Check if the remaining characters of the line are whitespace characters
+
+/** @brief Check if the remaining characters of the line are whitespace characters
+ * @return @p true or @p false.
+ */
 bool nothing_but_white_left() {
 	int c;
 	while(isspace(c = getchar()) && c != '\n');
@@ -28,7 +37,11 @@ bool nothing_but_white_left() {
 	}
 	return false;
 }
-// Take next token
+/** @brief Take next token
+ * Take the next token whilst checking if it is correct.
+ * @param [in] token - variable where the taken token will reside
+ * @return @p true if the token was correct numerically, @p false otherwise
+ */
 bool get_next_token(uint32_t* token) {
 	char number[UINT32_MAX_LENGTH+1];
 	int c;
@@ -55,7 +68,11 @@ bool get_next_token(uint32_t* token) {
 	*token = ans;
 	return true;
 }
-// Check first character of the line
+/** @brief Check first character of the line
+ * Check and return a recognized character.
+ * @return The given character if it was recognized and
+ * 0 otherwise.
+ */
 int check_first_char() {
 	int c = getchar();
 	if(c == 'B') {return BATCH_MODE;}
@@ -69,7 +86,6 @@ int check_first_char() {
 
 	return UNRECOGNIZED;
 }
-// Separate command into tokens correctly
 Command parse_command() {
 	Command command = {UNRECOGNIZED, 0, 0, 0, 0, 0, 0, 0};
 	command.type = check_first_char();

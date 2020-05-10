@@ -12,26 +12,24 @@
 #include <stdint.h>
 #include "ufind.h"
 
-/**
- * @brief Macro for direction up
+/** @brief Macro for direction up
  */
 #define UP 0
-/**
- * @brief Macro for direction down
+
+/** @brief Macro for direction down
  */
 #define DOWN 1
-/**
- * @brief Macro for direction left
+
+/** @brief Macro for direction left
  */
 #define LEFT 2
-/**
- * @brief Macro for direction right
+
+/** @brief Macro for direction right
  */
 #define RIGHT 3
-/**
- * @brief Structure storing the game state
- */
 
+/** @brief Structure storing the gamma game state
+ */
 typedef struct gamma {
 		unode_t*** arr;               ///< Two dimensional array for storing the board state
 		uint32_t width;               ///< Width of the board

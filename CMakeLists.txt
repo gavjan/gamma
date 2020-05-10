@@ -6,8 +6,8 @@ if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release")
 endif ()
 
-# We want to see messages about the percentage of build progress.
-set_property(GLOBAL PROPERTY RULE_MESSAGES ON)
+# We don't want to see messages about the percentage of build progress.
+set_property(GLOBAL PROPERTY RULE_MESSAGES OFF)
 
 # We want to see the commands called by make.
 set(CMAKE_VERBOSE_MAKEFILE ON)

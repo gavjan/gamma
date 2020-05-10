@@ -1,3 +1,9 @@
+/** @file
+ * Source file providing functions for interacting with the
+ * terminal.
+ * @author Gevorg Chobanyan
+ * @date 11.04.2020
+ */
 #include "ansi_escapes.h"
 #include "ui.h"
 #include <termios.h>
@@ -60,6 +66,6 @@ void cursor_right() {
 void cursor_left() {
 	printf("\x1b[%dD", MOVE_BY_ONE);
 }
-void move_to(int row, int col) {
-	printf("\x1b[%d;%df", row, col);
+void move_to(int row, int column) {
+	printf("\x1b[%d;%df", row, column);
 }

@@ -78,7 +78,7 @@ Gotowe rozwiązanie powinno się kompilować w dwóch wersjach: release i debug,
 
 ## Oddawanie rozwiązania
 
-Rozwiązanie należy oddawać, podobnie jak części 1, przez repozytorium [git](https://moodle.mimuw.edu.pl/mod/page/view.php?id=21494 "Git"). W repozytorium mają się znaleźć wszystkie pliki niezbędne do zbudowania pliku wykonywalnego i dokumentacji oraz skrypt. _W repozytorium nie wolno umieszczać plików binarnych ani tymczasowych._ W Moodlu jako rozwiązanie należy umieścić tekst zawierający identyfikator commitu finalnej wersji rozwiązania, na przykład:
+Rozwiązanie należy oddawać, podobnie jak części 1, przez repozytorium [git](https://moodle.mimuw.edu.pl/mod/page/view.php?id=21494 "Git"). W repozytorium mają się znaleźć wszystkie pliki niezbędne do zbudowania pliku wykonywalnego i dokumentacji. _W repozytorium nie wolno umieszczać plików binarnych ani tymczasowych._ W Moodlu jako rozwiązanie należy umieścić tekst zawierający identyfikator commitu finalnej wersji rozwiązania, na przykład:
 
     518507a7e9ea50e099b33cb6ca3d3141bc1d6638
 

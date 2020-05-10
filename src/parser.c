@@ -28,7 +28,7 @@ void reach_line_end() {
 /** @brief Check if the remaining characters of the line are whitespace characters
  * @return @p true or @p false.
  */
-bool nothing_but_white_left() {
+static bool nothing_but_white_left() {
 	int c;
 	while(isspace(c = getchar()) && c != '\n');
 	if(c == '\n' || c == EOF) {
@@ -42,7 +42,7 @@ bool nothing_but_white_left() {
  * @param [in] token - variable where the taken token will reside
  * @return @p true if the token was correct numerically, @p false otherwise
  */
-bool get_next_token(uint32_t* token) {
+static bool get_next_token(uint32_t* token) {
 	char number[UINT32_MAX_LENGTH+1];
 	int c;
 	while(isspace(c = getchar()) && c != '\n');
@@ -73,7 +73,7 @@ bool get_next_token(uint32_t* token) {
  * @return The given character if it was recognized and
  * 0 otherwise.
  */
-int check_first_char() {
+static inline int check_first_char() {
 	int c = getchar();
 	if(c == 'B') {return BATCH_MODE;}
 	if(c == 'I') {return INTER_MODE;}

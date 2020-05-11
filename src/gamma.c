@@ -439,20 +439,20 @@ gamma_t* gamma_new(uint32_t width, uint32_t height, uint32_t players, uint32_t a
 	g->free_fields = width*height;
 	g->max_areas = areas;
 	g->max_players = players;
-	size_t max_players = players,max_width=width,max_height=height;
+	size_t max_players = players, max_width = width, max_height = height;
 	g->del_error_flag = false;
 
 
 	unode_t** ptr;
 	unode_t*** arr;
-	arr = (unode_t***)malloc(sizeof(unode_t**)*max_width + sizeof(unode_t*)*max_height*max_width);
+	arr = (unode_t***)malloc(sizeof(unode_t**)*max_width+sizeof(unode_t*)*max_height*max_width);
 	if(arr == NULL) return safe_free(g);
-	ptr = (unode_t**)(arr + max_width);
+	ptr = (unode_t**)(arr+max_width);
 	for(i = 0; i < g->width; i++)
-		arr[i] = (ptr + max_height * i);
+		arr[i] = (ptr+max_height*i);
 	g->arr = arr;
 
-	arr=NULL;
+	arr = NULL;
 
 	g->did_golden_move = malloc((max_players+1)*sizeof(bool));
 	g->player_area_count = malloc((max_players+1)*sizeof(uint64_t));

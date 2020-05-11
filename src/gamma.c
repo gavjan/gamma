@@ -432,7 +432,7 @@ gamma_t* gamma_new(uint32_t width, uint32_t height, uint32_t players, uint32_t a
 	if(width == 0 || height == 0 || players == 0 || areas == 0) return NULL;
 	gamma_t* g;
 	uint64_t i;
-	g = malloc(sizeof(gamma_t));
+	g = calloc(sizeof(gamma_t), 1);
 	if(g == NULL) return NULL;
 	g->width = width;
 	g->height = height;
@@ -453,10 +453,10 @@ gamma_t* gamma_new(uint32_t width, uint32_t height, uint32_t players, uint32_t a
 	g->arr = arr;
 	arr = NULL;
 
-	g->did_golden_move = malloc((max_players+1)*sizeof(bool));
-	g->player_area_count = malloc((max_players+1)*sizeof(uint64_t));
-	g->player_free_fields = malloc((max_players+1)*sizeof(uint64_t));
-	g->player_busy_fields = malloc((max_players+1)*sizeof(uint64_t));
+	g->did_golden_move = calloc((max_players+1), sizeof(bool));
+	g->player_area_count = calloc((max_players+1), sizeof(uint64_t));
+	g->player_free_fields = calloc((max_players+1), sizeof(uint64_t));
+	g->player_busy_fields = calloc((max_players+1), sizeof(uint64_t));
 	if(
 					g->did_golden_move == NULL ||
 					g->player_area_count == NULL ||
@@ -472,12 +472,6 @@ gamma_t* gamma_new(uint32_t width, uint32_t height, uint32_t players, uint32_t a
 	for(i = 0; i < g->width; i++)
 		for(uint32_t j = 0; j < g->height; j++)
 			g->arr[i][j] = NULL;
-	for(i = 0; i <= g->max_players; i++) {
-		g->player_area_count[i] = 0;
-		g->player_free_fields[i] = 0;
-		g->player_busy_fields[i] = 0;
-		g->did_golden_move[i] = false;
-	}
 	return g;
 }
 void gamma_delete(gamma_t* g) {

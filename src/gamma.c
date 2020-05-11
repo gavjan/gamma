@@ -432,38 +432,36 @@ gamma_t* gamma_new(uint32_t width, uint32_t height, uint32_t players, uint32_t a
 	if(width == 0 || height == 0 || players == 0 || areas == 0) return NULL;
 	gamma_t* g;
 	uint64_t i;
-	g = calloc(sizeof(gamma_t), 1);
+	g = malloc(sizeof(gamma_t));
 	if(g == NULL) return NULL;
 	g->width = width;
 	g->height = height;
 	g->free_fields = width*height;
 	g->max_areas = areas;
 	g->max_players = players;
+	size_t max_players = players, max_width = width, max_height = height;
+	g->del_error_flag = false;
 	g->status_changed = true;
-	g->arr = calloc(g->width, sizeof(unode_t**));
-	if(g->arr == NULL) return safe_free(g);
-	for(i = 0; i < g->width; i++)
-		g->arr[i] = calloc(g->height, sizeof(unode_t*));
-	for(i = 0; i < g->width; i++) {
-		if(g->arr[i] == NULL) {
-			for(uint32_t j = 0; j < g->width; j++)
-				safe_free(g->arr[i]);
-			safe_free(g->arr);
-			return safe_free(g);
-		}
-	}
 
-	g->did_golden_move = calloc((g->max_players+1), sizeof(bool));
-	g->player_area_count = calloc((g->max_players+1), sizeof(uint64_t));
-	g->player_free_fields = calloc((g->max_players+1), sizeof(uint64_t));
-	g->player_busy_fields = calloc((g->max_players+1), sizeof(uint64_t));
+	unode_t** ptr;
+	unode_t*** arr;
+	arr = (unode_t***)malloc(sizeof(unode_t**)*max_width+sizeof(unode_t*)*max_height*max_width);
+	if(arr == NULL) return safe_free(g);
+	ptr = (unode_t**)(arr+max_width);
+	for(i = 0; i < g->width; i++)
+		arr[i] = (ptr+max_height*i);
+	g->arr = arr;
+	arr = NULL;
+
+	g->did_golden_move = malloc((max_players+1)*sizeof(bool));
+	g->player_area_count = malloc((max_players+1)*sizeof(uint64_t));
+	g->player_free_fields = malloc((max_players+1)*sizeof(uint64_t));
+	g->player_busy_fields = malloc((max_players+1)*sizeof(uint64_t));
 	if(
 					g->did_golden_move == NULL ||
 					g->player_area_count == NULL ||
 					g->player_free_fields == NULL ||
 					g->player_busy_fields == NULL) {
-		for(uint32_t j = 0; j < g->width; j++)
-			safe_free(g->arr[i]);
 		safe_free(g->arr);
 		safe_free(g->did_golden_move);
 		safe_free(g->player_area_count);
@@ -471,10 +469,15 @@ gamma_t* gamma_new(uint32_t width, uint32_t height, uint32_t players, uint32_t a
 		safe_free(g->player_busy_fields);
 		return safe_free(g);
 	}
-
 	for(i = 0; i < g->width; i++)
 		for(uint32_t j = 0; j < g->height; j++)
 			g->arr[i][j] = NULL;
+	for(i = 0; i <= g->max_players; i++) {
+		g->player_area_count[i] = 0;
+		g->player_free_fields[i] = 0;
+		g->player_busy_fields[i] = 0;
+		g->did_golden_move[i] = false;
+	}
 	return g;
 }
 void gamma_delete(gamma_t* g) {
@@ -482,8 +485,6 @@ void gamma_delete(gamma_t* g) {
 	for(uint32_t i = 0; i < g->width; i++)
 		for(uint32_t j = 0; j < g->height; j++)
 			safe_free(g->arr[i][j]);
-	for(uint32_t i = 0; i < g->width; i++)
-		safe_free(g->arr[i]);
 	safe_free(g->player_area_count);
 	safe_free(g->player_busy_fields);
 	safe_free(g->player_free_fields);

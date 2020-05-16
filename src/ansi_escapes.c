@@ -1,6 +1,6 @@
 /** @file
  * Source file providing functions for interacting with the
- * terminal.
+ * terminal
  * @author Gevorg Chobanyan
  * @date 11.04.2020
  */
@@ -9,18 +9,22 @@
 #include <termios.h>
 #include <unistd.h>
 #include <stdio.h>
-int get_key(game_t* t) {
-	int c = getch(t);
+int get_key(game_t* t, int c) {
+	if(c == NO_KEY) c = getch(t);
 	if(c == 4) return EOF;
 	if(c == 99 || c == 67) return KEY_C;
 	if(c == 103 || c == 71) return KEY_G;
 	if(c == 32) return KEY_SPACE;
-	if(c == 27 && getch(t) == 91) {
+	if(c == 27) {
 		c = getch(t);
-		if(c == 65) return KEY_UP;
-		if(c == 66) return KEY_DOWN;
-		if(c == 67) return KEY_RIGHT;
-		if(c == 68) return KEY_LEFT;
+		if(c == 91) {
+			c = getch(t);
+			if(c == 65) return KEY_UP;
+			if(c == 66) return KEY_DOWN;
+			if(c == 67) return KEY_RIGHT;
+			if(c == 68) return KEY_LEFT;
+		}
+		else return get_key(t, c);
 	}
 	return UNKNOWN;
 }

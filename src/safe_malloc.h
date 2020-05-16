@@ -10,7 +10,7 @@
 #include <stdio.h>
 /** @brief Safe free() wrapper
  * Safely frees a memory location pointed by @p p
- * Does nothing if this indicator is NULL.
+ * Does nothing if this indicator is NULL
  * @param [in] p - pointer to the memory location that
  * is to be freed
  * @return NULL pointer

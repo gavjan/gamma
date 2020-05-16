@@ -1,6 +1,6 @@
 /** @file
  * Source file providing access to the functions
- * responsible for the interactive mode.
+ * responsible for the interactive mode
  * @author Gevorg Chobanyan
  * @date 30.04.2020
  */
@@ -47,6 +47,11 @@
 /** @brief Macro for C key
  */
 #define KEY_C 7
+
+/** @brief Macro to indicate that no key was pressed yet
+ */
+#define NO_KEY 0
+
 /** @brief Structure storing the interactive game's state
  */
 typedef struct game {
@@ -63,7 +68,7 @@ typedef struct game {
 
 
 /** @brief Start Interactive Game Mode
- * @param [in] g - pointer to the structure that stores the game state.
+ * @param [in] g - pointer to the structure that stores the game state
  * @return @p true when Interactive Mode finishes, and @p false if the
  * given @p g pointer is NULL
  */

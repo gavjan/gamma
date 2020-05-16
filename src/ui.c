@@ -1,6 +1,6 @@
 /** @file
  * Source file providing access to the functions
- * responsible for the interactive mode.
+ * responsible for the interactive mode
  * @author Gevorg Chobanyan
  * @date 30.04.2020
  */
@@ -21,8 +21,8 @@ static inline void insert_char(int c) {
 	printf("\033[%dD", (1));
 }
 /** @brief Initialize the game board
- * @param [in] g - pointer to the structure that stores the game state.
- * @return Structure containing the interactive game's starting state.
+ * @param [in] g - pointer to the structure that stores the game state
+ * @return Structure containing the interactive game's starting state
  */
 static game_t init_board(gamma_t* g) {
 	static struct termios original_terminal;
@@ -51,8 +51,8 @@ static game_t init_board(gamma_t* g) {
 	return t;
 }
 /** @brief Update the Heads Up Display
- * @param [in] g - pointer to the structure that stores the game state.
- * @param [in] t - pointer to the structure that stores the interactive state.
+ * @param [in] g - pointer to the structure that stores the game state
+ * @param [in] t - pointer to the structure that stores the interactive state
  */
 static void update_hud(game_t* t, gamma_t* g) {
 	move_to(t->height+1, 1);
@@ -68,8 +68,8 @@ static void update_hud(game_t* t, gamma_t* g) {
 	move_to(t->cur_i, t->cur_j);
 }
 /** @brief Check if current player can't make a move
- * @param [in] t - pointer to the structure that stores the interactive state.
- * @param [in] g - pointer to the structure that stores the game state.
+ * @param [in] t - pointer to the structure that stores the interactive state
+ * @param [in] g - pointer to the structure that stores the game state
  * @return @p if the player can't make a move, @p false otherwise
  */
 static inline bool cant_move(game_t* t, gamma_t* g) {
@@ -77,8 +77,8 @@ static inline bool cant_move(game_t* t, gamma_t* g) {
 				 !gamma_golden_possible(g, t->curr_player);
 }
 /** @brief Skip a move
- * @param [in] t - pointer to the structure that stores the interactive state.
- * @param [in] g - pointer to the structure that stores the game state.
+ * @param [in] t - pointer to the structure that stores the interactive state
+ * @param [in] g - pointer to the structure that stores the game state
  */
 static void skip_move(game_t* t, gamma_t* g) {
 	t->curr_player = (t->curr_player)%t->max_players+1;
@@ -92,9 +92,9 @@ static void skip_move(game_t* t, gamma_t* g) {
 	update_hud(t, g);
 }
 /** @brief Make a move
- * @param [in] t - pointer to the structure that stores the interactive state.
- * @param [in] g - pointer to the structure that stores the game state.
- * @param [in] golden - boolean value that indicates if the move is golden.
+ * @param [in] t - pointer to the structure that stores the interactive state
+ * @param [in] g - pointer to the structure that stores the game state
+ * @param [in] golden - boolean value that indicates if the move is golden
  */
 static void make_move(game_t* t, gamma_t* g, bool golden) {
 	bool move_result = golden ?
@@ -111,7 +111,7 @@ bool start_interactive(gamma_t* g) {
 	game_t t = init_board(g);
 
 	while(!t.game_over) {
-		switch(get_key(&t)) {
+		switch(get_key(&t, NO_KEY)) {
 			case KEY_UP:
 				if(t.cur_i > 1) {
 					cursor_up();

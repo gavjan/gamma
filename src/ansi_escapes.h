@@ -1,6 +1,6 @@
 /** @file
  * Header file providing functions for interacting with the
- * terminal.
+ * terminal
  * @author Gevorg Chobanyan
  * @date 11.04.2020
  */
@@ -49,25 +49,26 @@
 
 /** @brief Return a pressed valid key.
  * Check if the pressed key is valid and if it is return it.
- * Return 0 otherwise.
- * @param [in] t - structure containing interactive game's state.
- * @return a character if it's valid.
+ * Return 0 otherwise
+ * @param [in] t - structure containing interactive game's state
+ * @param [in] c - flag for the last recognized key after escaping
+ * @return a character if it's valid
  */
-int get_key(game_t* t);
+int get_key(game_t* t, int c);
 
 /** @brief Implementation of the standard getch() function
- * @param [in] t - structure containing interactive game's state.
- * @return a character if it's valid.
+ * @param [in] t - structure containing interactive game's state
+ * @return a character if it's valid
  */
 int getch(game_t* t);
 
 /** @brief Prepare console
- * @param [in] t - structure containing interactive game's state.
+ * @param [in] t - structure containing interactive game's state
  */
 void setup_console(game_t* t);
 
 /** @brief Restore the console's original state
- * @param [in] t - structure containing interactive game's state.
+ * @param [in] t - structure containing interactive game's state
  */
 void restore_console(game_t* t);
 

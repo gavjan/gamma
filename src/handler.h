@@ -1,5 +1,5 @@
 /** @file
- * Header file providing access to the handler function.
+ * Header file providing access to the handler function
  * @author Gevorg Chobanyan
  * @date 27.04.2020
  */
@@ -13,7 +13,7 @@
  * @param [in] g - gamma game's pointer
  * @param [in] command - structure containing command data
  * @return @p true if the command was executed and @p false
- * otherwise.
+ * otherwise
  */
 bool handle_command(gamma_t** g, Command command);
 

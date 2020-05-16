@@ -14,7 +14,7 @@
  * @param [in] x - column number, positive number less than value
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
- * @p height from the @ref gamma_new function.
+ * @p height from the @ref gamma_new function
  * @return Value @p true if up adjacent node belongs to @p player @p false, otherwise
  */
 static inline bool adjacent_up(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
@@ -27,7 +27,7 @@ static inline bool adjacent_up(gamma_t* g, uint32_t player, uint32_t x, uint32_t
  * @param [in] x - column number, positive number less than value
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
- * @p height from the @ref gamma_new function.
+ * @p height from the @ref gamma_new function
  * @return Value @p true if down adjacent node belongs to @p player @p false, otherwise
  */
 static inline bool adjacent_down(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
@@ -40,7 +40,7 @@ static inline bool adjacent_down(gamma_t* g, uint32_t player, uint32_t x, uint32
  * @param [in] x - column number, positive number less than value
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
- * @p height from the @ref gamma_new function.
+ * @p height from the @ref gamma_new function
  * @return Value @p true if left adjacent node belongs to @p player @p false, otherwise
  */
 static inline bool adjacent_left(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
@@ -53,7 +53,7 @@ static inline bool adjacent_left(gamma_t* g, uint32_t player, uint32_t x, uint32
  * @param [in] x - column number, positive number less than value
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
- * @p height from the @ref gamma_new function.
+ * @p height from the @ref gamma_new function
  * @return Value @p true if right adjacent node belongs to @p player @p false, otherwise
  */
 static inline bool adjacent_right(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
@@ -64,7 +64,7 @@ static inline bool adjacent_right(gamma_t* g, uint32_t player, uint32_t x, uint3
  * @param [in] x - column number, positive number less than value
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
- * @p height from the @ref gamma_new function.
+ * @p height from the @ref gamma_new function
  * @return Value @p true if the field at right us exists @p false, otherwise
  */
 static inline bool exists_up(gamma_t* g, uint32_t x, uint32_t y) {
@@ -75,7 +75,7 @@ static inline bool exists_up(gamma_t* g, uint32_t x, uint32_t y) {
  * @param [in] x - column number, positive number less than value
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
- * @p height from the @ref gamma_new function.
+ * @p height from the @ref gamma_new function
  * @return Value @p true if the field at right us exists @p false, otherwise
  */
 static inline bool exists_down(gamma_t* g, uint32_t x, uint32_t y) {
@@ -86,7 +86,7 @@ static inline bool exists_down(gamma_t* g, uint32_t x, uint32_t y) {
  * @param [in] x - column number, positive number less than value
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
- * @p height from the @ref gamma_new function.
+ * @p height from the @ref gamma_new function
  * @return Value @p true if the field at right us exists @p false, otherwise
  */
 static inline bool exists_left(gamma_t* g, uint32_t x, uint32_t y) {
@@ -97,7 +97,7 @@ static inline bool exists_left(gamma_t* g, uint32_t x, uint32_t y) {
  * @param [in] x - column number, positive number less than value
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
- * @p height from the @ref gamma_new function.
+ * @p height from the @ref gamma_new function
  * @return Value @p true if the field at right us exists @p false, otherwise
  */
 static inline bool exists_right(gamma_t* g, uint32_t x, uint32_t y) {
@@ -108,7 +108,7 @@ static inline bool exists_right(gamma_t* g, uint32_t x, uint32_t y) {
  * @param [in] x - column number, positive number less than value
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
- * @p height from the @ref gamma_new function.
+ * @p height from the @ref gamma_new function
  * @return Value @p true if the fi ateld up us free @p false, otherwise
  */
 static inline bool free_adjacent_up(gamma_t* g, uint32_t x, uint32_t y) {
@@ -119,7 +119,7 @@ static inline bool free_adjacent_up(gamma_t* g, uint32_t x, uint32_t y) {
  * @param [in] x - column number, positive number less than value
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
- * @p height from the @ref gamma_new function.
+ * @p height from the @ref gamma_new function
  * @return Value @p true if the field at down is free @p false, otherwise
  */
 static inline bool free_adjacent_down(gamma_t* g, uint32_t x, uint32_t y) {
@@ -130,7 +130,7 @@ static inline bool free_adjacent_down(gamma_t* g, uint32_t x, uint32_t y) {
  * @param [in] x - column number, positive number less than value
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
- * @p height from the @ref gamma_new function.
+ * @p height from the @ref gamma_new function
  * @return Value @p true if the field at left is free @p false, otherwise
  */
 static inline bool free_adjacent_left(gamma_t* g, uint32_t x, uint32_t y) {
@@ -141,7 +141,7 @@ static inline bool free_adjacent_left(gamma_t* g, uint32_t x, uint32_t y) {
  * @param [in] x - column number, positive number less than value
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
- * @p height from the @ref gamma_new function.
+ * @p height from the @ref gamma_new function
  * @return Value @p true if the field at right us free @p false, otherwise
  */
 static inline bool free_adjacent_right(gamma_t* g, uint32_t x, uint32_t y) {
@@ -154,7 +154,7 @@ static inline bool free_adjacent_right(gamma_t* g, uint32_t x, uint32_t y) {
  * @param [in] x - column number, positive number less than value
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
- * @p height from the @ref gamma_new function.
+ * @p height from the @ref gamma_new function
  * @return Value @p true if the current field has at least
  * one adjacent field belonging to @p player @p false, otherwise
  */
@@ -173,7 +173,7 @@ static inline bool has_friends(gamma_t* g, uint32_t player, uint32_t x, uint32_t
  * @param [in] x - column number, positive number less than value
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
- * @p height from the @ref gamma_new function.
+ * @p height from the @ref gamma_new function
  */
 static inline void increase_if_no_friends(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	if(!has_friends(g, player, x, y)) g->player_free_fields[player]++;
@@ -186,7 +186,7 @@ static inline void increase_if_no_friends(gamma_t* g, uint32_t player, uint32_t 
  * @param [in] x - column number, positive number less than value
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
- * @p height from the @ref gamma_new function.
+ * @p height from the @ref gamma_new function
  */
 static void add_free_adjacents(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	if(free_adjacent_up(g, x, y)) increase_if_no_friends(g, player, x, y+1);
@@ -213,7 +213,7 @@ static void add_if_missing(uint32_t player, uint32_t* change) {
  * @param [in] master - new master field
  * @param [in] still_connected - list of areas that are still connected
  * @param [in] adder - how many areas will be added
- * @p height from the @ref gamma_new function.
+ * @p height from the @ref gamma_new function
  */
 static void add_and_decrease_distinct(unode_t* master, unode_t** still_connected, int* adder) {
 	for(int i = 0; i < 4; i++) {
@@ -232,7 +232,7 @@ static void add_and_decrease_distinct(unode_t* master, unode_t** still_connected
  * @param [in] x - column number, positive number less than value
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
- * @p height from the @ref gamma_new function.
+ * @p height from the @ref gamma_new function
  * @param [in] change - list of players for change
  */
 static inline void add_existing_neighbors(gamma_t* g, uint32_t x, uint32_t y, uint32_t* change) {
@@ -250,7 +250,7 @@ static inline void add_existing_neighbors(gamma_t* g, uint32_t x, uint32_t y, ui
  * @param [in] x - column number, positive number less than value
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
- * @p height from the @ref gamma_new function.
+ * @p height from the @ref gamma_new function
  */
 static void decrease_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
 	uint32_t change[4] = {0, 0, 0, 0};
@@ -271,7 +271,7 @@ static void decrease_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
  * @param [in] x - column number, positive number less than value
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
- * @p height from the @ref gamma_new function.
+ * @p height from the @ref gamma_new function
  * @param [in] from - direction we are coming from
  * @return Value @p true if the current free field has at least
  * one adjacent field belonging to @p player @p false, otherwise
@@ -290,7 +290,7 @@ static bool free_has_friends(gamma_t* g, uint32_t player, uint32_t x, uint32_t y
  * @param [in] x - column number, positive number less than value
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
- * @p height from the @ref gamma_new function.
+ * @p height from the @ref gamma_new function
  */
 static void decrease_player_free_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
 	uint32_t player = g->arr[x][y]->player;
@@ -309,7 +309,7 @@ static void decrease_player_free_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
  * @param [in] x - column number, positive number less than value
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
- * @p height from the @ref gamma_new function.
+ * @p height from the @ref gamma_new function
  */
 static void increase_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
 	uint32_t change[4] = {0, 0, 0, 0};
@@ -328,7 +328,7 @@ static void increase_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
  * @param [in] x - column number, positive number less than value
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
- * @p height from the @ref gamma_new function.
+ * @p height from the @ref gamma_new function
  * @param [in] master - new master field
  * @param [in] from - direction we are coming from
  */
@@ -353,7 +353,7 @@ static void reindex(gamma_t* g, uint32_t player, uint32_t x, uint32_t y, unode_t
  * @param [in] x - column number, positive number less than value
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
- * @p height from the @ref gamma_new function.
+ * @p height from the @ref gamma_new function
  * @return Value @p true if the field was removed @p false,
  * otherwise.
  */

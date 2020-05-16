@@ -26,7 +26,7 @@ void reach_line_end() {
 }
 
 /** @brief Check if the remaining characters of the line are whitespace characters
- * @return @p true or @p false.
+ * @return @p true or @p false
  */
 static bool nothing_but_white_left() {
 	int c;
@@ -71,7 +71,7 @@ static bool get_next_token(uint32_t* token) {
 /** @brief Check first character of the line
  * Check and return a recognized character.
  * @return The given character if it was recognized and
- * 0 otherwise.
+ * 0 otherwise
  */
 static inline int check_first_char() {
 	int c = getchar();

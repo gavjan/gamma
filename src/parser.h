@@ -66,7 +66,7 @@ typedef struct command {
  * Write ERROR with the line number of
  * the error to the standard diagnostic output
  * @return The given character if it was recognized and
- * 0 otherwise.
+ * 0 otherwise
  */
 void err(uint64_t line);
 

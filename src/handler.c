@@ -1,5 +1,5 @@
 /** @file
- * Source file providing handler function implementation.
+ * Source file providing handler function implementation
  * @author Gevorg Chobanyan
  * @date 27.04.2020
  */

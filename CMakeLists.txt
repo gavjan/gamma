@@ -18,11 +18,22 @@ set(CMAKE_C_FLAGS "-std=c11 -Wall -Wextra")
 set (CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG")
 set (CMAKE_C_FLAGS_DEBUG "-g")
 
+# We indicate source files for testing.
+set(TEST_SOURCE_FILES
+        src/ufind.c
+        src/ufind.h
+        src/safe_malloc.c
+        src/safe_malloc.h
+        src/gamma.c
+        src/gamma.h
+        src/gamma_test.c
+        )
+
 # We indicate source files.
 set(SOURCE_FILES
         src/gamma.c
         src/gamma.h
-        src/main.c
+        src/gamma_main.c
         src/ufind.c
         src/ufind.h
         src/safe_malloc.c
@@ -39,6 +50,10 @@ set(SOURCE_FILES
 
 # We indicate the executable file.
 add_executable(gamma ${SOURCE_FILES})
+
+# We indicate the executable files for testing.
+add_executable(test EXCLUDE_FROM_ALL ${TEST_SOURCE_FILES})
+set_target_properties(test PROPERTIES OUTPUT_NAME "gamma_test")
 
 # We add Doxygen support: check if it is installed:
 find_package(Doxygen)

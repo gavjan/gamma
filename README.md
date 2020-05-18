@@ -1,94 +1,67 @@
-## Duże zadanie, część 2
+## Duże zadanie, część 3
 
-# Zadanie gamma, część 2
+# Zadanie gamma, część 3
 
-Jako drugą część dużego zadania należy zaimplementować program, który, korzystając z modułu silnika zaimplementowanego w części pierwszej, umożliwia przeprowadzanie rozgrywki. Interfejs programu ma być tekstowy. Program ma czytać dane ze standardowego wejścia, wyniki wypisywać na standardowe wyjście, a informacje o błędach na standardowe wyjście diagnostyczne. Program działa w dwóch trybach.
+Celem trzeciej części zadania jest dokończenie projektu gry gamma. Oczekujemy poprawienia ewentualnych błędów z poprzednich części zadania oraz zmodyfikowania programu. Obowiązują ustalenia z treści poprzednich części zadania i z forum dyskusyjnego dla studentów.
 
-## Tryb wsadowy (ang. _batch mode_)
+## Modyfikacja silnika gry
 
-W trybie wsadowym program oczekuje poleceń, każde w osobnym wierszu. Rodzaj polecenia jest determinowany pierwszym znakiem wiersza. Jeśli polecenie wymaga podania parametru lub parametrów, to po tym znaku występuje odstęp składający się z co najmniej jednego białego znaku, a po tym odstępie pojawiają się kolejne parametry. Parametry polecenia są liczbami dziesiętnymi. Pomiędzy parametrami występuje odstęp składający się z co najmniej jednego białego znaku. Na końcu wiersza może wystąpić dowolna liczba białych znaków.
+Należy poprawić działanie funkcji `gamma_golden_possible`, aby dawała wynik `true` wtedy i tylko wtedy, gdy gracz o numerze `player` może wykonać złoty ruch. Należy też stosownie zmodyfikować dokumentację tej funkcji.
 
-Na początku działania program oczekuje jednego z dwóch poleceń:
+## Modyfikacja trybu interaktywnego
 
-*   `B width height players areas`
-*   `I width height players areas`
+Należy uatrakcyjnić wygląd planszy w trybie interaktywnym. Przykładowe pomysły:
 
-Polecenia te służą do utworzenia nowej gry za pomocą wywołania funkcji `gamma_new`. Poprawne wykonanie polecenia `B` jest kwitowane wypisaniem na standardowe wyjście komunikatu
+*   dodanie kolorów, na przykład w celu wyróżnienia pól gracza, który ma wykonać ruch albo w celu odróżniania pól, gdy gracze mają wielocyfrowe numery i na planszy nie ma żadnego separatora między polami,
+*   ulepszenie komunikatów pojawiających się pod planszą w trakcie gry i po jej zakończeniu,
+*   jeśli pole gry zajmuje więcej niż jeden znak i na tym polu stoi kursor, to całe pole wyświetlane jest w negatywie,
+*   sprawdzanie rozmiaru okna terminala i niedopuszczanie do gry (ze stosownym komunikatem), gdy jest za małe.
 
-`OK line`
+## Modyfikacja skryptu budującego
 
-gdzie `line` jest numerem wiersza, w którym pojawiło się to polecenie. Po czym program akceptuje polecenia:
+Należy dodać możliwość utworzenia pliku wykonywalnego z testami silnika gry. Czyli na przykład po wykonaniu:
 
-*   `m player x y` – wywołuje funkcję `gamma_move`,
-*   `g player x y` – wywołuje funkcję `gamma_golden_move`,
-*   `b player` – wywołuje funkcję `gamma_busy_fields`,
-*   `f player` – wywołuje funkcję `gamma_free_fields`,
-*   `q player` – wywołuje funkcję `gamma_golden_possible`,
-*   `p` – wywołuje funkcję `gamma_board`.
+    mkdir release
+    cd release
+    cmake ..
 
-Program wypisuje wynik każdej z tych funkcji na standardowe wyjście. Wartość `false` wypisuje jako `0`, a wartość `true` jako `1`.
+*   polecenie `make` tworzy plik wykonywalny `gamma` całej gry,
+*   polecenie `make test` tworzy plik wykonywalny `gamma_test` z testami silnika gry,
+*   polecenie `make doc` tworzy dokumentację w formacie `doxygen`.
 
-Program nie interpretuje pustych wierszy (składających się tylko ze znaku przejścia do nowego wiersza) oraz wierszy zaczynających się znakiem `#`.
+Jak poprzednio funkcja `main` gry ma się znajdować w pliku `src/gamma_main.c`. Funkcja `main` uruchamiająca testy silnika gry ma się znajdować w pliku `src/gamma_test.c` – może to być plik, który został udostępniony w szablonie do części 1 zadania, lub plik z oficjalnymi testami do części 1 zadania. Można do tego pliku dodać własne testy.
 
-Program kwituje każdy błędny wiersz (niepasujący do powyższego opisu) wypisaniem na standardowe wyjście diagnostyczne komunikatu
+Wskazówka: W pliku `CMakeList.txt` można dodać polecenie
 
-`ERROR line`
+    # Wskazujemy plik wykonywalny dla testów silnika.
+    add_executable(gamma_test EXCLUDE_FROM_ALL ${TEST_SOURCE_FILES})
 
-gdzie `line` jest numerem błędnego wiersza.
-
-Wiersze na wejściu liczone są od jedynki. Liczone są wszystkie wiersze, łącznie z tymi, które nie są interpretowane.
-
-W trybie wsadowym program kończy działanie, gdy skończą się dane na wejściu.
-
-Dalsze szczegóły działania programu w trybie wsadowym można wydedukować, analizując załączone przykłady użycia.
-
-Poprawne wykonanie polecenia `I` powoduje przejście do trybu interaktywnego.
-
-## Tryb interaktywny (ang. _interactive mode_)
-
-W trybie interaktywnym program wyświetla planszę, a pod planszą wiersz zachęcający gracza do wykonania ruchu. Program prosi o wykonanie ruchu kolejnych graczy, przy czym pomija graczy, dla których funkcja `gamma_free_fields` zwróciła `0` i funkcja `gamma_golden_possible` zwróciła `false`. Ruch wykonuje się, przesuwając kursor na wybrane pole za pomocą klawiszy ze strzałkami, a następnie wciskając klawisz `spacja`, aby wykonać zwykły ruch, lub klawisz `G`, aby wykonać złoty ruch. Gracz może zrezygnować z ruchu, wciskając klawisz `C`. Wciśnięcie klawiszy literowych powinno być rozpoznawane niezależnie od wciśnięcie klawisza `Shift` i stanu `CapsLock`.
-
-Gra kończy się, gdy już żaden gracz nie może wykonać ruchu lub po jednokrotnym wciśnięciu kombinacji klawiszy `Ctrl-D`. Wtedy program wypisuje ostateczną planszę gry wraz z podsumowaniem, ile pól zajął każdy z graczy.
-
-W trybie interaktywnym program powinien uniemożliwiać użytkownikom wykonywanie błędnych akcji.
-
-Dalsze szczegóły działania programu w trybie interaktywnym można wydedukować, oglądając załączone animacje.
-
-## Kończenie programu
-
-Zasadniczo program powinien zakończyć się kodem 0, chyba że wystąpił jakiś krytyczny błąd – wtedy program powinien zakończyć się kodem 1. Przed zakończeniem działania program powinien jawnie zwolnić całą zaalokowaną pamięć, w szczególności powinien wywołać funkcję `gamma_delete`.
+definiując uprzednio zmienną `TEST_SOURCE_FILES`.
 
 ## Dostarczamy
 
-Nie dostarczamy żadnego kodu źródłowego. Rozwiązanie drugiej części zadania powinno korzystać z własnego, ewentualnie samodzielnie zmodyfikowanego, rozwiązania części pierwszej.
+Rozwiązanie części 3 zadania powinno korzystać z własnego rozwiązania poprzednich jego części.
 
 ## Wymagamy
 
-Jako rozwiązanie części 2 zadania wymagamy:
+Jako rozwiązanie części 3 zadania wymagamy:
 
-*   umieszczenia kodu źródłowego implementacji w katalogu `src`,
-*   uzupełnienia dokumentacji w formacie [doxygen](https://moodle.mimuw.edu.pl/mod/page/view.php?id=21498 "Doxygen") tak, aby była przydatna dla programistów rozwijających program,
-*   dostosowania pliku konfiguracyjnego dla programu [cmake](https://moodle.mimuw.edu.pl/mod/page/view.php?id=21497 "CMake").
+*   zachowania lub poprawienia struktury plików z poprzednich części,
+*   zachowania lub poprawienia plików źródłowych z poprzednich części rozwiązania,
+*   uzupełnienia pliku konfiguracyjnego dla programu `cmake`,
+*   uzupełnienia dokumentacji w formacie `doxygen` tak, aby była przydatna dla programistów rozwijających program.
 
-Gotowe rozwiązanie powinno się kompilować w dwóch wersjach: release i debug, jak to opisano w pierwszej części zadania.
+Gotowe rozwiązanie powinno się kompilować w dwóch wersjach: `release` i `debug`, jak to opisano w pierwszej części zadania.
 
-**UWAGA 1: funkcja `main` programu musi znajdować się w pliku `src/gamma_main.c`.**
-
-**UWAGA 2: w wyniku kompilacji powinien powstać plik wykonywalny `gamma`.**
+**Uwaga: Niezmiernie istotne jest, aby przestrzegać opisanej specyfikacji nazw plików.**
 
 ## Oddawanie rozwiązania
 
-Rozwiązanie należy oddawać, podobnie jak części 1, przez repozytorium [git](https://moodle.mimuw.edu.pl/mod/page/view.php?id=21494 "Git"). W repozytorium mają się znaleźć wszystkie pliki niezbędne do zbudowania pliku wykonywalnego i dokumentacji. _W repozytorium nie wolno umieszczać plików binarnych ani tymczasowych._ W Moodlu jako rozwiązanie należy umieścić tekst zawierający identyfikator commitu finalnej wersji rozwiązania, na przykład:
+Rozwiązanie należy oddawać, podobnie jak części 1 i 2, przez repozytorium git. W repozytorium mają się znaleźć wszystkie pliki niezbędne do zbudowania plików wykonywalnych i dokumentacji, i tylko te pliki. _W repozytorium nie wolno umieszczać plików binarnych ani tymczasowych._ W Moodlu jako rozwiązanie należy umieścić tekst zawierający identyfikator commitu finalnej wersji rozwiązania, na przykład:
 
     518507a7e9ea50e099b33cb6ca3d3141bc1d6638
 
-Rozwiązanie należy zatwierdzić ([git](https://moodle.mimuw.edu.pl/mod/page/view.php?id=21494 "Git") commit) i wysłać do repozytorium ([git](https://moodle.mimuw.edu.pl/mod/page/view.php?id=21494 "Git") push) przed terminem podanym w Moodlu.
-
-## Wskazówki
-
-Funkcje `scanf`, `atoi` itp. nie sprawdzają dokładnie poprawności wczytywanych wartości liczbowych. Lepiej zachowują się funkcje `strtoul`, `strtoull` lub tp.
-
-Obsługę terminala Linuksowego w trybie interaktywnym można zrealizować za pomocą `ANSI escape codes`. Można też skorzystać z jakiejś biblioteki, o ile jest zainstalowana w laboratorium komputerowym.
+Rozwiązanie należy zatwierdzić (`git commit`) i wysłać do repozytorium (`git push`) przed terminem podanym w Moodlu.
 
 ## Punktacja
 
@@ -98,9 +71,9 @@ Za w pełni poprawną implementację programu można zdobyć maksymalnie 20 punk
 *   Za każdy test, którego program nie przejdzie, traci się do 1 punktu.
 *   Za problemy z zarządzaniem pamięcią można stracić do 6 punktów.
 *   Za niezgodną ze specyfikacją strukturę plików w rozwiązaniu, niezgodne ze specyfikacją nazwy plików w rozwiązaniu lub umieszczenie w repozytorium niepotrzebnych albo tymczasowych plików można stracić do 4 punktów.
-*   Za złą jakość kodu, brzydki [styl](https://moodle.mimuw.edu.pl/mod/page/view.php?id=21479 "Styl") kodowania można stracić do 4 punktów.
-*   Za ostrzeżenia wypisywane przez [kompilator](https://moodle.mimuw.edu.pl/mod/page/view.php?id=21482 "Kompilator") można stracić do 2 punktów.
+*   Za złą jakość kodu, brzydki styl kodowania można stracić do 4 punktów.
+*   Za ostrzeżenia wypisywane przez kompilator można stracić do 2 punktów.
 *   Za braki w dokumentacji można stracić do 2 punktów.
-*   Za „wrażenia nieartystyczne” z rozgrywki w trybie interaktywnym, czyli za ocenę wzrokową działania programu można stracić do 5 punktów.
+*   Za nieuatrakcyjnienie wyglądu planszy w trybie interaktywnym można stracić do 3 punktów.
 
-**Rozwiązania należy implementować samodzielnie pod rygorem niezaliczenia przedmiotu.** z modułu silnika zaimplementowanego w części pierwszej, umożliwia przeprowadzanie rozgrywki. Interfejs programu ma być tekstowy. Program ma czytać dane ze standardowego wejścia, wyniki wypisywać na standardowe wyjście, a informacje o błędach na standardowe wyjście diagnostyczne. Program działa w dwóch trybach.
+**Rozwiązania należy implementować samodzielnie pod rygorem niezaliczenia przedmiotu. Zarówno korzystanie z cudzego kodu, jak i prywatne lub publiczne udostępnianie własnego kodu jest zabronione.**

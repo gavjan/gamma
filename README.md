@@ -34,7 +34,8 @@ Jak poprzednio funkcja `main` gry ma się znajdować w pliku `src/gamma_main.c`.
 Wskazówka: W pliku `CMakeList.txt` można dodać polecenie
 
     # Wskazujemy plik wykonywalny dla testów silnika.
-    add_executable(gamma_test EXCLUDE_FROM_ALL ${TEST_SOURCE_FILES})
+    add_executable(test EXCLUDE_FROM_ALL ${TEST_SOURCE_FILES})
+    set_target_properties(test PROPERTIES OUTPUT_NAME gamma_test)
 
 definiując uprzednio zmienną `TEST_SOURCE_FILES`.
 

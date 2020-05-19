@@ -65,7 +65,7 @@ static inline bool adjacent_right(gamma_t* g, uint32_t player, uint32_t x, uint3
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
  * @p height from the @ref gamma_new function
- * @return Value @p true if the field at right us exists @p false, otherwise
+ * @return Value @p true if the field at right exists @p false, otherwise
  */
 static inline bool exists_up(gamma_t* g, uint32_t x, uint32_t y) {
 	return (y+1 < g->height && g->arr[x][y+1] != NULL);
@@ -76,7 +76,7 @@ static inline bool exists_up(gamma_t* g, uint32_t x, uint32_t y) {
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
  * @p height from the @ref gamma_new function
- * @return Value @p true if the field at right us exists @p false, otherwise
+ * @return Value @p true if the field at right exists @p false, otherwise
  */
 static inline bool exists_down(gamma_t* g, uint32_t x, uint32_t y) {
 	return (y > 0 && g->arr[x][y-1] != NULL);
@@ -87,7 +87,7 @@ static inline bool exists_down(gamma_t* g, uint32_t x, uint32_t y) {
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
  * @p height from the @ref gamma_new function
- * @return Value @p true if the field at right us exists @p false, otherwise
+ * @return Value @p true if the field at right exists @p false, otherwise
  */
 static inline bool exists_left(gamma_t* g, uint32_t x, uint32_t y) {
 	return (x > 0 && g->arr[x-1][y] != NULL);
@@ -98,7 +98,7 @@ static inline bool exists_left(gamma_t* g, uint32_t x, uint32_t y) {
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
  * @p height from the @ref gamma_new function
- * @return Value @p true if the field at right us exists @p false, otherwise
+ * @return Value @p true if the field at right exists @p false, otherwise
  */
 static inline bool exists_right(gamma_t* g, uint32_t x, uint32_t y) {
 	return (x+1 < g->width && g->arr[x+1][y] != NULL);
@@ -109,7 +109,7 @@ static inline bool exists_right(gamma_t* g, uint32_t x, uint32_t y) {
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
  * @p height from the @ref gamma_new function
- * @return Value @p true if the fi ateld up us free @p false, otherwise
+ * @return Value @p true if the field at up is free @p false, otherwise
  */
 static inline bool free_adjacent_up(gamma_t* g, uint32_t x, uint32_t y) {
 	return (y+1 < g->height && g->arr[x][y+1] == NULL);
@@ -349,13 +349,13 @@ static void reindex(gamma_t* g, uint32_t player, uint32_t x, uint32_t y, unode_t
 }
 /** @brief Remove a field
  * Removing a field is used for making a golden move
- * @param [in, out] g - pointer to the structure that stores the game state,
+ * @param [in] g - pointer to the structure that stores the game state,
  * @param [in] x - column number, positive number less than value
  * @p width from the @ref gamma_new function,
  * @param [in] y - line number, positive number less than value
  * @p height from the @ref gamma_new function
  * @return Value @p true if the field was removed @p false,
- * otherwise.
+ * otherwise
  */
 static bool remove_field(gamma_t* g, uint32_t x, uint32_t y) {
 	uint32_t player = g->arr[x][y]->player;
@@ -428,6 +428,18 @@ static bool remove_field(gamma_t* g, uint32_t x, uint32_t y) {
 	}
 	return true;
 }
+/** @brief Checks if the player can make a golden move in a given field
+ * Checks if the @p player can make a golden move in the the filed @p x, @p y
+ * @param [in, out] g - pointer to the structure that stores the game state,
+ * @param [in] player - player number, positive number does not exceed value
+ * @p players from the @ref gamma_new function
+ * @param [in] x - column number, positive number less than value
+ * @p width from the @ref gamma_new function,
+ * @param [in] y - line number, positive number less than value
+ * @p height from the @ref gamma_new function
+ * @return Value @p true if the player can make a golden move at that field
+ * and @p false otherwise
+ */
 static bool gamma_golden_possible_field(gamma_t* g,uint32_t player,uint32_t x, uint32_t y) {
 	if(g->arr[x][y] == NULL) return false;
 	if(g->arr[x][y]->player == player) return false;
@@ -436,8 +448,8 @@ static bool gamma_golden_possible_field(gamma_t* g,uint32_t player,uint32_t x, u
 
 	uint32_t original_player = g->arr[x][y]->player;
 	if(!remove_field(g, x, y)) return false;
-	bool always_true = gamma_move(g, original_player, x, y);
-	assert(always_true);
+	if(!gamma_move(g, original_player, x, y))
+		assert(false);
 	return true;
 }
 bool gamma_golden_available(gamma_t* g, uint32_t player) {
@@ -585,7 +597,7 @@ bool gamma_golden_possible(gamma_t* g, uint32_t player) {
 
 	uint32_t height=g->height,width=g->width,x,y;;
 	for(x = 0; x < width; x++)
-		for(uint32_t y = 0; y < height; y++)
+		for(y = 0; y < height; y++)
 			if(gamma_golden_possible_field(g,player,x,y))
 				return true;
 	return false;

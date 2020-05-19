@@ -428,6 +428,22 @@ static bool remove_field(gamma_t* g, uint32_t x, uint32_t y) {
 	}
 	return true;
 }
+static bool gamma_golden_possible_field(gamma_t* g,uint32_t player,uint32_t x, uint32_t y) {
+	if(g->arr[x][y] == NULL) return false;
+	if(g->arr[x][y]->player == player) return false;
+	if(g->player_area_count[player] >= g->max_areas && !has_friends(g, player, x, y))
+		return false;
+
+	uint32_t original_player = g->arr[x][y]->player;
+	if(!remove_field(g, x, y)) return false;
+	bool always_true = gamma_move(g, original_player, x, y);
+	assert(always_true);
+	return true;
+}
+bool gamma_golden_available(gamma_t* g, uint32_t player) {
+	if(g == NULL || player > g->max_players || player == 0) return false;
+	return !g->did_golden_move[player];
+}
 gamma_t* gamma_new(uint32_t width, uint32_t height, uint32_t players, uint32_t areas) {
 	if(width == 0 || height == 0 || players == 0 || areas == 0) return NULL;
 	gamma_t* g;
@@ -448,7 +464,7 @@ gamma_t* gamma_new(uint32_t width, uint32_t height, uint32_t players, uint32_t a
 	arr = (unode_t***)malloc(sizeof(unode_t**)*max_width+sizeof(unode_t*)*max_height*max_width);
 	if(arr == NULL) return safe_free(g);
 	ptr = (unode_t**)(arr+max_width);
-	for(i = 0; i < g->width; i++)
+	for(i = 0; i < width; i++)
 		arr[i] = (ptr+max_height*i);
 	g->arr = arr;
 	arr = NULL;
@@ -469,8 +485,9 @@ gamma_t* gamma_new(uint32_t width, uint32_t height, uint32_t players, uint32_t a
 		safe_free(g->player_busy_fields);
 		return safe_free(g);
 	}
-	for(i = 0; i < g->width; i++)
-		for(uint32_t j = 0; j < g->height; j++)
+
+	for(i = 0; i < width; i++)
+		for(uint32_t j = 0; j < height; j++)
 			g->arr[i][j] = NULL;
 	return g;
 }
@@ -559,10 +576,18 @@ uint64_t gamma_free_fields(gamma_t* g, uint32_t player) {
 bool gamma_golden_possible(gamma_t* g, uint32_t player) {
 	if(g == NULL || player > g->max_players || player == 0) return false;
 	if(g->did_golden_move[player]) return false;
+	bool available = false;
 	uint32_t i;
 	for(i = 1; i <= g->max_players; i++)
 		if(g->player_busy_fields[i] > 0 && i != player)
-			return true;
+			available = true;
+	if(!available) return false;
+
+	uint32_t height=g->height,width=g->width,x,y;;
+	for(x = 0; x < width; x++)
+		for(uint32_t y = 0; y < height; y++)
+			if(gamma_golden_possible_field(g,player,x,y))
+				return true;
 	return false;
 }
 char* gamma_board(gamma_t* g) {

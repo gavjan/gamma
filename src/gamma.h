@@ -148,4 +148,13 @@ char* gamma_board(gamma_t* g);
  */
 bool gamma_game_over(gamma_t* g);
 
+/** @brief Checks if whether or not the player has mad a golden move
+ * @param [in] g - pointer to the structure that stores the game state,
+ * @param [in] player - player number, positive number does not exceed value
+ * @p players from the @ref gamma_new function
+ * @return Value @p true if the player has not yet done in this game
+ * golden move, and @p false otherwise
+ */
+bool gamma_golden_available(gamma_t* g, uint32_t player);
+
 #endif /* GAMMA_H */

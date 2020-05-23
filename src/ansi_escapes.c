@@ -9,6 +9,21 @@
 #include <termios.h>
 #include <unistd.h>
 #include <stdio.h>
+void setTextColor(int code) {
+	printf("\x1b[%dm", code);
+}
+void setTextColorBright(int code) {
+	printf("\x1b[%d;1m", code);
+}
+void setBackgroundColor(int code) {
+	printf("\x1b[%dm", code);
+}
+void setBackgroundColorBright(int code) {
+	printf("\x1b[%d;1m", code);
+}
+void resetColor(void) {
+	printf("\x1b[%dm", RESET_COLOR);
+}
 int get_key(game_t* t, int c) {
 	if(c == NO_KEY) c = getch(t);
 	if(c == 4) return EOF;

@@ -452,6 +452,47 @@ static bool gamma_golden_possible_field(gamma_t* g,uint32_t player,uint32_t x, u
 		assert(false);
 	return true;
 }
+static bool move_possible(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
+	bool ans = gamma_move(g,player,x,y);
+	if(ans) remove_field(g,x,y);
+	return ans;
+}
+static bool check_golden_possible(gamma_t* g, uint32_t player, bool** ans_arr) {
+	bool for_interactive = ans_arr != NULL, interactive_ans = false,ans;
+	uint32_t height=g->height,width=g->width,x,y;
+
+	if(for_interactive)
+		for(x = 0; x < width; x++)
+			for(y = 0; y < height; y++)
+				ans_arr[x][y] = false;
+
+	if(g == NULL || player > g->max_players || player == 0) return false;
+	if(g->did_golden_move[player]) return false;
+	bool available = false;
+	uint32_t i;
+	for(i = 1; i <= g->max_players; i++)
+		if(g->player_busy_fields[i] > 0 && i != player)
+			available = true;
+	if(!available) return false;
+
+	if(for_interactive) {
+		for(x = 0; x < width; x++) {
+			for(y = 0; y < height; y++) {
+				ans = ans_arr[x][y] = gamma_golden_possible_field(g, player, x, y);
+				if(interactive_ans == false && ans == true) interactive_ans = true;
+			}
+		}
+	}
+	else
+		for(x = 0; x < width; x++)
+			for(y = 0; y < height; y++)
+				if(gamma_golden_possible_field(g,player,x,y))
+					return true;
+	if(for_interactive)
+		return interactive_ans;
+	else
+		return false;
+}
 bool gamma_golden_available(gamma_t* g, uint32_t player) {
 	if(g == NULL || player > g->max_players || player == 0) return false;
 	return !g->did_golden_move[player];
@@ -586,21 +627,7 @@ uint64_t gamma_free_fields(gamma_t* g, uint32_t player) {
 	return g->free_fields;
 }
 bool gamma_golden_possible(gamma_t* g, uint32_t player) {
-	if(g == NULL || player > g->max_players || player == 0) return false;
-	if(g->did_golden_move[player]) return false;
-	bool available = false;
-	uint32_t i;
-	for(i = 1; i <= g->max_players; i++)
-		if(g->player_busy_fields[i] > 0 && i != player)
-			available = true;
-	if(!available) return false;
-
-	uint32_t height=g->height,width=g->width,x,y;;
-	for(x = 0; x < width; x++)
-		for(y = 0; y < height; y++)
-			if(gamma_golden_possible_field(g,player,x,y))
-				return true;
-	return false;
+	return check_golden_possible(g,player,NULL);
 }
 char* gamma_board(gamma_t* g) {
 	if(g == NULL) return NULL;
@@ -630,4 +657,14 @@ bool gamma_game_over(gamma_t* g) {
 		g->game_over = true;
 	}
 	return g->game_over;
+}
+bool gamma_golden_possible_interactive(gamma_t* g, uint32_t player, bool** ans_arr) {
+	return check_golden_possible(g,player,ans_arr);
+}
+void gamma_possible_moves(gamma_t* g, uint32_t player, bool** ans_arr) {
+	uint32_t height=g->height,width=g->width,x,y;
+	for(x = 0; x < width; x++)
+		for(y = 0; y < height; y++)
+			if(g->arr[x][y] == NULL)
+				ans_arr[x][y] = move_possible(g, player, x, y);
 }

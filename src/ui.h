@@ -62,8 +62,11 @@ typedef struct game {
 		uint32_t height;                  ///< Height of the board
 		uint32_t curr_player;             ///< Current player that is to make a move
 		bool game_over;                   ///< Game Over flag
+		bool** pos_can_move;
+		char** arr;
 		struct termios original_terminal; ///< Structure holding the old terminal
 		struct termios new_terminal;      ///< Structure holding the new terminal
+		bool enough_memory;
 } game_t;
 
 

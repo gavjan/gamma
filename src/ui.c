@@ -18,7 +18,7 @@
  */
 static inline void insert_char(int c) {
 	putchar(c);
-	printf("\033[%dD", (1));
+	cursor_left();
 }
 /** @brief Initialize the game board
  * @param [in] g - pointer to the structure that stores the game state
@@ -27,6 +27,31 @@ static inline void insert_char(int c) {
 static game_t init_board(gamma_t* g) {
 	static struct termios original_terminal;
 	static struct termios new_terminal;
+	bool enough_memory = true;
+	bool** pos_can_move = malloc(sizeof(bool*)*g->width+sizeof(bool)*g->height*g->width);
+	char** arr = malloc(sizeof(char*)*g->width+sizeof(char)*g->height*g->width);
+
+	if(arr == NULL || pos_can_move == NULL) {
+		safe_free(arr);
+		safe_free(pos_can_move);
+		enough_memory = false;
+	}
+	else {
+		uint32_t i;
+		char* char_ptr;
+		bool* bool_ptr;
+		char_ptr = (char*)(arr+g->width);
+		bool_ptr = (bool*)(pos_can_move+g->width);
+		for(i = 0; i < g->width; i++) {
+			arr[i] = (char_ptr+g->height*i);
+			pos_can_move[i] = (bool_ptr+g->height*i);
+		}
+		uint32_t height = g->height, width = g->width, x, y;
+		for(x = 0; x < width; x++)
+			for(y = 0; y < height; y++)
+				arr[x][y] = '.';
+	}
+
 	game_t t = {1,
 							1,
 							g->max_players,
@@ -34,21 +59,32 @@ static game_t init_board(gamma_t* g) {
 							g->height,
 							1,
 							false,
+							pos_can_move,
+							arr,
 							original_terminal,
-							new_terminal
+							new_terminal,
+							enough_memory
 	};
 
 	setup_console(&t);
 	clear_screen();
 	move_to(1, 1);
 	char* board = gamma_board(g);
+
+	setTextColor(GREEN_TXT);
 	printf("%s", board);
+	setTextColor(RESET_COLOR);
+
 	safe_free(board);
 	move_to(g->height+1, 1);
 	printf("PLAYER 1 0 %d\n", g->height*g->width);
 	move_to(1, 1);
 
 	return t;
+}
+static void delete_board(game_t* t) {
+	safe_free(t->pos_can_move);
+	safe_free(t->arr);
 }
 /** @brief Update the Heads Up Display
  * @param [in] g - pointer to the structure that stores the game state
@@ -62,9 +98,32 @@ static void update_hud(game_t* t, gamma_t* g) {
 	uint64_t busy_fields = gamma_busy_fields(g, t->curr_player);
 
 	printf("PLAYER %u %lu %lu", t->curr_player, busy_fields, free_fields);
-	if(gamma_golden_possible(g, t->curr_player))
+
+
+	if(gamma_golden_possible_interactive(g, t->curr_player, t->pos_can_move))
+		setTextColor(GREEN_TXT);
+	if(gamma_golden_available(g,t->curr_player))
 		printf(" G");
+	setTextColor(RESET_COLOR);
 	printf("\n");
+
+	gamma_possible_moves(g, t->curr_player, t->pos_can_move);
+	move_to(1, 1);
+	uint32_t i, j, width = t->width, height = t->height;
+	bool** pos_can_move = t->pos_can_move;
+	char** arr = t->arr;
+	for(i = 0; i < height; i++) {
+		for(j = 0; j < width; j++) {
+			if(pos_can_move[width-1-j][height-1-i])
+				setTextColor(GREEN_TXT);
+			else
+				setTextColor(RESET_COLOR);
+			printf("%c", arr[width-1-j][height-1-i]);
+		}
+		printf("\n");
+	}
+	setTextColor(RESET_COLOR);
+
 	move_to(t->cur_i, t->cur_j);
 }
 /** @brief Check if current player can't make a move
@@ -102,6 +161,8 @@ static void make_move(game_t* t, gamma_t* g, bool golden) {
 														: gamma_move(g, t->curr_player, t->width-t->cur_j, t->height-t->cur_i);
 	if(move_result) {
 		insert_char('0'+t->curr_player);
+		t->arr[t->width-t->cur_j][t->height-t->cur_i] = '0'+t->curr_player;
+
 		// Skip or end the game
 		skip_move(t, g);
 	}
@@ -109,6 +170,11 @@ static void make_move(game_t* t, gamma_t* g, bool golden) {
 bool start_interactive(gamma_t* g) {
 	if(g == NULL) return false;
 	game_t t = init_board(g);
+
+	if(!t.enough_memory) {
+		delete_board(&t);
+		return false;
+	}
 
 	while(!t.game_over) {
 		switch(get_key(&t, NO_KEY)) {
@@ -164,5 +230,6 @@ bool start_interactive(gamma_t* g) {
 	for(uint32_t i = 1; i <= t.max_players; i++)
 		printf("PLAYER %u %lu\n", i, gamma_busy_fields(g, i));
 	restore_console(&t);
+	delete_board(&t);
 	return true;
 }

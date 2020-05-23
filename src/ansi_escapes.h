@@ -47,6 +47,37 @@
  */
 #define KEY_C 7
 
+enum Colors {
+		RESET_COLOR,
+		BLACK_TXT = 30,
+		RED_TXT,
+		GREEN_TXT,
+		YELLOW_TXT,
+		BLUE_TXT,
+		MAGENTA_TXT,
+		CYAN_TXT,
+		WHITE_TXT,
+
+		BLACK_BKG = 40,
+		RED_BKG,
+		GREEN_BKG,
+		YELLOW_BKG,
+		BLUE_BKG,
+		MAGENTA_BKG,
+		CYAN_BKG,
+		WHITE_BKG
+};
+
+void setTextColor(int code);
+
+void setTextColorBright(int code);
+
+void setBackgroundColor(int code);
+
+void setBackgroundColorBright(int code);
+
+void resetColor(void);
+
 /** @brief Return a pressed valid key.
  * Check if the pressed key is valid and if it is return it.
  * Return 0 otherwise

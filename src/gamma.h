@@ -157,4 +157,8 @@ bool gamma_game_over(gamma_t* g);
  */
 bool gamma_golden_available(gamma_t* g, uint32_t player);
 
+bool gamma_golden_possible_interactive(gamma_t* g, uint32_t player, bool** ans_arr);
+
+void gamma_possible_moves(gamma_t* g, uint32_t player, bool** ans_arr);
+
 #endif /* GAMMA_H */

@@ -12,42 +12,17 @@
 /** @brief Macro for Max digit count of UINT32_MAX
  */
 #define UINT32_MAX_LENGTH 10
-
-/** @brief Macro for an Unrecognized command
- */
-#define UNRECOGNIZED 0
-
-/** @brief Macro for Batch Mode
- */
-#define BATCH_MODE 1
-
-/** @brief Macro for Interactive Mode
- */
-#define INTER_MODE 2
-
-/** @brief Macro for Move command
- */
-#define MOVE 3
-
-/** @brief Macro for Golden Move command
- */
-#define GOLDEN_MOVE 4
-
-/** @brief Macro for Busy Fields command
- */
-#define BUSY_FIELDS 5
-
-/** @brief Macro for Free Fields command
- */
-#define FREE_FIELDS 6
-
-/** @brief Macro for Golden Move Possible command
- */
-#define GOLDEN_POSSIBLE 7
-
-/** @brief Macro for Board State command
- */
-#define BOARD 8
+enum Command {
+		UNRECOGNIZED,
+		BATCH_MODE,
+		INTER_MODE,
+		MOVE,
+		GOLDEN_MOVE,
+		BUSY_FIELDS,
+		FREE_FIELDS,
+		GOLDEN_POSSIBLE,
+		BOARD
+};
 
 /** @brief Structure for storing command's tokens
  */

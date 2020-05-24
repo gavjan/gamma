@@ -12,21 +12,12 @@
 #include <stdint.h>
 #include "ufind.h"
 
-/** @brief Macro for direction up
- */
-#define UP 0
-
-/** @brief Macro for direction down
- */
-#define DOWN 1
-
-/** @brief Macro for direction left
- */
-#define LEFT 2
-
-/** @brief Macro for direction right
- */
-#define RIGHT 3
+enum Direction {
+		UP,
+		DOWN,
+		LEFT,
+		RIGHT
+};
 
 /** @brief Structure storing the gamma game state
  */

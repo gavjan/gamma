@@ -20,37 +20,6 @@
  */
 #define NOT_GOLDEN false
 
-/** @brief Macro for Arrow key up
- */
-#define KEY_UP 1
-
-/** @brief Macro for Arrow key down
- */
-#define KEY_DOWN 2
-
-/** @brief Macro for Arrow key right
- */
-#define KEY_RIGHT 3
-
-/** @brief Macro for Arrow key left
- */
-#define KEY_LEFT 4
-
-/** @brief Macro for Space key
- */
-#define KEY_SPACE 5
-
-/** @brief Macro for G key
- */
-#define KEY_G 6
-
-/** @brief Macro for C key
- */
-#define KEY_C 7
-
-/** @brief Macro to indicate that no key was pressed yet
- */
-#define NO_KEY 0
 
 /** @brief Structure storing the interactive game's state
  */

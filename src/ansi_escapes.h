@@ -15,68 +15,26 @@
  */
 #define MOVE_BY_ONE 1
 
-/** @brief Macro for unsupported keyboard key
- */
-#define UNKNOWN 0
 
-/** @brief Macro for Up Key
- */
-#define KEY_UP 1
-
-/** @brief Macro for Down Key
- */
-#define KEY_DOWN 2
-
-/** @brief Macro for Right Key
- */
-#define KEY_RIGHT 3
-
-/** @brief Macro for Left Key
- */
-#define KEY_LEFT 4
-
-/** @brief Macro for Space Key
- */
-#define KEY_SPACE 5
-
-/** @brief Macro for G Key
- */
-#define KEY_G 6
-
-/** @brief Macro for C Key
- */
-#define KEY_C 7
-
-enum Colors {
-		RESET_COLOR,
-		BLACK_TXT = 30,
-		RED_TXT,
-		GREEN_TXT,
-		YELLOW_TXT,
-		BLUE_TXT,
-		MAGENTA_TXT,
-		CYAN_TXT,
-		WHITE_TXT,
-
-		BLACK_BKG = 40,
-		RED_BKG,
-		GREEN_BKG,
-		YELLOW_BKG,
-		BLUE_BKG,
-		MAGENTA_BKG,
-		CYAN_BKG,
-		WHITE_BKG
+enum Keys {
+		NO_KEY,
+		KEY_UP,
+		KEY_DOWN,
+		KEY_RIGHT,
+		KEY_LEFT,
+		KEY_SPACE,
+		KEY_G,
+		KEY_C,
+		UNKNOWN
 };
 
-void setTextColor(int code);
+enum Colors {
+		RESET_COLOR = 0,
+		GREEN_TXT = 32,
+		YELLOW_TXT = 33
+};
 
-void setTextColorBright(int code);
-
-void setBackgroundColor(int code);
-
-void setBackgroundColorBright(int code);
-
-void resetColor(void);
+void set_text_color(int code);
 
 /** @brief Return a pressed valid key.
  * Check if the pressed key is valid and if it is return it.

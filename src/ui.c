@@ -71,9 +71,9 @@ static game_t init_board(gamma_t* g) {
 	move_to(1, 1);
 	char* board = gamma_board(g);
 
-	setTextColor(GREEN_TXT);
+	set_text_color(GREEN_TXT);
 	printf("%s", board);
-	setTextColor(RESET_COLOR);
+	set_text_color(RESET_COLOR);
 
 	safe_free(board);
 	move_to(g->height+1, 1);
@@ -101,10 +101,10 @@ static void update_hud(game_t* t, gamma_t* g) {
 
 
 	if(gamma_golden_possible_interactive(g, t->curr_player, t->pos_can_move))
-		setTextColor(GREEN_TXT);
+		set_text_color(YELLOW_TXT);
 	if(gamma_golden_available(g,t->curr_player))
 		printf(" G");
-	setTextColor(RESET_COLOR);
+	set_text_color(RESET_COLOR);
 	printf("\n");
 
 	gamma_possible_moves(g, t->curr_player, t->pos_can_move);
@@ -115,14 +115,14 @@ static void update_hud(game_t* t, gamma_t* g) {
 	for(i = 0; i < height; i++) {
 		for(j = 0; j < width; j++) {
 			if(pos_can_move[width-1-j][height-1-i])
-				setTextColor(GREEN_TXT);
+				set_text_color(arr[width-1-j][height-1-i] == '.' ? GREEN_TXT : YELLOW_TXT);
 			else
-				setTextColor(RESET_COLOR);
+				set_text_color(RESET_COLOR);
 			printf("%c", arr[width-1-j][height-1-i]);
 		}
 		printf("\n");
 	}
-	setTextColor(RESET_COLOR);
+	set_text_color(RESET_COLOR);
 
 	move_to(t->cur_i, t->cur_j);
 }
@@ -227,8 +227,12 @@ bool start_interactive(gamma_t* g) {
 	move_to(t.height+1, 1);
 	clear_line();
 	move_to(t.height+1, 1);
-	for(uint32_t i = 1; i <= t.max_players; i++)
-		printf("PLAYER %u %lu\n", i, gamma_busy_fields(g, i));
+	for(uint32_t i = 1; i <= t.max_players; i++) {
+		printf("PLAYER %u %lu", i, gamma_busy_fields(g, i));
+		if(gamma_golden_available(g,i))
+			printf(" G");
+		printf("\n");
+	}
 	restore_console(&t);
 	delete_board(&t);
 	return true;

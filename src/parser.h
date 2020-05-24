@@ -12,6 +12,8 @@
 /** @brief Macro for Max digit count of UINT32_MAX
  */
 #define UINT32_MAX_LENGTH 10
+/** @brief enum for supported commands
+ */
 enum Command {
 		UNRECOGNIZED,
 		BATCH_MODE,

@@ -440,7 +440,7 @@ static bool remove_field(gamma_t* g, uint32_t x, uint32_t y) {
  * @return Value @p true if the player can make a golden move at that field
  * and @p false otherwise
  */
-static bool gamma_golden_possible_field(gamma_t* g,uint32_t player,uint32_t x, uint32_t y) {
+static bool gamma_golden_possible_field(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	if(g->arr[x][y] == NULL) return false;
 	if(g->arr[x][y]->player == player) return false;
 	if(g->player_area_count[player] >= g->max_areas && !has_friends(g, player, x, y))
@@ -452,14 +452,36 @@ static bool gamma_golden_possible_field(gamma_t* g,uint32_t player,uint32_t x, u
 		assert(false);
 	return true;
 }
+/** @brief Checks if the player can make a move in a given field
+ * Checks if the @p player can make move in the the filed @p x, @p y
+ * @param [in, out] g - pointer to the structure that stores the game state,
+ * @param [in] player - player number, positive number does not exceed value
+ * @p players from the @ref gamma_new function
+ * @param [in] x - column number, positive number less than value
+ * @p width from the @ref gamma_new function,
+ * @param [in] y - line number, positive number less than value
+ * @p height from the @ref gamma_new function
+ * @return Value @p true if the player can make a move at that field
+ * and @p false otherwise
+ */
 static bool move_possible(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
-	bool ans = gamma_move(g,player,x,y);
-	if(ans) remove_field(g,x,y);
+	bool ans = gamma_move(g, player, x, y);
+	if(ans) remove_field(g, x, y);
 	return ans;
 }
+/** @brief Checks if the player can make a golden move
+ * Checks if the @p player can make a golden move in at least one field.
+ * For interactive mode answers for every field will be written to @p ans_arr.
+ * For batch mode @p ans_arr will be NULL upon calling.
+ * @param [in, out] g - pointer to the structure that stores the game state,
+ * @param [in] player - player number, positive number does not exceed value
+ * @p players from the @ref gamma_new function
+ * @param ans_arr [in, out] - pointer to array which will contain answer for fields
+ * @return Value @p true if the player can make a  golden and @p false otherwise
+ */
 static bool check_golden_possible(gamma_t* g, uint32_t player, bool** ans_arr) {
-	bool for_interactive = ans_arr != NULL, interactive_ans = false,ans;
-	uint32_t height=g->height,width=g->width,x,y;
+	bool for_interactive = ans_arr != NULL, interactive_ans = false, ans;
+	uint32_t height = g->height, width = g->width, x, y;
 
 	if(for_interactive)
 		for(x = 0; x < width; x++)
@@ -486,7 +508,7 @@ static bool check_golden_possible(gamma_t* g, uint32_t player, bool** ans_arr) {
 	else
 		for(x = 0; x < width; x++)
 			for(y = 0; y < height; y++)
-				if(gamma_golden_possible_field(g,player,x,y))
+				if(gamma_golden_possible_field(g, player, x, y))
 					return true;
 	if(for_interactive)
 		return interactive_ans;
@@ -627,7 +649,7 @@ uint64_t gamma_free_fields(gamma_t* g, uint32_t player) {
 	return g->free_fields;
 }
 bool gamma_golden_possible(gamma_t* g, uint32_t player) {
-	return check_golden_possible(g,player,NULL);
+	return check_golden_possible(g, player, NULL);
 }
 char* gamma_board(gamma_t* g) {
 	if(g == NULL) return NULL;
@@ -659,10 +681,10 @@ bool gamma_game_over(gamma_t* g) {
 	return g->game_over;
 }
 bool gamma_golden_possible_interactive(gamma_t* g, uint32_t player, bool** ans_arr) {
-	return check_golden_possible(g,player,ans_arr);
+	return check_golden_possible(g, player, ans_arr);
 }
 void gamma_possible_moves(gamma_t* g, uint32_t player, bool** ans_arr) {
-	uint32_t height=g->height,width=g->width,x,y;
+	uint32_t height = g->height, width = g->width, x, y;
 	for(x = 0; x < width; x++)
 		for(y = 0; y < height; y++)
 			if(g->arr[x][y] == NULL)

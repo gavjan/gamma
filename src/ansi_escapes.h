@@ -15,7 +15,8 @@
  */
 #define MOVE_BY_ONE 1
 
-
+/** @brief enum for supported keyboard keys
+ */
 enum Keys {
 		NO_KEY,
 		KEY_UP,
@@ -27,17 +28,21 @@ enum Keys {
 		KEY_C,
 		UNKNOWN
 };
-
+/** @brief enum containing color codes
+ */
 enum Colors {
 		RESET_COLOR = 0,
 		GREEN_TXT = 32,
 		YELLOW_TXT = 33
 };
 
+/** @brief Changes printing color
+ * @param [in] code - Color code
+ */
 void set_text_color(int code);
 
-/** @brief Return a pressed valid key.
- * Check if the pressed key is valid and if it is return it.
+/** @brief Return a pressed valid key
+ * Check if the pressed key is valid and if it is return it
  * Return 0 otherwise
  * @param [in] t - structure containing interactive game's state
  * @param [in] c - flag for the last recognized key after escaping

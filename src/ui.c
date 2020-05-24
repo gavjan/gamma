@@ -82,6 +82,10 @@ static game_t init_board(gamma_t* g) {
 
 	return t;
 }
+/** @brief Delete interactive state structure
+ * Free manually allocated resources for the interactive state structure
+ * @param [in] t - pointer to the structure that stores the interactive state
+ */
 static void delete_board(game_t* t) {
 	safe_free(t->pos_can_move);
 	safe_free(t->arr);
@@ -102,7 +106,7 @@ static void update_hud(game_t* t, gamma_t* g) {
 
 	if(gamma_golden_possible_interactive(g, t->curr_player, t->pos_can_move))
 		set_text_color(YELLOW_TXT);
-	if(gamma_golden_available(g,t->curr_player))
+	if(gamma_golden_available(g, t->curr_player))
 		printf(" G");
 	set_text_color(RESET_COLOR);
 	printf("\n");
@@ -229,7 +233,7 @@ bool start_interactive(gamma_t* g) {
 	move_to(t.height+1, 1);
 	for(uint32_t i = 1; i <= t.max_players; i++) {
 		printf("PLAYER %u %lu", i, gamma_busy_fields(g, i));
-		if(gamma_golden_available(g,i))
+		if(gamma_golden_available(g, i))
 			printf(" G");
 		printf("\n");
 	}

@@ -11,7 +11,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include "ufind.h"
-
+/** @brief enum for directions
+ */
 enum Direction {
 		UP,
 		DOWN,
@@ -143,13 +144,29 @@ bool gamma_game_over(gamma_t* g);
  * @param [in] g - pointer to the structure that stores the game state,
  * @param [in] player - player number, positive number does not exceed value
  * @p players from the @ref gamma_new function
- * @return Value @p true if the player has not yet done in this game
- * golden move, and @p false otherwise
+ * @return Value @p true if the player has not yet done a golden_move this game,
+ * and @p false otherwise
  */
 bool gamma_golden_available(gamma_t* g, uint32_t player);
 
+/** @brief wrapper function for check_golden_possible()
+ * Wrapper function which keeps the naming consistency for gamma function
+ * @param [in] g - pointer to the structure that stores the game state,
+ * @param [in] player - player number, positive number does not exceed value
+ * @p players from the @ref gamma_new function
+ * @param ans_arr [in, out] - pointer to array which will contain answer for fields
+ * @return Return value of the function check_golden_possible()
+ */
 bool gamma_golden_possible_interactive(gamma_t* g, uint32_t player, bool** ans_arr);
 
+/** @brief Check where a player can make a move
+ * Check in which fields player @p player can make a move and write the answers
+ * to @p ans_arr
+ * @param [in, out] g - pointer to the structure that stores the game state,
+ * @param [in] player - player number, positive number does not exceed value
+ * @p players from the @ref gamma_new function
+ * @param ans_arr [in, out] - pointer to array which will contain answer for fields
+ */
 void gamma_possible_moves(gamma_t* g, uint32_t player, bool** ans_arr);
 
 #endif /* GAMMA_H */

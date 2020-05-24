@@ -11,6 +11,7 @@
 #include "ansi_escapes.h"
 #include "gamma.h"
 #include "safe_malloc.h"
+#include "list.h"
 /** @brief Insert a character
  * Insert a character to the cursor's position and move the
  * cursor back to that position
@@ -237,6 +238,22 @@ bool start_interactive(gamma_t* g) {
 			printf(" G");
 		printf("\n");
 	}
+	bool draw;
+	list_t* draw_list = NULL	;
+	uint32_t winner = gamma_winner(g,&draw, &draw_list);
+	if(draw) {
+		list_t* l = draw_list;
+		printf("--\nDRAW FOR PLAYERS: %u", l->data);
+		l = l->next;
+		while(l != NULL) {
+			printf(", %u", l->data);
+			l = l->next;
+		}
+		printf("\n");
+	}
+	else if(winner != NO_WINNER)
+		printf("--\nPLAYER %u WON\n", winner);
+	list_free(&draw_list);
 	restore_console(&t);
 	delete_board(&t);
 	return true;

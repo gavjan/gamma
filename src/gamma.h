@@ -11,6 +11,11 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include "ufind.h"
+#include "list.h"
+/** @brief macro for no winner
+ */
+#define NO_WINNER 0
+
 /** @brief enum for directions
  */
 enum Direction {
@@ -168,5 +173,13 @@ bool gamma_golden_possible_interactive(gamma_t* g, uint32_t player, bool** ans_a
  * @param ans_arr [in, out] - pointer to array which will contain answer for fields
  */
 void gamma_possible_moves(gamma_t* g, uint32_t player, bool** ans_arr);
+
+/** @brief Get the winner
+ * @param [in] g - pointer to the structure that stores the game state,
+ * @param [in] draw - game draw flag
+ * @param [in, out] l  - list of players who drawed
+ * @return Return number of the winning player, 0 if there is no winner
+ */
+uint32_t gamma_winner(gamma_t* g, bool* draw, list_t** l);
 
 #endif /* GAMMA_H */

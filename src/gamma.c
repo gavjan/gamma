@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include "safe_malloc.h"
+#include "list.h"
 /** @brief Check if field up from current field belongs to @p player
  * @param [in, out] g - pointer to the structure that stores the game state,
  * @param [in] player - player number, positive number does not exceed value
@@ -679,6 +680,28 @@ bool gamma_game_over(gamma_t* g) {
 		g->game_over = true;
 	}
 	return g->game_over;
+}
+uint32_t gamma_winner(gamma_t* g, bool* draw, list_t** l) {
+	*draw = false;
+	if(!g->game_over)
+		return NO_WINNER;
+	uint32_t winner = NO_WINNER;
+	for(uint32_t i = 1; i <= g->max_players; i++) {
+		if(gamma_busy_fields(g, i) == gamma_busy_fields(g,winner)) {
+			*draw = true;
+			winner = i;
+		}
+		else if (gamma_busy_fields(g, i) > gamma_busy_fields(g,winner)) {
+			*draw = false;
+			winner = i;
+		}
+	}
+	if(*draw)
+		for(uint32_t i = g->max_players; i >=1; i--)
+			if(gamma_busy_fields(g, i) == gamma_busy_fields(g,winner))
+				list_insert(l,i);
+
+	return winner;
 }
 bool gamma_golden_possible_interactive(gamma_t* g, uint32_t player, bool** ans_arr) {
 	return check_golden_possible(g, player, ans_arr);

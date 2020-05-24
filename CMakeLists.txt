@@ -20,6 +20,8 @@ set (CMAKE_C_FLAGS_DEBUG "-g")
 
 # We indicate source files for testing.
 set(TEST_SOURCE_FILES
+        src/list.c
+        src/list.h
         src/ufind.c
         src/ufind.h
         src/safe_malloc.c
@@ -34,6 +36,8 @@ set(SOURCE_FILES
         src/gamma.c
         src/gamma.h
         src/gamma_main.c
+        src/list.c
+        src/list.h
         src/ufind.c
         src/ufind.h
         src/safe_malloc.c

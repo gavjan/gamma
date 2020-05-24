@@ -1,3 +1,3 @@
-- Who won when game was over
-- Check terminal size
-- Fix gamma_golden_possible test
+- [ ] Who won when game was over
+- [ ] Check terminal size
+- [ ] Fix gamma_golden_possible test

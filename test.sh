@@ -20,7 +20,7 @@ function progress_bar {
     let _left=40-$_done
     _fill=$(printf "%${_done}s")
     _empty=$(printf "%${_left}s")
-printf "\r[${_fill// /#}${_empty// /-}] ${_progress}%%"
+    printf "\r[${_fill// /#}${_empty// /-}] ${_progress}%%"
 }
 
 
@@ -60,6 +60,7 @@ for f in $FILES; do
 
   # Reset progress bar
   printf "\r                                                \r"
+
   DIFF1="$(diff "$out" "$EXEC".out)"
   DIFF2="$(diff "$err" "$EXEC".err)"
   if [ "$DIFF1" ] || [ "$DIFF2" ]; then

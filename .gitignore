@@ -10,5 +10,6 @@ gamma
 *.o
 test_diff.sh
 test/*
+test.zip
 test_build/*
 build/*

@@ -481,6 +481,7 @@ static bool move_possible(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
  * @return Value @p true if the player can make a  golden and @p false otherwise
  */
 static bool check_golden_possible(gamma_t* g, uint32_t player, bool** ans_arr) {
+	if(g == NULL || player > g->max_players || player == 0) return false;
 	bool for_interactive = ans_arr != NULL, interactive_ans = false, ans;
 	uint32_t height = g->height, width = g->width, x, y;
 
@@ -488,8 +489,6 @@ static bool check_golden_possible(gamma_t* g, uint32_t player, bool** ans_arr) {
 		for(x = 0; x < width; x++)
 			for(y = 0; y < height; y++)
 				ans_arr[x][y] = false;
-
-	if(g == NULL || player > g->max_players || player == 0) return false;
 	if(g->did_golden_move[player]) return false;
 	bool available = false;
 	uint32_t i;

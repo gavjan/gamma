@@ -16,6 +16,7 @@ function compile() {
   gcc -Wall -Wextra -std=c11 -O2 -c src/gamma.c
   gcc -Wall -Wextra -std=c11 -O2 -c src/safe_malloc.c
   gcc -Wall -Wextra -std=c11 -O2 -c src/ufind.c
+  gcc -Wall -Wextra -std=c11 -O2 -c src/list.c
 }
 DIR="$1"
 RED='\033[1;31m'
@@ -29,10 +30,10 @@ for f in $FILES; do
   name="${base::-2}"
   cp "${f}" ./src
   gcc -Wall -Wextra -std=c11 -O2 -c "src/${base}"
-  if [ ! -f "gamma.o" ] || [ ! -f "safe_malloc.o" ] || [ ! -f "ufind.o" ] ; then
+  if [ ! -f "gamma.o" ] || [ ! -f "safe_malloc.o" ] || [ ! -f "ufind.o" ] || [ ! -f "list.o" ] ; then
     compile
   fi
-  gcc  -o "$name" "${name}.o" gamma.o safe_malloc.o ufind.o
+  gcc  -o "$name" "${name}.o" gamma.o safe_malloc.o ufind.o list.o
   valgrind --error-exitcode=15 --leak-check=full --show-leak-kinds=all -q ./"$name"
   #./"$name"
   if [ $? -eq 0 ]; then

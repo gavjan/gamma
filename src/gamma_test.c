@@ -465,7 +465,7 @@ static int golden_possible(void) {
 	assert(gamma_move(g, 2, 1, 3));
 	assert(gamma_move(g, 1, 5, 4));
 	assert(gamma_move(g, 1, 4, 5));
-	assert(gamma_golden_possible(g, 1));
+	assert(!gamma_golden_possible(g, 1));
 	assert(!gamma_golden_move(g, 1, 1, 1));
 	assert(!gamma_golden_move(g, 1, 1, 2));
 	assert(!gamma_golden_move(g, 1, 1, 3));

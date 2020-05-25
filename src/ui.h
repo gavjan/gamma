@@ -35,7 +35,7 @@ typedef struct game {
 		char** arr;                       ///< Board information
 		struct termios original_terminal; ///< Structure holding the old terminal
 		struct termios new_terminal;      ///< Structure holding the new terminal
-		bool enough_memory;               ///< Flag for indicating memory allocation result
+		bool init_successful;               ///< Flag for indicating memory allocation result
 } game_t;
 
 

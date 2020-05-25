@@ -8,6 +8,8 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <termios.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
 #include "ansi_escapes.h"
 #include "gamma.h"
 #include "safe_malloc.h"
@@ -28,14 +30,21 @@ static inline void insert_char(int c) {
 static game_t init_board(gamma_t* g) {
 	static struct termios original_terminal;
 	static struct termios new_terminal;
-	bool enough_memory = true;
+	struct winsize w;
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+	unsigned short rows = w.ws_row;
+	unsigned short columns = w.ws_col;
+	bool init_successful = true;
+
+	if(g->width > columns || g->height+2 > rows)
+		init_successful = false;
 	bool** pos_can_move = malloc(sizeof(bool*)*g->width+sizeof(bool)*g->height*g->width);
 	char** arr = malloc(sizeof(char*)*g->width+sizeof(char)*g->height*g->width);
 
 	if(arr == NULL || pos_can_move == NULL) {
 		safe_free(arr);
 		safe_free(pos_can_move);
-		enough_memory = false;
+		init_successful = false;
 	}
 	else {
 		uint32_t i;
@@ -64,8 +73,9 @@ static game_t init_board(gamma_t* g) {
 							arr,
 							original_terminal,
 							new_terminal,
-							enough_memory
+							init_successful
 	};
+	if(!init_successful) return t;
 
 	setup_console(&t);
 	clear_screen();
@@ -176,7 +186,7 @@ bool start_interactive(gamma_t* g) {
 	if(g == NULL) return false;
 	game_t t = init_board(g);
 
-	if(!t.enough_memory) {
+	if(!t.init_successful) {
 		delete_board(&t);
 		return false;
 	}

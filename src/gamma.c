@@ -686,19 +686,19 @@ uint32_t gamma_winner(gamma_t* g, bool* draw, list_t** l) {
 		return NO_WINNER;
 	uint32_t winner = NO_WINNER;
 	for(uint32_t i = 1; i <= g->max_players; i++) {
-		if(gamma_busy_fields(g, i) == gamma_busy_fields(g,winner)) {
+		if(gamma_busy_fields(g, i) == gamma_busy_fields(g, winner)) {
 			*draw = true;
 			winner = i;
 		}
-		else if (gamma_busy_fields(g, i) > gamma_busy_fields(g,winner)) {
+		else if(gamma_busy_fields(g, i) > gamma_busy_fields(g, winner)) {
 			*draw = false;
 			winner = i;
 		}
 	}
 	if(*draw)
-		for(uint32_t i = g->max_players; i >=1; i--)
-			if(gamma_busy_fields(g, i) == gamma_busy_fields(g,winner))
-				list_insert(l,i);
+		for(uint32_t i = g->max_players; i >= 1; i--)
+			if(gamma_busy_fields(g, i) == gamma_busy_fields(g, winner))
+				list_insert(l, i);
 
 	return winner;
 }

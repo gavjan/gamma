@@ -1,6 +1,5 @@
 /** @file
  * Header file for Safe Manual Allocation Operations
- *
  * @author Gevorg Chobanyan
  * @date 11.04.2020
  */

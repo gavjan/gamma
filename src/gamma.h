@@ -1,6 +1,5 @@
 /** @file
  * Header file providing functions for Gamma
- *
  * @author Gevorg Chobanyan
  * @date 11.04.2020
  */

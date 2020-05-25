@@ -1,6 +1,5 @@
 /** @file
  * Header file for Union Find Data Structure
- *
  * @author Gevorg Chobanyan
  * @date 11.04.2020
  */

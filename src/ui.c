@@ -249,8 +249,8 @@ bool start_interactive(gamma_t* g) {
 		printf("\n");
 	}
 	bool draw;
-	list_t* draw_list = NULL	;
-	uint32_t winner = gamma_winner(g,&draw, &draw_list);
+	list_t* draw_list = NULL;
+	uint32_t winner = gamma_winner(g, &draw, &draw_list);
 	if(draw) {
 		list_t* l = draw_list;
 		printf("--\nDRAW FOR PLAYERS: %u", l->data);

@@ -1,6 +1,15 @@
+/** @file
+ * Source file for List storing drawn players
+ * @author Gevorg Chobanyan
+ * @date 25.05.2020
+ */
 #include "list.h"
 #include "safe_malloc.h"
 #include <stdlib.h>
+/** @brief Get a linked list new node
+ * Allocate memory for a linked listd
+ * @return pointer to manually allocated memory for the node
+ */
 list_t* new_node() {
 	list_t* l = malloc(sizeof(list_t));
 	l->next = NULL;
@@ -12,7 +21,7 @@ void list_free(list_t** head) {
 	*head = NULL;
 	while(l != NULL) {
 		del = l;
-		l=l->next;
+		l = l->next;
 		safe_free(del);
 	}
 }

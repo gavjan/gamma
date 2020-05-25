@@ -1,6 +1,5 @@
 /** @file
  * Header file for input parsing functions
- *
  * @author Gevorg Chobanyan
  * @date 27.04.2020
  */

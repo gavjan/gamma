@@ -181,7 +181,7 @@ void gamma_possible_moves(gamma_t* g, uint32_t player, bool** ans_arr);
 /** @brief Get the winner
  * @param [in] g - pointer to the structure that stores the game state,
  * @param [in] draw - game draw flag
- * @param [in, out] l  - list of players who drawed
+ * @param [in, out] l  - list of players who drawn
  * @return Return number of the winning player, 0 if there is no winner
  */
 uint32_t gamma_winner(gamma_t* g, bool* draw, list_t** l);

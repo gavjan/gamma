@@ -7,7 +7,7 @@
 #include "safe_malloc.h"
 #include <stdlib.h>
 /** @brief Get a linked list new node
- * Allocate memory for a linked listd
+ * Allocate memory for a linked list
  * @return pointer to manually allocated memory for the node
  */
 list_t* new_node() {

@@ -11,9 +11,14 @@
 #include <stdint.h>
 #include "ufind.h"
 #include "list.h"
+
 /** @brief macro for no winner
  */
 #define NO_WINNER 0
+
+/** @brief macro for uint128_t
+ */
+typedef unsigned __int128 uint128_t;
 
 /** @brief enum for directions
  */

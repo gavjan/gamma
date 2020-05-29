@@ -104,3 +104,6 @@ Za w pełni poprawną implementację programu można zdobyć maksymalnie 20 punk
 *   Za „wrażenia nieartystyczne” z rozgrywki w trybie interaktywnym, czyli za ocenę wzrokową działania programu można stracić do 5 punktów.
 
 **Rozwiązania należy implementować samodzielnie pod rygorem niezaliczenia przedmiotu.** z modułu silnika zaimplementowanego w części pierwszej, umożliwia przeprowadzanie rozgrywki. Interfejs programu ma być tekstowy. Program ma czytać dane ze standardowego wejścia, wyniki wypisywać na standardowe wyjście, a informacje o błędach na standardowe wyjście diagnostyczne. Program działa w dwóch trybach.
+
+## Testy
+Oficjalne i nieoficjalne testy można znaleźć [tutaj.](https://github.com/gavjan/gamma/releases/tag/part2_test)

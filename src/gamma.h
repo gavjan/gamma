@@ -28,8 +28,12 @@
  */
 #define RIGHT 3
 
+/** @brief macro for uint128_t
+ */
+typedef unsigned __int128 uint128_t;
 /** @brief Structure storing the gamma game state
  */
+
 typedef struct gamma {
 		unode_t*** arr;               ///< Two dimensional array for storing the board state
 		uint32_t width;               ///< Width of the board

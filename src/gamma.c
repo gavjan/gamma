@@ -445,6 +445,9 @@ gamma_t* gamma_new(uint32_t width, uint32_t height, uint32_t players, uint32_t a
 
 	unode_t** ptr;
 	unode_t*** arr;
+	uint128_t size = sizeof(unode_t**)*max_width + sizeof(unode_t*)*max_height*max_width;
+	if(size > UINT32_MAX) return safe_free(g);
+	arr = (unode_t***)malloc(size);
 	arr = (unode_t***)malloc(sizeof(unode_t**)*max_width+sizeof(unode_t*)*max_height*max_width);
 	if(arr == NULL) return safe_free(g);
 	ptr = (unode_t**)(arr+max_width);

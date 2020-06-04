@@ -18,22 +18,36 @@
 /** @brief enum for supported keyboard keys
  */
 enum Keys {
-		NO_KEY,
-		KEY_UP,
-		KEY_DOWN,
-		KEY_RIGHT,
-		KEY_LEFT,
-		KEY_SPACE,
-		KEY_G,
-		KEY_C,
-		UNKNOWN
+	NO_KEY,
+	KEY_UP,
+	KEY_DOWN,
+	KEY_RIGHT,
+	KEY_LEFT,
+	KEY_SPACE,
+	KEY_G,
+	KEY_C,
+	UNKNOWN
 };
 /** @brief enum containing color codes
  */
 enum Colors {
-		RESET_COLOR = 0,
-		GREEN_TXT = 32,
-		YELLOW_TXT = 33
+	RESET_COLOR = 0,
+	GREEN_TXT = 32,
+	YELLOW_TXT = 33
+};
+
+/** @brief enum containing Key Codes
+ */
+enum Key_Codes {
+	CTRL_D = 4,
+	UPPER_C = 67,
+	LOWER_C = 99,
+	UPPER_G = 71,
+	LOWER_G = 103,
+	SPACE = 32,
+	ESCAPE_CODE = 27,
+	ESCAPE_BRACKET = 91,
+
 };
 
 /** @brief Changes printing color

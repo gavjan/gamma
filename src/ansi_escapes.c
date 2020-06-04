@@ -14,20 +14,19 @@ void set_text_color(int code) {
 }
 int get_key(game_t* t, int c) {
 	if(c == NO_KEY) c = getch(t);
-	if(c == 4) return EOF;
-	if(c == 99 || c == 67) return KEY_C;
-	if(c == 103 || c == 71) return KEY_G;
-	if(c == 32) return KEY_SPACE;
-	if(c == 27) {
+	if(c == CTRL_D) return EOF;
+	if(c == LOWER_C || c == UPPER_C) return KEY_C;
+	if(c == LOWER_G || c == UPPER_G) return KEY_G;
+	if(c == SPACE) return KEY_SPACE;
+	if(c == ESCAPE_CODE) {
 		c = getch(t);
-		if(c == 91) {
+		if(c == ESCAPE_BRACKET) {
 			c = getch(t);
 			if(c == 65) return KEY_UP;
 			if(c == 66) return KEY_DOWN;
 			if(c == 67) return KEY_RIGHT;
 			if(c == 68) return KEY_LEFT;
-		}
-		else return get_key(t, c);
+		} else return get_key(t, c);
 	}
 	return UNKNOWN;
 }
@@ -35,7 +34,7 @@ int getch(game_t* t) {
 	int ch;
 	tcgetattr(STDIN_FILENO, &(t->original_terminal));
 	t->new_terminal = t->original_terminal;
-	t->new_terminal.c_lflag &= ~(ICANON|ECHO);
+	t->new_terminal.c_lflag &= ~(ICANON | ECHO);
 	tcsetattr(STDIN_FILENO, TCSANOW, &(t->new_terminal));
 	ch = getchar();
 	tcsetattr(STDIN_FILENO, TCSANOW, &(t->original_terminal));
@@ -45,7 +44,7 @@ int getch(game_t* t) {
 void setup_console(game_t* t) {
 	tcgetattr(STDIN_FILENO, &(t->original_terminal));
 	t->new_terminal = t->original_terminal;
-	t->new_terminal.c_lflag &= ~(ICANON|ECHO);
+	t->new_terminal.c_lflag &= ~(ICANON | ECHO);
 	tcsetattr(STDIN_FILENO, TCSANOW, &(t->new_terminal));
 }
 void restore_console(game_t* t) {

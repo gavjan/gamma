@@ -14,7 +14,7 @@ void set_text_color(int code) {
 }
 int get_key(game_t* t, int c) {
 	if(c == NO_KEY) c = getch(t);
-	if(c == CTRL_D) return EOF;
+	if(c == CTRL_D) return KEY_CTRL_D;
 	if(c == LOWER_C || c == UPPER_C) return KEY_C;
 	if(c == LOWER_G || c == UPPER_G) return KEY_G;
 	if(c == SPACE) return KEY_SPACE;
@@ -22,37 +22,39 @@ int get_key(game_t* t, int c) {
 		c = getch(t);
 		if(c == ESCAPE_BRACKET) {
 			c = getch(t);
-			if(c == 65) return KEY_UP;
-			if(c == 66) return KEY_DOWN;
-			if(c == 67) return KEY_RIGHT;
-			if(c == 68) return KEY_LEFT;
+			if(c == UP_CODE) return KEY_UP;
+			if(c == DOWN_CODE) return KEY_DOWN;
+			if(c == RIGHT_CODE) return KEY_RIGHT;
+			if(c == LEFT_CODE) return KEY_LEFT;
 		} else return get_key(t, c);
 	}
 	return UNKNOWN;
 }
 int getch(game_t* t) {
 	int ch;
-	tcgetattr(STDIN_FILENO, &(t->original_terminal));
+	safe_exec(tcgetattr(STDIN_FILENO, &(t->original_terminal)));
 	t->new_terminal = t->original_terminal;
 	t->new_terminal.c_lflag &= ~(ICANON | ECHO);
-	tcsetattr(STDIN_FILENO, TCSANOW, &(t->new_terminal));
+	safe_exec(tcsetattr(STDIN_FILENO, TCSANOW, &(t->new_terminal)));
 	ch = getchar();
-	tcsetattr(STDIN_FILENO, TCSANOW, &(t->original_terminal));
+	safe_exec(tcsetattr(STDIN_FILENO, TCSANOW, &(t->original_terminal)));
 
 	return ch;
 }
-void setup_console(game_t* t) {
-	tcgetattr(STDIN_FILENO, &(t->original_terminal));
+int setup_console(game_t* t) {
+	safe_exec(tcgetattr(STDIN_FILENO, &(t->original_terminal)));
 	t->new_terminal = t->original_terminal;
 	t->new_terminal.c_lflag &= ~(ICANON | ECHO);
-	tcsetattr(STDIN_FILENO, TCSANOW, &(t->new_terminal));
+	safe_exec(tcsetattr(STDIN_FILENO, TCSANOW, &(t->new_terminal)));
+	return SUCCESS;
 }
-void restore_console(game_t* t) {
+int restore_console(game_t* t) {
 	// Reset colors
 	printf("\x1b[0m");
 
 	// Reset console mode
-	tcsetattr(STDIN_FILENO, TCSANOW, &(t->original_terminal));
+	safe_exec(tcsetattr(STDIN_FILENO, TCSANOW, &(t->original_terminal)));
+	return SUCCESS;
 }
 void clear_screen() {
 	printf("\x1b[%dJ", CLEAR_ALL);

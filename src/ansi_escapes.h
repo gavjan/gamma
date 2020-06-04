@@ -7,6 +7,16 @@
 #include <stdio.h>
 #include "ui.h"
 
+
+
+/** @brief Macro for successful execution
+ */
+#define SUCCESS 0
+
+/** @brief Macro for unsuccessful execution
+ */
+#define FAIL (-1)
+
 /** @brief Macro for Clearing All flag in terminal
  */
 #define CLEAR_ALL 2
@@ -26,6 +36,7 @@ enum Keys {
 	KEY_SPACE,
 	KEY_G,
 	KEY_C,
+	KEY_CTRL_D,
 	UNKNOWN
 };
 /** @brief enum containing color codes
@@ -47,8 +58,13 @@ enum Key_Codes {
 	SPACE = 32,
 	ESCAPE_CODE = 27,
 	ESCAPE_BRACKET = 91,
-
+	UP_CODE = 65,
+	DOWN_CODE = 66,
+	RIGHT_CODE = 67,
+	LEFT_CODE = 68
 };
+
+#define safe_exec(res)  if(res != SUCCESS) return FAIL
 
 /** @brief Changes printing color
  * @param [in] code - Color code
@@ -72,13 +88,15 @@ int getch(game_t* t);
 
 /** @brief Prepare console
  * @param [in] t - structure containing interactive game's state
+ * @return 0 upon successful execution and -1 otherwise
  */
-void setup_console(game_t* t);
+int setup_console(game_t* t);
 
 /** @brief Restore the console's original state
  * @param [in] t - structure containing interactive game's state
+ * @return 0 upon successful execution and -1 otherwise
  */
-void restore_console(game_t* t);
+int restore_console(game_t* t);
 
 /** @brief Clear the whole screen
  */

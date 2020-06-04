@@ -34,17 +34,17 @@ static game_t init_board(gamma_t* g) {
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
 	unsigned short rows = w.ws_row;
 	unsigned short columns = w.ws_col;
-	bool init_successful = true;
+	bool successful_flag = true;
 
 	if(g->width > columns || g->height + 2 > rows)
-		init_successful = false;
+		successful_flag = false;
 	bool** pos_can_move = malloc(sizeof(bool*) * g->width + sizeof(bool) * g->height * g->width);
 	char** arr = malloc(sizeof(char*) * g->width + sizeof(char) * g->height * g->width);
 
 	if(arr == NULL || pos_can_move == NULL) {
 		safe_free(arr);
 		safe_free(pos_can_move);
-		init_successful = false;
+		successful_flag = false;
 	} else {
 		uint32_t i;
 		char* char_ptr;
@@ -61,7 +61,8 @@ static game_t init_board(gamma_t* g) {
 				arr[x][y] = '.';
 	}
 
-	game_t t = {1,
+	game_t t = {
+		 1,
 		 1,
 		 g->max_players,
 		 g->width,
@@ -72,11 +73,14 @@ static game_t init_board(gamma_t* g) {
 		 arr,
 		 original_terminal,
 		 new_terminal,
-		 init_successful
+		 successful_flag
 	};
-	if(!init_successful) return t;
+	if(!successful_flag) return t;
 
-	setup_console(&t);
+	if(setup_console(&t) != SUCCESS) {
+		t.successful_flag = false;
+		return t;
+	}
 	clear_screen();
 	move_to(1, 1);
 	char* board = gamma_board(g);
@@ -184,7 +188,7 @@ bool start_interactive(gamma_t* g) {
 	if(g == NULL) return false;
 	game_t t = init_board(g);
 
-	if(!t.init_successful) {
+	if(!t.successful_flag) {
 		delete_board(&t);
 		return false;
 	}
@@ -231,11 +235,20 @@ bool start_interactive(gamma_t* g) {
 				skip_move(&t, g);
 				break;
 
-			case EOF:
+			case KEY_CTRL_D:
 				t.game_over = true;
+				break;
+			case FAIL:
+				t.game_over = true;
+				t.successful_flag = false;
 				break;
 		}
 	}
+	if(!t.successful_flag) {
+		delete_board(&t);
+		return false;
+	}
+
 	// Print End Scores
 	move_to(t.height + 1, 1);
 	clear_line();
@@ -261,7 +274,6 @@ bool start_interactive(gamma_t* g) {
 	} else if(winner != NO_WINNER)
 		printf("--\nPLAYER %u WON\n", winner);
 	list_free(&draw_list);
-	restore_console(&t);
 	delete_board(&t);
-	return true;
+	return restore_console(&t) == SUCCESS;
 }

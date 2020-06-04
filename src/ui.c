@@ -31,13 +31,19 @@ static game_t init_board(gamma_t* g) {
 	static struct termios original_terminal;
 	static struct termios new_terminal;
 	struct winsize w;
-	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+	bool successful_flag = true;
+	if(ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == FAIL) {
+		fprintf(stderr, "Error setting up the terminal\n");
+		successful_flag = false;
+	}
 	unsigned short rows = w.ws_row;
 	unsigned short columns = w.ws_col;
-	bool successful_flag = true;
 
-	if(g->width > columns || g->height + 2 > rows)
+
+	if(g->width > columns || g->height + 2 > rows) {
 		successful_flag = false;
+		fprintf(stderr, "Error, terminal is too small to fit the board\n");
+	}
 	bool** pos_can_move = malloc(sizeof(bool*) * g->width + sizeof(bool) * g->height * g->width);
 	char** arr = malloc(sizeof(char*) * g->width + sizeof(char) * g->height * g->width);
 
@@ -45,6 +51,7 @@ static game_t init_board(gamma_t* g) {
 		safe_free(arr);
 		safe_free(pos_can_move);
 		successful_flag = false;
+		fprintf(stderr, "Error allocating memory for interactive mode\n");
 	} else {
 		uint32_t i;
 		char* char_ptr;
@@ -79,6 +86,7 @@ static game_t init_board(gamma_t* g) {
 
 	if(setup_console(&t) != SUCCESS) {
 		t.successful_flag = false;
+		fprintf(stderr, "Error setting up the terminal\n");
 		return t;
 	}
 	clear_screen();
@@ -240,6 +248,7 @@ bool start_interactive(gamma_t* g) {
 				break;
 			case FAIL:
 				t.game_over = true;
+				fprintf(stderr, "Error with the terminal\n");
 				t.successful_flag = false;
 				break;
 		}
@@ -275,5 +284,10 @@ bool start_interactive(gamma_t* g) {
 		printf("--\nPLAYER %u WON\n", winner);
 	list_free(&draw_list);
 	delete_board(&t);
-	return restore_console(&t) == SUCCESS;
+
+	if(restore_console(&t) != SUCCESS) {
+		fprintf(stderr, "Error restoring the terminal\n");
+		return false;
+	}
+	return true;
 }

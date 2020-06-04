@@ -26,7 +26,6 @@ bool handle_command(gamma_t** g, Command command) {
 			if(!start_interactive(*g)) {
 				gamma_delete(*g);
 				*g = NULL;
-				fprintf(stderr, "ERROR while in interactive mode\n");
 				exit(1);
 			}
 			return true;

@@ -42,7 +42,7 @@ static bool nothing_but_white_left() {
  * @return @p true if the token was correct numerically, @p false otherwise
  */
 static bool get_next_token(uint32_t* token) {
-	char number[UINT32_MAX_LENGTH+1];
+	char number[UINT32_MAX_LENGTH + 1];
 	int c;
 	while(isspace(c = getchar()) && c != '\n');
 	ungetc(c, stdin);
@@ -53,8 +53,7 @@ static bool get_next_token(uint32_t* token) {
 			if(c == EOF || c == '\n') {
 				ungetc(c, stdin);
 				break;
-			}
-			else
+			} else
 				return false;
 		}
 		number[pos] = (char)c;
@@ -106,8 +105,7 @@ Command parse_command() {
 				command.type = UNRECOGNIZED;
 			}
 			return command;
-		}
-		else if(command.type == MOVE || command.type == GOLDEN_MOVE) {
+		} else if(command.type == MOVE || command.type == GOLDEN_MOVE) {
 			if(!get_next_token(&command.player) ||
 				 !get_next_token(&command.x) ||
 				 !get_next_token(&command.y) ||
@@ -115,8 +113,7 @@ Command parse_command() {
 				command.type = UNRECOGNIZED;
 			}
 			return command;
-		}
-		else {
+		} else {
 			if(!get_next_token(&command.player) ||
 				 !nothing_but_white_left()) {
 				command.type = UNRECOGNIZED;

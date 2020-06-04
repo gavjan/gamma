@@ -22,8 +22,7 @@ int main() {
 			command = parse_command();
 			if(command.type == UNRECOGNIZED || !handle_command(&g, command)) {
 				err(line_num);
-			}
-			else {
+			} else {
 				if(command.type == BATCH_MODE)
 					printf("OK %lu\n", line_num);
 				if(command.type == INTER_MODE)

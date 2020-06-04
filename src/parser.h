@@ -14,28 +14,28 @@
 /** @brief enum for supported commands
  */
 enum Command {
-		UNRECOGNIZED,
-		BATCH_MODE,
-		INTER_MODE,
-		MOVE,
-		GOLDEN_MOVE,
-		BUSY_FIELDS,
-		FREE_FIELDS,
-		GOLDEN_POSSIBLE,
-		BOARD
+	UNRECOGNIZED,
+	BATCH_MODE,
+	INTER_MODE,
+	MOVE,
+	GOLDEN_MOVE,
+	BUSY_FIELDS,
+	FREE_FIELDS,
+	GOLDEN_POSSIBLE,
+	BOARD
 };
 
 /** @brief Structure for storing command's tokens
  */
 typedef struct command {
-		int type;         ///< Type of the command
-		uint32_t player;  ///< player token
-		uint32_t x;       ///< x coordinate token
-		uint32_t y;       ///< y coordinate token
-		uint32_t width;   ///< width token
-		uint32_t height;  ///< height token
-		uint32_t players; ///< players token
-		uint32_t areas;   ///< areas token
+	int type;         ///< Type of the command
+	uint32_t player;  ///< player token
+	uint32_t x;       ///< x coordinate token
+	uint32_t y;       ///< y coordinate token
+	uint32_t width;   ///< width token
+	uint32_t height;  ///< height token
+	uint32_t players; ///< players token
+	uint32_t areas;   ///< areas token
 } Command;
 
 /** @brief Write ERROR
@@ -45,7 +45,6 @@ typedef struct command {
  * 0 otherwise
  */
 void err(uint64_t line);
-
 
 /** @brief Separate command into tokens correctly
  * @return @p Command structure containing the respective tokens

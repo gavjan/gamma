@@ -23,28 +23,28 @@ typedef unsigned __int128 uint128_t;
 /** @brief enum for directions
  */
 enum Direction {
-		UP,
-		DOWN,
-		LEFT,
-		RIGHT
+	UP,
+	DOWN,
+	LEFT,
+	RIGHT
 };
 
 /** @brief Structure storing the gamma game state
  */
 typedef struct gamma {
-		unode_t*** arr;               ///< Two dimensional array for storing the board state
-		uint32_t width;               ///< Width of the board
-		uint32_t height;              ///< Height of the board
-		uint32_t max_players;         ///< Maximum number of players allowed
-		uint32_t max_areas;           ///< Maximum number of areas a player can possess
-		uint64_t free_fields;         ///< Counter for free fields
-		uint64_t* player_area_count;  ///< Array of counters for taken areas
-		uint64_t* player_free_fields; ///< Array of counters for free adjacent fields
-		uint64_t* player_busy_fields; ///< Array of counters for taken fields
-		bool del_error_flag;          ///< Error flag used when Golden Move fails
-		bool* did_golden_move;        ///< Track of which player has already made a Golden move
-		bool game_over;               ///< Game Over Flag
-		bool status_changed;          ///< Flag that indicates if the game status has changed
+	unode_t*** arr;               ///< Two dimensional array for storing the board state
+	uint32_t width;               ///< Width of the board
+	uint32_t height;              ///< Height of the board
+	uint32_t max_players;         ///< Maximum number of players allowed
+	uint32_t max_areas;           ///< Maximum number of areas a player can possess
+	uint64_t free_fields;         ///< Counter for free fields
+	uint64_t* player_area_count;  ///< Array of counters for taken areas
+	uint64_t* player_free_fields; ///< Array of counters for free adjacent fields
+	uint64_t* player_busy_fields; ///< Array of counters for taken fields
+	bool del_error_flag;          ///< Error flag used when Golden Move fails
+	bool* did_golden_move;        ///< Track of which player has already made a Golden move
+	bool game_over;               ///< Game Over Flag
+	bool status_changed;          ///< Flag that indicates if the game status has changed
 } gamma_t;
 
 /** @brief Creates a structure that stores the game state

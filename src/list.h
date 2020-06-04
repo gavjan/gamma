@@ -11,8 +11,8 @@
 /** @brief Structure for a linked list
  */
 typedef struct list {
-		uint32_t data;     ///< Stored Data
-		struct list* next; ///< Pointer to the next node
+	uint32_t data;     ///< Stored Data
+	struct list* next; ///< Pointer to the next node
 } list_t;
 
 /** @brief Free the linked list

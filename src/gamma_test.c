@@ -65,10 +65,10 @@ static const bool test_errno = false;
 #define MANY_GAMES 42
 
 typedef struct {
-		uint32_t width;
-		uint32_t height;
-		uint32_t players;
-		uint32_t areas;
+	uint32_t width;
+	uint32_t height;
+	uint32_t players;
+	uint32_t areas;
 } gamma_param_t;
 
 /** WŁAŚCIWE TESTY **/
@@ -76,16 +76,16 @@ typedef struct {
 /* Testuje opublikowany przykład użycia. */
 static int example(void) {
 	static const char board[] =
-					"1.........\n"
-					"..........\n"
-					"..........\n"
-					"......2...\n"
-					".....2....\n"
-					"..........\n"
-					"..........\n"
-					"1.........\n"
-					"1221......\n"
-					"1.........\n";
+		 "1.........\n"
+		 "..........\n"
+		 "..........\n"
+		 "......2...\n"
+		 ".....2....\n"
+		 "..........\n"
+		 "..........\n"
+		 "1.........\n"
+		 "1221......\n"
+		 "1.........\n";
 
 	gamma_t* g;
 
@@ -208,12 +208,12 @@ static int params(void) {
  * z dużą liczbą graczy. */
 static int many_players(void) {
 	gamma_t* g = gamma_new(MIDDLE_BOARD_SIZE, MIDDLE_BOARD_SIZE,
-												 MIDDLE_BOARD_SIZE*MIDDLE_BOARD_SIZE, 1);
+												 MIDDLE_BOARD_SIZE * MIDDLE_BOARD_SIZE, 1);
 	assert(g != NULL);
 
 	for(uint32_t x = 0; x < MIDDLE_BOARD_SIZE; ++x)
 		for(uint32_t y = 0; y < MIDDLE_BOARD_SIZE; ++y)
-			assert(gamma_move(g, x*MIDDLE_BOARD_SIZE+y+1, x, y));
+			assert(gamma_move(g, x * MIDDLE_BOARD_SIZE + y + 1, x, y));
 
 	char* board = gamma_board(g);
 	assert(board != NULL);
@@ -226,10 +226,10 @@ static int many_players(void) {
 /* Testuje, czy można rozgrywać równocześnie więcej niż jedną grę. */
 static int many_games(void) {
 	static const gamma_param_t game[] = {
-					{7,  9,  2, 4},
-					{11, 21, 2, 4},
-					{47, 3,  2, 4},
-					{2,  99, 2, 2},
+		 {7, 9, 2, 4},
+		 {11, 21, 2, 4},
+		 {47, 3, 2, 4},
+		 {2, 99, 2, 2},
 	};
 	static const uint64_t free1[SIZE(game)] = {
 		8, 8, 6, 4
@@ -250,11 +250,11 @@ static int many_games(void) {
 		for(size_t j = 0; j < SIZE(game);
 		++j) {
 			assert(gamma_move(g[i][j], 1, 0, 0));
-			assert(gamma_move(g[i][j], 1, 0, game[j].height-1));
-			assert(gamma_move(g[i][j], 1, game[j].width-1, 0));
-			assert(gamma_move(g[i][j], 1, game[j].width-1, game[j].height-1));
-			assert(!gamma_move(g[i][j], 1, game[j].width, game[j].height-1));
-			assert(!gamma_move(g[i][j], 1, game[j].width-1, game[j].height));
+			assert(gamma_move(g[i][j], 1, 0, game[j].height - 1));
+			assert(gamma_move(g[i][j], 1, game[j].width - 1, 0));
+			assert(gamma_move(g[i][j], 1, game[j].width - 1, game[j].height - 1));
+			assert(!gamma_move(g[i][j], 1, game[j].width, game[j].height - 1));
+			assert(!gamma_move(g[i][j], 1, game[j].width - 1, game[j].height));
 		}
 	}
 
@@ -264,8 +264,8 @@ static int many_games(void) {
 			assert(gamma_busy_fields(g[i][j], 1) == 4);
 			assert(gamma_free_fields(g[i][j], 1) == free1[j]);
 			assert(gamma_busy_fields(g[i][j], 2) == 0);
-			uint64_t size = (uint64_t)game[j].width*(uint64_t)game[j].height;
-			assert(gamma_free_fields(g[i][j], 2) == size-4);
+			uint64_t size = (uint64_t)game[j].width * (uint64_t)game[j].height;
+			assert(gamma_free_fields(g[i][j], 2) == size - 4);
 		}
 	}
 
@@ -481,14 +481,14 @@ static int areas(void) {
 
 	for(uint32_t i = 0; i < 21; ++i) {
 		assert(gamma_move(g, 1, i, i));
-		assert(gamma_move(g, 1, i+2, i));
+		assert(gamma_move(g, 1, i + 2, i));
 	}
 
 	assert(!gamma_move(g, 1, 0, 2));
 	assert(!gamma_move(g, 1, 0, 4));
 
 	for(uint32_t i = 0; i < 9; ++i)
-		assert(gamma_move(g, 1, i+1, i));
+		assert(gamma_move(g, 1, i + 1, i));
 
 	for(uint32_t i = 2; i <= 36; i += 2)
 		assert(gamma_move(g, 1, 0, i));
@@ -606,11 +606,11 @@ static int tree(void) {
 /* Testuje ruchy wykonywane wyłącznie na brzegu planszy. */
 static int border(void) {
 	static const char board[] =
-					"321442\n"
-					"4....1\n"
-					"4....4\n"
-					"1....3\n"
-					"123412\n";
+		 "321442\n"
+		 "4....1\n"
+		 "4....4\n"
+		 "1....3\n"
+		 "123412\n";
 
 	gamma_t* g = gamma_new(6, 5, 4, 4);
 	assert(g != NULL);
@@ -666,7 +666,7 @@ static int memory_alloc(void) {
 	assert(g != NULL);
 
 	/* Alokujemy całą dostępną pamięć. */
-	for(size_t s = 1024*1024*1024; s >= 1; s /= 2) {
+	for(size_t s = 1024 * 1024 * 1024; s >= 1; s /= 2) {
 		void* p;
 		do {
 			p = malloc(s);
@@ -686,25 +686,25 @@ static int memory_alloc(void) {
 /* Testuje odporność implementacji na duże wartości parametrów w gamma_new. */
 static int big_board(void) {
 	static const gamma_param_t game[] = {
-					{UINT32_MAX,        UINT32_MAX,        UINT32_MAX,        UINT32_MAX},
-					{2,                 UINT32_MAX,        UINT32_MAX,        UINT32_MAX},
-					{UINT32_MAX, 2,                        UINT32_MAX,        UINT32_MAX},
-					{UINT32_MAX,        UINT32_MAX, 2,                        UINT32_MAX},
-					{UINT32_MAX,        UINT32_MAX,        UINT32_MAX, 5},
-					{UINT32_MAX, 2,                 2,                 5},
-					{2,                 UINT32_MAX, 2,                 5},
-					{2,          2,                        UINT32_MAX, 5},
-					{2,          2,                 2,                        UINT32_MAX},
-					{1<<16,      1<<16,             2,                 5},
-					{(1<<24)+1,  1<<8,              2,                 5},
-					{(1<<15)+1,  (1<<14)+1,         2,                 5},
-					{(1<<14)+1,  (1<<13)+1,         2,                 5},
-					{(1<<13)+1,  (1<<12)+1,         2,                 5},
-					{(1<<12)+1,  (1<<11)+1,         2,                 5},
-					{(1<<11)+1,  (1<<10)+1,         2,                 5},
-					{BIG_BOARD_SIZE,    BIG_BOARD_SIZE,    BIG_BOARD_SIZE,    BIG_BOARD_SIZE},
-					{MIDDLE_BOARD_SIZE, MIDDLE_BOARD_SIZE, MIDDLE_BOARD_SIZE, MIDDLE_BOARD_SIZE},
-					{SMALL_BOARD_SIZE,  SMALL_BOARD_SIZE,  SMALL_BOARD_SIZE,  SMALL_BOARD_SIZE},
+		 {UINT32_MAX, UINT32_MAX, UINT32_MAX, UINT32_MAX},
+		 {2, UINT32_MAX, UINT32_MAX, UINT32_MAX},
+		 {UINT32_MAX, 2, UINT32_MAX, UINT32_MAX},
+		 {UINT32_MAX, UINT32_MAX, 2, UINT32_MAX},
+		 {UINT32_MAX, UINT32_MAX, UINT32_MAX, 5},
+		 {UINT32_MAX, 2, 2, 5},
+		 {2, UINT32_MAX, 2, 5},
+		 {2, 2, UINT32_MAX, 5},
+		 {2, 2, 2, UINT32_MAX},
+		 {1 << 16, 1 << 16, 2, 5},
+		 {(1 << 24) + 1, 1 << 8, 2, 5},
+		 {(1 << 15) + 1, (1 << 14) + 1, 2, 5},
+		 {(1 << 14) + 1, (1 << 13) + 1, 2, 5},
+		 {(1 << 13) + 1, (1 << 12) + 1, 2, 5},
+		 {(1 << 12) + 1, (1 << 11) + 1, 2, 5},
+		 {(1 << 11) + 1, (1 << 10) + 1, 2, 5},
+		 {BIG_BOARD_SIZE, BIG_BOARD_SIZE, BIG_BOARD_SIZE, BIG_BOARD_SIZE},
+		 {MIDDLE_BOARD_SIZE, MIDDLE_BOARD_SIZE, MIDDLE_BOARD_SIZE, MIDDLE_BOARD_SIZE},
+		 {SMALL_BOARD_SIZE, SMALL_BOARD_SIZE, SMALL_BOARD_SIZE, SMALL_BOARD_SIZE},
 	};
 
 	unsigned success = 0;
@@ -714,19 +714,18 @@ static int big_board(void) {
 		gamma_t* g = gamma_new(game[i].width, game[i].height,
 													 game[i].players, game[i].areas);
 		if(g != NULL) {
-			uint64_t size = (uint64_t)game[i].width*(uint64_t)game[i].height;
+			uint64_t size = (uint64_t)game[i].width * (uint64_t)game[i].height;
 			assert(gamma_free_fields(g, game[i].players) == size);
 			// Przynajmniej cztery ruchy powinny się udać.
 			assert(gamma_move(g, game[i].players, 0, 0));
-			assert(gamma_move(g, game[i].players, 0, game[i].height-1));
-			assert(gamma_move(g, game[i].players, game[i].width-1, 0));
-			assert(gamma_move(g, game[i].players, game[i].width-1, game[i].height-1));
-			assert(gamma_free_fields(g, game[i].players) == size-4);
+			assert(gamma_move(g, game[i].players, 0, game[i].height - 1));
+			assert(gamma_move(g, game[i].players, game[i].width - 1, 0));
+			assert(gamma_move(g, game[i].players, game[i].width - 1, game[i].height - 1));
+			assert(gamma_free_fields(g, game[i].players) == size - 4);
 			assert(gamma_busy_fields(g, game[i].players) == 4);
 			gamma_delete(g);
 			++success;
-		}
-		else {
+		} else {
 			assert(!test_errno || errno == ENOMEM);
 		}
 	}
@@ -746,15 +745,14 @@ static int middle_board(void) {
 			// Jeśli udało się zaalokować planszę o rozmiarze size * size, to powinno
 			// się też udać zaalokować inną planszę o nieco mniejszej powierzchni.
 			gamma_t* g2;
-			g2 = gamma_new((size-1)*(size-1), 1, 2, 2);
+			g2 = gamma_new((size - 1) * (size - 1), 1, 2, 2);
 			assert(g2 != NULL);
 			gamma_delete(g2);
-			g2 = gamma_new(1, (size-1)*(size-1), 2, 2);
+			g2 = gamma_new(1, (size - 1) * (size - 1), 2, 2);
 			assert(g2 != NULL);
 			gamma_delete(g2);
 			++success;
-		}
-		else {
+		} else {
 			assert(!test_errno || errno == ENOMEM);
 		}
 	}
@@ -767,28 +765,28 @@ static int middle_board(void) {
 /** URUCHAMIANIE TESTÓW **/
 
 typedef struct {
-		char const* name;
-		int (* function)(void);
+	char const* name;
+	int (* function)(void);
 } test_list_t;
 
 #define TEST(t) {#t, t}
 
 static const test_list_t test_list[] = {
-				TEST(example),
-				TEST(minimal),
-				TEST(params),
-				TEST(many_players),
-				TEST(many_games),
-				TEST(delete_null),
-				TEST(normal_move),
-				TEST(golden_move),
-				TEST(golden_possible),
-				TEST(areas),
-				TEST(tree),
-				TEST(border),
-				TEST(memory_alloc),
-				TEST(big_board),
-				TEST(middle_board),
+	 TEST(example),
+	 TEST(minimal),
+	 TEST(params),
+	 TEST(many_players),
+	 TEST(many_games),
+	 TEST(delete_null),
+	 TEST(normal_move),
+	 TEST(golden_move),
+	 TEST(golden_possible),
+	 TEST(areas),
+	 TEST(tree),
+	 TEST(border),
+	 TEST(memory_alloc),
+	 TEST(big_board),
+	 TEST(middle_board),
 };
 
 int main(int argc, char* argv[]) {

@@ -36,25 +36,24 @@ static game_t init_board(gamma_t* g) {
 	unsigned short columns = w.ws_col;
 	bool init_successful = true;
 
-	if(g->width > columns || g->height+2 > rows)
+	if(g->width > columns || g->height + 2 > rows)
 		init_successful = false;
-	bool** pos_can_move = malloc(sizeof(bool*)*g->width+sizeof(bool)*g->height*g->width);
-	char** arr = malloc(sizeof(char*)*g->width+sizeof(char)*g->height*g->width);
+	bool** pos_can_move = malloc(sizeof(bool*) * g->width + sizeof(bool) * g->height * g->width);
+	char** arr = malloc(sizeof(char*) * g->width + sizeof(char) * g->height * g->width);
 
 	if(arr == NULL || pos_can_move == NULL) {
 		safe_free(arr);
 		safe_free(pos_can_move);
 		init_successful = false;
-	}
-	else {
+	} else {
 		uint32_t i;
 		char* char_ptr;
 		bool* bool_ptr;
-		char_ptr = (char*)(arr+g->width);
-		bool_ptr = (bool*)(pos_can_move+g->width);
+		char_ptr = (char*)(arr + g->width);
+		bool_ptr = (bool*)(pos_can_move + g->width);
 		for(i = 0; i < g->width; i++) {
-			arr[i] = (char_ptr+g->height*i);
-			pos_can_move[i] = (bool_ptr+g->height*i);
+			arr[i] = (char_ptr + g->height * i);
+			pos_can_move[i] = (bool_ptr + g->height * i);
 		}
 		uint32_t height = g->height, width = g->width, x, y;
 		for(x = 0; x < width; x++)
@@ -63,17 +62,17 @@ static game_t init_board(gamma_t* g) {
 	}
 
 	game_t t = {1,
-							1,
-							g->max_players,
-							g->width,
-							g->height,
-							1,
-							false,
-							pos_can_move,
-							arr,
-							original_terminal,
-							new_terminal,
-							init_successful
+		 1,
+		 g->max_players,
+		 g->width,
+		 g->height,
+		 1,
+		 false,
+		 pos_can_move,
+		 arr,
+		 original_terminal,
+		 new_terminal,
+		 init_successful
 	};
 	if(!init_successful) return t;
 
@@ -87,8 +86,8 @@ static game_t init_board(gamma_t* g) {
 	set_text_color(RESET_COLOR);
 
 	safe_free(board);
-	move_to(g->height+1, 1);
-	printf("PLAYER 1 0 %d\n", g->height*g->width);
+	move_to(g->height + 1, 1);
+	printf("PLAYER 1 0 %d\n", g->height * g->width);
 	move_to(1, 1);
 
 	return t;
@@ -106,14 +105,13 @@ static void delete_board(game_t* t) {
  * @param [in] t - pointer to the structure that stores the interactive state
  */
 static void update_hud(game_t* t, gamma_t* g) {
-	move_to(t->height+1, 1);
+	move_to(t->height + 1, 1);
 	clear_line();
-	move_to(t->height+1, 1);
+	move_to(t->height + 1, 1);
 	uint64_t free_fields = gamma_free_fields(g, t->curr_player);
 	uint64_t busy_fields = gamma_busy_fields(g, t->curr_player);
 
 	printf("PLAYER %u %lu %lu", t->curr_player, busy_fields, free_fields);
-
 
 	if(gamma_golden_possible_interactive(g, t->curr_player, t->pos_can_move))
 		set_text_color(YELLOW_TXT);
@@ -129,11 +127,11 @@ static void update_hud(game_t* t, gamma_t* g) {
 	char** arr = t->arr;
 	for(i = 0; i < height; i++) {
 		for(j = 0; j < width; j++) {
-			if(pos_can_move[width-1-j][height-1-i])
-				set_text_color(arr[width-1-j][height-1-i] == '.' ? GREEN_TXT : YELLOW_TXT);
+			if(pos_can_move[width - 1 - j][height - 1 - i])
+				set_text_color(arr[width - 1 - j][height - 1 - i] == '.' ? GREEN_TXT : YELLOW_TXT);
 			else
 				set_text_color(RESET_COLOR);
-			printf("%c", arr[width-1-j][height-1-i]);
+			printf("%c", arr[width - 1 - j][height - 1 - i]);
 		}
 		printf("\n");
 	}
@@ -148,20 +146,20 @@ static void update_hud(game_t* t, gamma_t* g) {
  */
 static inline bool cant_move(game_t* t, gamma_t* g) {
 	return gamma_free_fields(g, t->curr_player) == 0 &&
-				 !gamma_golden_possible(g, t->curr_player);
+		 !gamma_golden_possible(g, t->curr_player);
 }
 /** @brief Skip a move
  * @param [in] t - pointer to the structure that stores the interactive state
  * @param [in] g - pointer to the structure that stores the game state
  */
 static void skip_move(game_t* t, gamma_t* g) {
-	t->curr_player = (t->curr_player)%t->max_players+1;
+	t->curr_player = (t->curr_player) % t->max_players + 1;
 	while(cant_move(t, g)) {
 		if(gamma_game_over(g)) {
 			t->game_over = true;
 			break;
 		}
-		t->curr_player = (t->curr_player)%t->max_players+1;
+		t->curr_player = (t->curr_player) % t->max_players + 1;
 	}
 	update_hud(t, g);
 }
@@ -172,11 +170,11 @@ static void skip_move(game_t* t, gamma_t* g) {
  */
 static void make_move(game_t* t, gamma_t* g, bool golden) {
 	bool move_result = golden ?
-										 gamma_golden_move(g, t->curr_player, t->width-t->cur_j, t->height-t->cur_i)
-														: gamma_move(g, t->curr_player, t->width-t->cur_j, t->height-t->cur_i);
+		 gamma_golden_move(g, t->curr_player, t->width - t->cur_j, t->height - t->cur_i)
+		 : gamma_move(g, t->curr_player, t->width - t->cur_j, t->height - t->cur_i);
 	if(move_result) {
-		insert_char('0'+t->curr_player);
-		t->arr[t->width-t->cur_j][t->height-t->cur_i] = '0'+t->curr_player;
+		insert_char('0' + t->curr_player);
+		t->arr[t->width - t->cur_j][t->height - t->cur_i] = '0' + t->curr_player;
 
 		// Skip or end the game
 		skip_move(t, g);
@@ -239,9 +237,9 @@ bool start_interactive(gamma_t* g) {
 		}
 	}
 	// Print End Scores
-	move_to(t.height+1, 1);
+	move_to(t.height + 1, 1);
 	clear_line();
-	move_to(t.height+1, 1);
+	move_to(t.height + 1, 1);
 	for(uint32_t i = 1; i <= t.max_players; i++) {
 		printf("PLAYER %u %lu", i, gamma_busy_fields(g, i));
 		if(gamma_golden_available(g, i))
@@ -260,8 +258,7 @@ bool start_interactive(gamma_t* g) {
 			l = l->next;
 		}
 		printf("\n");
-	}
-	else if(winner != NO_WINNER)
+	} else if(winner != NO_WINNER)
 		printf("--\nPLAYER %u WON\n", winner);
 	list_free(&draw_list);
 	restore_console(&t);

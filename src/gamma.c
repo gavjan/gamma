@@ -19,7 +19,7 @@
  * @return Value @p true if up adjacent node belongs to @p player @p false, otherwise
  */
 static inline bool adjacent_up(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
-	return (y+1 < g->height && g->arr[x][y+1] != NULL && g->arr[x][y+1]->player == player);
+	return (y + 1 < g->height && g->arr[x][y + 1] != NULL && g->arr[x][y + 1]->player == player);
 }
 /** @brief Check if field down from current field belongs to @p player
  * @param [in, out] g - pointer to the structure that stores the game state,
@@ -32,7 +32,7 @@ static inline bool adjacent_up(gamma_t* g, uint32_t player, uint32_t x, uint32_t
  * @return Value @p true if down adjacent node belongs to @p player @p false, otherwise
  */
 static inline bool adjacent_down(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
-	return (y > 0 && g->arr[x][y-1] != NULL && g->arr[x][y-1]->player == player);
+	return (y > 0 && g->arr[x][y - 1] != NULL && g->arr[x][y - 1]->player == player);
 }
 /** @brief Check if field left from current field belongs to @p player
  * @param [in, out] g - pointer to the structure that stores the game state,
@@ -45,7 +45,7 @@ static inline bool adjacent_down(gamma_t* g, uint32_t player, uint32_t x, uint32
  * @return Value @p true if left adjacent node belongs to @p player @p false, otherwise
  */
 static inline bool adjacent_left(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
-	return (x > 0 && g->arr[x-1][y] != NULL && g->arr[x-1][y]->player == player);
+	return (x > 0 && g->arr[x - 1][y] != NULL && g->arr[x - 1][y]->player == player);
 }
 /** @brief Check if field right from current field belongs to @p player
  * @param [in, out] g - pointer to the structure that stores the game state,
@@ -58,7 +58,7 @@ static inline bool adjacent_left(gamma_t* g, uint32_t player, uint32_t x, uint32
  * @return Value @p true if right adjacent node belongs to @p player @p false, otherwise
  */
 static inline bool adjacent_right(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
-	return (x+1 < g->width && g->arr[x+1][y] != NULL && g->arr[x+1][y]->player == player);
+	return (x + 1 < g->width && g->arr[x + 1][y] != NULL && g->arr[x + 1][y]->player == player);
 }
 /** @brief Check if field up from current field exists
  * @param [in, out] g - pointer to the structure that stores the game state,
@@ -69,7 +69,7 @@ static inline bool adjacent_right(gamma_t* g, uint32_t player, uint32_t x, uint3
  * @return Value @p true if the field at right exists @p false, otherwise
  */
 static inline bool exists_up(gamma_t* g, uint32_t x, uint32_t y) {
-	return (y+1 < g->height && g->arr[x][y+1] != NULL);
+	return (y + 1 < g->height && g->arr[x][y + 1] != NULL);
 }
 /** @brief Check if field down from current field exists
  * @param [in, out] g - pointer to the structure that stores the game state,
@@ -80,7 +80,7 @@ static inline bool exists_up(gamma_t* g, uint32_t x, uint32_t y) {
  * @return Value @p true if the field at right exists @p false, otherwise
  */
 static inline bool exists_down(gamma_t* g, uint32_t x, uint32_t y) {
-	return (y > 0 && g->arr[x][y-1] != NULL);
+	return (y > 0 && g->arr[x][y - 1] != NULL);
 }
 /** @brief Check if field left from current field exists
  * @param [in, out] g - pointer to the structure that stores the game state,
@@ -91,7 +91,7 @@ static inline bool exists_down(gamma_t* g, uint32_t x, uint32_t y) {
  * @return Value @p true if the field at right exists @p false, otherwise
  */
 static inline bool exists_left(gamma_t* g, uint32_t x, uint32_t y) {
-	return (x > 0 && g->arr[x-1][y] != NULL);
+	return (x > 0 && g->arr[x - 1][y] != NULL);
 }
 /** @brief Check if field right from current field exists
  * @param [in, out] g - pointer to the structure that stores the game state,
@@ -102,7 +102,7 @@ static inline bool exists_left(gamma_t* g, uint32_t x, uint32_t y) {
  * @return Value @p true if the field at right exists @p false, otherwise
  */
 static inline bool exists_right(gamma_t* g, uint32_t x, uint32_t y) {
-	return (x+1 < g->width && g->arr[x+1][y] != NULL);
+	return (x + 1 < g->width && g->arr[x + 1][y] != NULL);
 }
 /** @brief Check if field up from current field is free
  * @param [in, out] g - pointer to the structure that stores the game state,
@@ -113,7 +113,7 @@ static inline bool exists_right(gamma_t* g, uint32_t x, uint32_t y) {
  * @return Value @p true if the field at up is free @p false, otherwise
  */
 static inline bool free_adjacent_up(gamma_t* g, uint32_t x, uint32_t y) {
-	return (y+1 < g->height && g->arr[x][y+1] == NULL);
+	return (y + 1 < g->height && g->arr[x][y + 1] == NULL);
 }
 /** @brief Check if field down from current field is free
  * @param [in, out] g - pointer to the structure that stores the game state,
@@ -124,7 +124,7 @@ static inline bool free_adjacent_up(gamma_t* g, uint32_t x, uint32_t y) {
  * @return Value @p true if the field at down is free @p false, otherwise
  */
 static inline bool free_adjacent_down(gamma_t* g, uint32_t x, uint32_t y) {
-	return (y > 0 && g->arr[x][y-1] == NULL);
+	return (y > 0 && g->arr[x][y - 1] == NULL);
 }
 /** @brief Check if field left from current field is free
  * @param [in, out] g - pointer to the structure that stores the game state,
@@ -135,7 +135,7 @@ static inline bool free_adjacent_down(gamma_t* g, uint32_t x, uint32_t y) {
  * @return Value @p true if the field at left is free @p false, otherwise
  */
 static inline bool free_adjacent_left(gamma_t* g, uint32_t x, uint32_t y) {
-	return (x > 0 && g->arr[x-1][y] == NULL);
+	return (x > 0 && g->arr[x - 1][y] == NULL);
 }
 /** @brief Check if field right from current field is free
  * @param [in, out] g - pointer to the structure that stores the game state,
@@ -146,7 +146,7 @@ static inline bool free_adjacent_left(gamma_t* g, uint32_t x, uint32_t y) {
  * @return Value @p true if the field at right us free @p false, otherwise
  */
 static inline bool free_adjacent_right(gamma_t* g, uint32_t x, uint32_t y) {
-	return (x+1 < g->width && g->arr[x+1][y] == NULL);
+	return (x + 1 < g->width && g->arr[x + 1][y] == NULL);
 }
 /** @brief Check if field @p x,@p y has adjacent fields belonging to @p player
  * @param [in, out] g - pointer to the structure that stores the game state,
@@ -161,9 +161,9 @@ static inline bool free_adjacent_right(gamma_t* g, uint32_t x, uint32_t y) {
  */
 static inline bool has_friends(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 	return adjacent_up(g, player, x, y) ||
-				 adjacent_down(g, player, x, y) ||
-				 adjacent_left(g, player, x, y) ||
-				 adjacent_right(g, player, x, y);
+		 adjacent_down(g, player, x, y) ||
+		 adjacent_left(g, player, x, y) ||
+		 adjacent_right(g, player, x, y);
 }
 /** @brief Increase potential field count that @p player can visit
  * Adds the @p player counter for fields he can move without increasing
@@ -190,10 +190,10 @@ static inline void increase_if_no_friends(gamma_t* g, uint32_t player, uint32_t 
  * @p height from the @ref gamma_new function
  */
 static void add_free_adjacents(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
-	if(free_adjacent_up(g, x, y)) increase_if_no_friends(g, player, x, y+1);
-	if(free_adjacent_down(g, x, y)) increase_if_no_friends(g, player, x, y-1);
-	if(free_adjacent_left(g, x, y)) increase_if_no_friends(g, player, x-1, y);
-	if(free_adjacent_right(g, x, y)) increase_if_no_friends(g, player, x+1, y);
+	if(free_adjacent_up(g, x, y)) increase_if_no_friends(g, player, x, y + 1);
+	if(free_adjacent_down(g, x, y)) increase_if_no_friends(g, player, x, y - 1);
+	if(free_adjacent_left(g, x, y)) increase_if_no_friends(g, player, x - 1, y);
+	if(free_adjacent_right(g, x, y)) increase_if_no_friends(g, player, x + 1, y);
 }
 /** @brief Add a player to the list if we are missing that player
  * @param [in] player - player number, positive number does not exceed value
@@ -238,13 +238,13 @@ static void add_and_decrease_distinct(unode_t* master, unode_t** still_connected
  */
 static inline void add_existing_neighbors(gamma_t* g, uint32_t x, uint32_t y, uint32_t* change) {
 	if(exists_up(g, x, y))
-		add_if_missing(g->arr[x][y+1]->player, change);
+		add_if_missing(g->arr[x][y + 1]->player, change);
 	if(exists_down(g, x, y))
-		add_if_missing(g->arr[x][y-1]->player, change);
+		add_if_missing(g->arr[x][y - 1]->player, change);
 	if(exists_left(g, x, y))
-		add_if_missing(g->arr[x-1][y]->player, change);
+		add_if_missing(g->arr[x - 1][y]->player, change);
 	if(exists_right(g, x, y))
-		add_if_missing(g->arr[x+1][y]->player, change);
+		add_if_missing(g->arr[x + 1][y]->player, change);
 }
 /** @brief Decrease potential free locations for neighbors
  * @param [in, out] g - pointer to the structure that stores the game state,
@@ -280,10 +280,10 @@ static void decrease_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
 static bool free_has_friends(gamma_t* g, uint32_t player, uint32_t x, uint32_t y, char from) {
 	if(g->arr[x][y] != NULL) return true;
 	return
-					(adjacent_up(g, player, x, y) && from != UP) ||
-					(adjacent_down(g, player, x, y) && from != DOWN) ||
-					(adjacent_left(g, player, x, y) && from != LEFT) ||
-					(adjacent_right(g, player, x, y) && from != RIGHT);
+		 (adjacent_up(g, player, x, y) && from != UP) ||
+				(adjacent_down(g, player, x, y) && from != DOWN) ||
+				(adjacent_left(g, player, x, y) && from != LEFT) ||
+				(adjacent_right(g, player, x, y) && from != RIGHT);
 }
 /** @brief Decrease player's free locations
  * When removing lonesome friends we decrease player's free field locations
@@ -295,13 +295,13 @@ static bool free_has_friends(gamma_t* g, uint32_t player, uint32_t x, uint32_t y
  */
 static void decrease_player_free_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
 	uint32_t player = g->arr[x][y]->player;
-	if(free_adjacent_up(g, x, y) && !free_has_friends(g, player, x, y+1, DOWN))
+	if(free_adjacent_up(g, x, y) && !free_has_friends(g, player, x, y + 1, DOWN))
 		g->player_free_fields[player]--;
-	if(free_adjacent_down(g, x, y) && !free_has_friends(g, player, x, y-1, UP))
+	if(free_adjacent_down(g, x, y) && !free_has_friends(g, player, x, y - 1, UP))
 		g->player_free_fields[player]--;
-	if(free_adjacent_left(g, x, y) && !free_has_friends(g, player, x-1, y, RIGHT))
+	if(free_adjacent_left(g, x, y) && !free_has_friends(g, player, x - 1, y, RIGHT))
 		g->player_free_fields[player]--;
-	if(free_adjacent_right(g, x, y) && !free_has_friends(g, player, x+1, y, LEFT))
+	if(free_adjacent_right(g, x, y) && !free_has_friends(g, player, x + 1, y, LEFT))
 		g->player_free_fields[player]--;
 }
 /** @brief Increase player's free locations
@@ -339,13 +339,13 @@ static void reindex(gamma_t* g, uint32_t player, uint32_t x, uint32_t y, unode_t
 	g->arr[x][y]->depth = 1;
 	g->arr[x][y]->parent = master;
 	if(from != UP && adjacent_up(g, player, x, y))
-		reindex(g, player, x, y+1, master, DOWN);
+		reindex(g, player, x, y + 1, master, DOWN);
 	if(from != DOWN && adjacent_down(g, player, x, y))
-		reindex(g, player, x, y-1, master, UP);
+		reindex(g, player, x, y - 1, master, UP);
 	if(from != LEFT && adjacent_left(g, player, x, y))
-		reindex(g, player, x-1, y, master, RIGHT);
+		reindex(g, player, x - 1, y, master, RIGHT);
 	if(from != RIGHT && adjacent_right(g, player, x, y))
-		reindex(g, player, x+1, y, master, LEFT);
+		reindex(g, player, x + 1, y, master, LEFT);
 	g->arr[x][y]->visited = false;
 }
 /** @brief Remove a field
@@ -373,42 +373,41 @@ static bool remove_field(gamma_t* g, uint32_t x, uint32_t y) {
 		g->player_busy_fields[player]--;
 		g->player_area_count[player]--;
 		return true;
-	}
-	else {
+	} else {
 		g->arr[x][y]->visited = true;
 		if(adjacent_up(g, player, x, y)) {
-			master = new_unode(g->arr[x][y+1]->player);
+			master = new_unode(g->arr[x][y + 1]->player);
 			if(master == NULL) return false;
-			reindex(g, player, x, y+1, master, DOWN);
-			del = g->arr[x][y+1];
-			g->arr[x][y+1] = master;
+			reindex(g, player, x, y + 1, master, DOWN);
+			del = g->arr[x][y + 1];
+			g->arr[x][y + 1] = master;
 			safe_free(del);
 			add_and_decrease_distinct(ufind(master), still_connected, &adder);
 		}
 		if(adjacent_down(g, player, x, y)) {
-			master = new_unode(g->arr[x][y-1]->player);
+			master = new_unode(g->arr[x][y - 1]->player);
 			if(master == NULL) return false;
-			reindex(g, player, x, y-1, master, UP);
-			del = g->arr[x][y-1];
-			g->arr[x][y-1] = master;
+			reindex(g, player, x, y - 1, master, UP);
+			del = g->arr[x][y - 1];
+			g->arr[x][y - 1] = master;
 			safe_free(del);
 			add_and_decrease_distinct(ufind(master), still_connected, &adder);
 		}
 		if(adjacent_left(g, player, x, y)) {
-			master = new_unode(g->arr[x-1][y]->player);
+			master = new_unode(g->arr[x - 1][y]->player);
 			if(master == NULL) return false;
-			reindex(g, player, x-1, y, master, RIGHT);
-			del = g->arr[x-1][y];
-			g->arr[x-1][y] = master;
+			reindex(g, player, x - 1, y, master, RIGHT);
+			del = g->arr[x - 1][y];
+			g->arr[x - 1][y] = master;
 			safe_free(del);
 			add_and_decrease_distinct(ufind(master), still_connected, &adder);
 		}
 		if(adjacent_right(g, player, x, y)) {
-			master = new_unode(g->arr[x+1][y]->player);
+			master = new_unode(g->arr[x + 1][y]->player);
 			if(master == NULL) return false;
-			reindex(g, player, x+1, y, master, LEFT);
-			del = g->arr[x+1][y];
-			g->arr[x+1][y] = master;
+			reindex(g, player, x + 1, y, master, LEFT);
+			del = g->arr[x + 1][y];
+			g->arr[x + 1][y] = master;
 			safe_free(del);
 			add_and_decrease_distinct(ufind(master), still_connected, &adder);
 		}
@@ -418,14 +417,13 @@ static bool remove_field(gamma_t* g, uint32_t x, uint32_t y) {
 		g->free_fields++;
 		assert(g->player_busy_fields);
 		g->player_busy_fields[player]--;
-		if(g->max_areas-g->player_area_count[player] < (uint64_t)adder) {
+		if(g->max_areas - g->player_area_count[player] < (uint64_t)adder) {
 			g->player_area_count[player] += adder;
 			g->del_error_flag = true;
 			gamma_move(g, player, x, y);
 			g->del_error_flag = false;
 			return false;
-		}
-		else g->player_area_count[player] += adder;
+		} else g->player_area_count[player] += adder;
 	}
 	return true;
 }
@@ -504,8 +502,7 @@ static bool check_golden_possible(gamma_t* g, uint32_t player, bool** ans_arr) {
 				if(interactive_ans == false && ans == true) interactive_ans = true;
 			}
 		}
-	}
-	else
+	} else
 		for(x = 0; x < width; x++)
 			for(y = 0; y < height; y++)
 				if(gamma_golden_possible_field(g, player, x, y))
@@ -527,7 +524,7 @@ gamma_t* gamma_new(uint32_t width, uint32_t height, uint32_t players, uint32_t a
 	if(g == NULL) return NULL;
 	g->width = width;
 	g->height = height;
-	g->free_fields = width*height;
+	g->free_fields = width * height;
 	g->max_areas = areas;
 	g->max_players = players;
 	size_t max_players = players, max_width = width, max_height = height;
@@ -536,25 +533,25 @@ gamma_t* gamma_new(uint32_t width, uint32_t height, uint32_t players, uint32_t a
 
 	unode_t** ptr;
 	unode_t*** arr;
-	uint128_t size = sizeof(unode_t**)*max_width + sizeof(unode_t*)*max_height*max_width;
+	uint128_t size = sizeof(unode_t**) * max_width + sizeof(unode_t*) * max_height * max_width;
 	if(size > UINT32_MAX) return safe_free(g);
 	arr = (unode_t***)malloc(size);
 	if(arr == NULL) return safe_free(g);
-	ptr = (unode_t**)(arr+max_width);
+	ptr = (unode_t**)(arr + max_width);
 	for(i = 0; i < width; i++)
-		arr[i] = (ptr+max_height*i);
+		arr[i] = (ptr + max_height * i);
 	g->arr = arr;
 	arr = NULL;
 
-	g->did_golden_move = calloc((max_players+1), sizeof(bool));
-	g->player_area_count = calloc((max_players+1), sizeof(uint64_t));
-	g->player_free_fields = calloc((max_players+1), sizeof(uint64_t));
-	g->player_busy_fields = calloc((max_players+1), sizeof(uint64_t));
+	g->did_golden_move = calloc((max_players + 1), sizeof(bool));
+	g->player_area_count = calloc((max_players + 1), sizeof(uint64_t));
+	g->player_free_fields = calloc((max_players + 1), sizeof(uint64_t));
+	g->player_busy_fields = calloc((max_players + 1), sizeof(uint64_t));
 	if(
-					g->did_golden_move == NULL ||
-					g->player_area_count == NULL ||
-					g->player_free_fields == NULL ||
-					g->player_busy_fields == NULL) {
+		 g->did_golden_move == NULL ||
+				g->player_area_count == NULL ||
+				g->player_free_fields == NULL ||
+				g->player_busy_fields == NULL) {
 		safe_free(g->arr);
 		safe_free(g->did_golden_move);
 		safe_free(g->player_area_count);
@@ -593,14 +590,13 @@ bool gamma_move(gamma_t* g, uint32_t player, uint32_t x, uint32_t y) {
 		g->player_area_count[player]++;
 		g->arr[x][y] = new_unode(player);
 		if(g->arr[x][y] == NULL) return false;
-	}
-	else {
+	} else {
 		g->arr[x][y] = new_unode(player);
 		if(g->arr[x][y] == NULL) return false;
-		unode_t* up = adjacent_up(g, player, x, y) ? ufind(g->arr[x][y+1]) : NULL;
-		unode_t* down = adjacent_down(g, player, x, y) ? ufind(g->arr[x][y-1]) : NULL;
-		unode_t* left = adjacent_left(g, player, x, y) ? ufind(g->arr[x-1][y]) : NULL;
-		unode_t* right = adjacent_right(g, player, x, y) ? ufind(g->arr[x+1][y]) : NULL;
+		unode_t* up = adjacent_up(g, player, x, y) ? ufind(g->arr[x][y + 1]) : NULL;
+		unode_t* down = adjacent_down(g, player, x, y) ? ufind(g->arr[x][y - 1]) : NULL;
+		unode_t* left = adjacent_left(g, player, x, y) ? ufind(g->arr[x - 1][y]) : NULL;
+		unode_t* right = adjacent_right(g, player, x, y) ? ufind(g->arr[x + 1][y]) : NULL;
 		unode_t* horizontal = NULL;
 		unode_t* vertical = NULL;
 
@@ -657,17 +653,17 @@ char* gamma_board(gamma_t* g) {
 	if(g == NULL) return NULL;
 	uint32_t height = g->height;
 	uint32_t width = g->width;
-	char* board = calloc(1+height*(width+1), sizeof(char));
+	char* board = calloc(1 + height * (width + 1), sizeof(char));
 	if(board == NULL) return NULL;
 	unode_t*** arr = g->arr;
 	uint32_t i, j;
 	for(i = 0; i < height; i++)
 		for(j = 0; j < width; j++)
-			*(board+i*(width+1)+j) = arr[j][height-1-i] != NULL ?
-															 '0'+arr[j][height-1-i]->player : '.';
+			*(board + i * (width + 1) + j) = arr[j][height - 1 - i] != NULL ?
+				 '0' + arr[j][height - 1 - i]->player : '.';
 	for(i = 0; i < height; i++)
-		*(board+i*(width+1)+width) = '\n';
-	*(board+(height-1)*(width+1)+width+1) = '\0';
+		*(board + i * (width + 1) + width) = '\n';
+	*(board + (height - 1) * (width + 1) + width + 1) = '\0';
 	return board;
 }
 bool gamma_game_over(gamma_t* g) {
@@ -691,8 +687,7 @@ uint32_t gamma_winner(gamma_t* g, bool* draw, list_t** l) {
 		if(gamma_busy_fields(g, i) == gamma_busy_fields(g, winner)) {
 			*draw = true;
 			winner = i;
-		}
-		else if(gamma_busy_fields(g, i) > gamma_busy_fields(g, winner)) {
+		} else if(gamma_busy_fields(g, i) > gamma_busy_fields(g, winner)) {
 			*draw = false;
 			winner = i;
 		}

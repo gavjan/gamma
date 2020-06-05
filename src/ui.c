@@ -39,7 +39,6 @@ static game_t init_board(gamma_t* g) {
 	unsigned short rows = w.ws_row;
 	unsigned short columns = w.ws_col;
 
-
 	if(g->width > columns || g->height + 2 > rows) {
 		successful_flag = false;
 		fprintf(stderr, "Error, terminal is too small to fit the board\n");

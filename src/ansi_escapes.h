@@ -63,7 +63,8 @@ enum Key_Codes {
 	RIGHT_CODE = 67,
 	LEFT_CODE = 68
 };
-
+/** @brief Macro for fail-safe execution of functions that can fail
+ */
 #define safe_exec(res)  if(res != SUCCESS) return FAIL
 
 /** @brief Changes printing color
@@ -81,10 +82,9 @@ void set_text_color(int code);
 int get_key(game_t* t, int c);
 
 /** @brief Implementation of the standard getch() function
- * @param [in] t - structure containing interactive game's state
  * @return a character if it's valid
  */
-int getch(game_t* t);
+int getch();
 
 /** @brief Prepare console
  * @param [in] t - structure containing interactive game's state

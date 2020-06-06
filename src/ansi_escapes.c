@@ -30,15 +30,15 @@ int get_key(game_t* t, int c) {
 	}
 	return UNKNOWN;
 }
-int getch(game_t* t) {
+int getch() {
 	int ch;
-	safe_exec(tcgetattr(STDIN_FILENO, &(t->original_terminal)));
-	t->new_terminal = t->original_terminal;
-	t->new_terminal.c_lflag &= ~(ICANON | ECHO);
-	safe_exec(tcsetattr(STDIN_FILENO, TCSANOW, &(t->new_terminal)));
+	struct termios old_term, new_term;
+	safe_exec(tcgetattr(STDIN_FILENO, &old_term));
+	new_term = old_term;
+	new_term.c_lflag &= ~(ICANON | ECHO);
+	safe_exec(tcsetattr(STDIN_FILENO, TCSANOW, &new_term));
 	ch = getchar();
-	safe_exec(tcsetattr(STDIN_FILENO, TCSANOW, &(t->original_terminal)));
-
+	safe_exec(tcsetattr(STDIN_FILENO, TCSANOW, &old_term));
 	return ch;
 }
 int setup_console(game_t* t) {

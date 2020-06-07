@@ -13,10 +13,10 @@ function ctrl_c() {
   exit 0
 }
 function compile() {
-  gcc -Wall -Wextra -std=c11 -O2 -c src/gamma.c
-  gcc -Wall -Wextra -std=c11 -O2 -c src/safe_malloc.c
-  gcc -Wall -Wextra -std=c11 -O2 -c src/ufind.c
-  gcc -Wall -Wextra -std=c11 -O2 -c src/list.c
+  gcc -std=c11 -Wall -Wextra -O3 -DNDEBUG -c src/gamma.c
+  gcc -std=c11 -Wall -Wextra -O3 -DNDEBUG -c src/safe_malloc.c
+  gcc -std=c11 -Wall -Wextra -O3 -DNDEBUG -c src/ufind.c
+  gcc -std=c11 -Wall -Wextra -O3 -DNDEBUG -c src/list.c
 }
 function progress_bar {
     let _progress=(${1}*100/${2}*100)/100
@@ -44,7 +44,7 @@ for f in $FILES; do
   base=$(basename "${f}")
   name="${base::-2}"
   cp "${f}" ./src
-  gcc -Wall -Wextra -std=c11 -O2 -c "src/${base}"
+  gcc -std=c11 -Wall -Wextra -O3 -DNDEBUG  -c "src/${base}"
   if [ ! -f "gamma.o" ] || [ ! -f "safe_malloc.o" ] || [ ! -f "ufind.o" ] || [ ! -f "list.o" ] ; then
     compile
   fi

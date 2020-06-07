@@ -90,4 +90,4 @@ Rozwiązanie należy zatwierdzić (`git commit`) i wysłać do repozytorium (`gi
 w Moodle'u.
 
 ## Testy
-Oficjalne i nieoficjalne testy można znaleźć [tutaj.](https://github.com/gavjan/gamma/releases/tag/part1_test)
+Oficjalne testy są w pliku `src/gamma_test.c`. Nieoficjalne testy można znaleźć [tutaj.](https://github.com/gavjan/gamma/releases/tag/part1_test)

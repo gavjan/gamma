@@ -270,6 +270,10 @@ bool start_interactive(gamma_t* g) {
 	bool draw;
 	list_t* draw_list = NULL;
 	uint32_t winner = gamma_winner(g, &draw, &draw_list);
+	if(winner == NO_MEM) {
+		fprintf(stderr, "Error, ran out of memory\n");
+		return false;
+	}
 	if(draw) {
 		list_t* l = draw_list;
 		printf("--\nDRAW FOR PLAYERS: %u", l->data);

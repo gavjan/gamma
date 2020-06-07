@@ -709,7 +709,8 @@ uint32_t gamma_winner(gamma_t* g, bool* draw, list_t** l) {
 	if(*draw)
 		for(uint32_t i = g->max_players; i >= 1; i--)
 			if(gamma_busy_fields(g, i) == gamma_busy_fields(g, winner))
-				list_insert(l, i);
+				if(!list_insert(l, i))
+					return NO_MEM;
 
 	return winner;
 }

@@ -8,6 +8,10 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+/** @brief Constant for indicating lack of available memory
+ */
+#define NO_MEM 0
+
 /** @brief Structure for a linked list
  */
 typedef struct list {

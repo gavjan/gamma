@@ -4,6 +4,10 @@ trap ctrl_c INT
 function ctrl_c() {
   rm -f gamma *.o vgcore.*
   rm -f src/"${base}"
+
+  rm "$name" 2> /dev/null
+  rm -f "${name}.o" "src/${base}" 2> /dev/null
+
   printf "\n\n--\n number of tests that didn't pass: "
   if [ "$err_counter" -eq 0 ]; then
     echo -e "${GREEN}0"

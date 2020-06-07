@@ -10,8 +10,9 @@
  * Allocate memory for a linked list
  * @return pointer to manually allocated memory for the node
  */
-list_t* new_node() {
+static inline list_t* new_node() {
 	list_t* l = malloc(sizeof(list_t));
+	if(l == NULL) return NULL;
 	l->next = NULL;
 	return l;
 }

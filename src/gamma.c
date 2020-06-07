@@ -320,6 +320,17 @@ void increase_adjacents(gamma_t* g, uint32_t x, uint32_t y) {
 		if(change[i] != 0)
 			g->player_free_fields[change[i]]++;
 }
+/** @brief Unvisit all cells
+ * @param [in, out] g - pointer to the structure that stores the game state,
+ */
+static void unvisit_all(gamma_t* g) {
+	if(g == NULL) return;
+	uint32_t height = g->height, width = g->width, x, y;
+	for(x = 0; x < width; x++)
+		for(y = 0; y < height; y++)
+			if(g->arr[x][y] != NULL)
+				g->arr[x][y]->visited = false;
+}
 /** @brief Reindex an area
  * When removing a field we might potentially be breaking an area into two
  * @param [in, out] g - pointer to the structure that stores the game state,
@@ -345,7 +356,6 @@ void reindex(gamma_t* g, uint32_t player, uint32_t x, uint32_t y, unode_t* maste
 		reindex(g, player, x-1, y, master, RIGHT);
 	if(from != RIGHT && adjacent_right(g, player, x, y))
 		reindex(g, player, x+1, y, master, LEFT);
-	g->arr[x][y]->visited = false;
 }
 /** @brief Remove a field
  * Removing a field is used for making a golden move
@@ -378,6 +388,7 @@ bool remove_field(gamma_t* g, uint32_t x, uint32_t y) {
 		if(adjacent_up(g, player, x, y)) {
 			master = new_unode(g->arr[x][y+1]->player);
 			if(master == NULL) return false;
+			unvisit_all(g);
 			reindex(g, player, x, y+1, master, DOWN);
 			del = g->arr[x][y+1];
 			g->arr[x][y+1] = master;
@@ -387,6 +398,7 @@ bool remove_field(gamma_t* g, uint32_t x, uint32_t y) {
 		if(adjacent_down(g, player, x, y)) {
 			master = new_unode(g->arr[x][y-1]->player);
 			if(master == NULL) return false;
+			unvisit_all(g);
 			reindex(g, player, x, y-1, master, UP);
 			del = g->arr[x][y-1];
 			g->arr[x][y-1] = master;
@@ -396,6 +408,7 @@ bool remove_field(gamma_t* g, uint32_t x, uint32_t y) {
 		if(adjacent_left(g, player, x, y)) {
 			master = new_unode(g->arr[x-1][y]->player);
 			if(master == NULL) return false;
+			unvisit_all(g);
 			reindex(g, player, x-1, y, master, RIGHT);
 			del = g->arr[x-1][y];
 			g->arr[x-1][y] = master;
@@ -405,6 +418,7 @@ bool remove_field(gamma_t* g, uint32_t x, uint32_t y) {
 		if(adjacent_right(g, player, x, y)) {
 			master = new_unode(g->arr[x+1][y]->player);
 			if(master == NULL) return false;
+			unvisit_all(g);
 			reindex(g, player, x+1, y, master, LEFT);
 			del = g->arr[x+1][y];
 			g->arr[x+1][y] = master;

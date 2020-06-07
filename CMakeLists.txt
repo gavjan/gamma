@@ -22,8 +22,6 @@ set (CMAKE_C_FLAGS_DEBUG "-g")
 set(TEST_SOURCE_FILES
         src/list.c
         src/list.h
-        src/queue.c
-        src/queue.h
         src/ufind.c
         src/ufind.h
         src/safe_malloc.c
@@ -40,8 +38,6 @@ set(SOURCE_FILES
         src/gamma_main.c
         src/list.c
         src/list.h
-        src/queue.c
-        src/queue.h
         src/ufind.c
         src/ufind.h
         src/safe_malloc.c

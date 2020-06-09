@@ -10,10 +10,33 @@
 #include <termios.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
+#include <stdbool.h>
 #include "ansi_escapes.h"
 #include "gamma.h"
 #include "safe_malloc.h"
 #include "list.h"
+/** @brief Macro indicating that the move is golden
+ */
+#define GOLDEN true
+/** @brief Macro indicating that the move isn't golden
+ */
+#define NOT_GOLDEN false
+/** @brief Structure storing the interactive game's state
+ */
+typedef struct game {
+	uint32_t cur_i;                   ///< Cursor's vertical location
+	uint32_t cur_j;                   ///< Cursor's horizontal location
+	uint32_t max_players;             ///< Maximum amount of players
+	uint32_t width;                   ///< Width of the board
+	uint32_t height;                  ///< Height of the board
+	uint32_t curr_player;             ///< Current player that is to make a move
+	bool game_over;                   ///< Game Over flag
+	bool** pos_can_move;              ///< Fields where current player can move
+	char** arr;                       ///< Board information
+	struct termios original_terminal; ///< Structure holding the old terminal
+	struct termios new_terminal;      ///< Structure holding the new terminal
+	bool successful_flag;             ///< Flag for indicating memory allocation result
+} game_t;
 /** @brief Insert a character
  * Insert a character to the cursor's position and move the
  * cursor back to that position
@@ -38,13 +61,14 @@ static game_t init_board(gamma_t* g) {
 	}
 	unsigned short rows = w.ws_row;
 	unsigned short columns = w.ws_col;
-
-	if(g->width > columns || g->height + 2 > rows) {
+	uint32_t width = get_width(g);
+	uint32_t height = get_height(g);
+	if(width > columns || height + 2 > rows) {
 		successful_flag = false;
 		fprintf(stderr, "Error, terminal is too small to fit the board\n");
 	}
-	bool** pos_can_move = malloc(sizeof(bool*) * g->width + sizeof(bool) * g->height * g->width);
-	char** arr = malloc(sizeof(char*) * g->width + sizeof(char) * g->height * g->width);
+	bool** pos_can_move = malloc(sizeof(bool*) * width + sizeof(bool) * height * width);
+	char** arr = malloc(sizeof(char*) * width + sizeof(char) * height * width);
 
 	if(arr == NULL || pos_can_move == NULL) {
 		safe_free(arr);
@@ -55,13 +79,13 @@ static game_t init_board(gamma_t* g) {
 		uint32_t i;
 		char* char_ptr;
 		bool* bool_ptr;
-		char_ptr = (char*)(arr + g->width);
-		bool_ptr = (bool*)(pos_can_move + g->width);
-		for(i = 0; i < g->width; i++) {
-			arr[i] = (char_ptr + g->height * i);
-			pos_can_move[i] = (bool_ptr + g->height * i);
+		char_ptr = (char*)(arr + width);
+		bool_ptr = (bool*)(pos_can_move + width);
+		for(i = 0; i < width; i++) {
+			arr[i] = (char_ptr + height * i);
+			pos_can_move[i] = (bool_ptr + height * i);
 		}
-		uint32_t height = g->height, width = g->width, x, y;
+		uint32_t x, y;
 		for(x = 0; x < width; x++)
 			for(y = 0; y < height; y++)
 				arr[x][y] = '.';
@@ -70,9 +94,9 @@ static game_t init_board(gamma_t* g) {
 	game_t t = {
 		 1,
 		 1,
-		 g->max_players,
-		 g->width,
-		 g->height,
+		 get_max_players(g),
+		 width,
+		 height,
 		 1,
 		 false,
 		 pos_can_move,
@@ -83,7 +107,7 @@ static game_t init_board(gamma_t* g) {
 	};
 	if(!successful_flag) return t;
 
-	if(setup_console(&t) != SUCCESS) {
+	if(setup_console(&t.original_terminal, &t.new_terminal) != SUCCESS) {
 		t.successful_flag = false;
 		fprintf(stderr, "Error setting up the terminal\n");
 		return t;
@@ -97,8 +121,8 @@ static game_t init_board(gamma_t* g) {
 	set_text_color(RESET_COLOR);
 
 	safe_free(board);
-	move_to(g->height + 1, 1);
-	printf("PLAYER 1 0 %d\n", g->height * g->width);
+	move_to(height + 1, 1);
+	printf("PLAYER 1 0 %d\n", height * width);
 	move_to(1, 1);
 
 	return t;
@@ -201,7 +225,7 @@ bool start_interactive(gamma_t* g) {
 	}
 
 	while(!t.game_over) {
-		switch(get_key(&t, NO_KEY)) {
+		switch(get_key(NO_KEY)) {
 			case KEY_UP:
 				if(t.cur_i > 1) {
 					cursor_up();
@@ -267,11 +291,12 @@ bool start_interactive(gamma_t* g) {
 			printf(" G");
 		printf("\n");
 	}
-	bool draw;
+	bool draw, exec_success;
 	list_t* draw_list = NULL;
-	uint32_t winner = gamma_winner(g, &draw, &draw_list);
-	if(winner == NO_MEM) {
+	uint32_t winner = gamma_winner(g, &draw, &draw_list, &exec_success);
+	if(!exec_success) {
 		fprintf(stderr, "Error, ran out of memory\n");
+		list_free(&draw_list);
 		return false;
 	}
 	if(draw) {
@@ -288,7 +313,7 @@ bool start_interactive(gamma_t* g) {
 	list_free(&draw_list);
 	delete_board(&t);
 
-	if(restore_console(&t) != SUCCESS) {
+	if(restore_console(&t.original_terminal) != SUCCESS) {
 		fprintf(stderr, "Error restoring the terminal\n");
 		return false;
 	}

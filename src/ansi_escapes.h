@@ -5,10 +5,7 @@
  * @date 11.04.2020
  */
 #include <stdio.h>
-#include "ui.h"
-
-
-
+#include <termios.h>
 /** @brief Macro for successful execution
  */
 #define SUCCESS 0
@@ -79,7 +76,7 @@ void set_text_color(int code);
  * @param [in] c - flag for the last recognized key after escaping
  * @return a character if it's valid
  */
-int get_key(game_t* t, int c);
+int get_key(int c);
 
 /** @brief Implementation of the standard getch() function
  * @return a character if it's valid
@@ -90,13 +87,13 @@ int getch();
  * @param [in] t - structure containing interactive game's state
  * @return 0 upon successful execution and -1 otherwise
  */
-int setup_console(game_t* t);
+int setup_console(struct termios* original_terminal, struct termios* new_terminal);
 
 /** @brief Restore the console's original state
  * @param [in] t - structure containing interactive game's state
  * @return 0 upon successful execution and -1 otherwise
  */
-int restore_console(game_t* t);
+int restore_console(struct termios* original_terminal);
 
 /** @brief Clear the whole screen
  */

@@ -8,14 +8,26 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-/** @brief Structure storing a Union Find node
+/** @brief typedef for unode_t in order to hide it
  */
-typedef struct unode_t {
-	struct unode_t* parent;  ///< parent of this node
-	uint32_t player;         ///< player to which this node belongs
-	uint16_t depth;          ///< depth for current node. 1 on creation
-	bool visited;            ///< flag for visiting the current node
-} unode_t;
+typedef struct unode unode_t;
+
+/** @brief macro for no winner
+ */
+#define NO_WINNER 0
+
+/** @brief macro for uint128_t
+ */
+typedef unsigned __int128 uint128_t;
+
+/** @brief enum for directions
+ */
+enum Direction {
+	UP,
+	DOWN,
+	LEFT,
+	RIGHT
+};
 
 /** @brief Returns a new unode_t
  * @param [in] player - to which player this unode belongs
@@ -38,5 +50,35 @@ unode_t* ufind(unode_t* element);
  * if one of them is NULL or they are already joined
  */
 bool ujoin(unode_t* a, unode_t* b);
+
+/** @brief Set unode's parent
+ * @param [in] element - Pointer to unode to be changed
+ * @param [in] parent - parent to be set
+ */
+void set_parent(unode_t* element, unode_t* parent);
+
+/** @brief Set unode's depth
+ * @param [in] element - Pointer to unode to be changed
+ * @param [in] depth -  depth to be set
+ */
+void set_depth(unode_t* element, uint16_t depth);
+
+/** @brief Set unode's visited flag
+ * @param [in] element - Pointer to unode to be changed
+ * @param [in] visited - visited flag to be set
+ */
+void set_visited(unode_t* element, bool visited);
+
+/** @brief Get unode's player
+ * @param [in] element - Pointer to unode to be changed
+ * @return player of unode
+ */
+uint32_t get_player(unode_t* element);
+
+/** @brief Get unode's visited flag state
+ * @param [in] element - Pointer to unode to be changed
+ * @return visited flag of unode
+ */
+bool get_visited(unode_t* element);
 
 #endif //GAMMA_UFIND_H

@@ -5,9 +5,19 @@
  */
 #include "ufind.h"
 #include <stdlib.h>
-unode_t* new_unode(uint32_t player) {
-	unode_t* p;
-	if((p = calloc(sizeof(unode_t), 1)) == NULL)
+#include <stdbool.h>
+#include <stdint.h>
+/** @brief Structure storing a Union Find node
+ */
+struct unode {
+	struct unode* parent;  ///< parent of this node
+	uint32_t player;         ///< player to which this node belongs
+	uint16_t depth;          ///< depth for current node. 1 on creation
+	bool visited;            ///< flag for visiting the current node
+};
+struct unode* new_unode(uint32_t player) {
+	struct unode* p;
+	if((p = calloc(sizeof(struct unode), 1)) == NULL)
 		return NULL;
 	p->player = player;
 	p->parent = NULL;
@@ -15,19 +25,19 @@ unode_t* new_unode(uint32_t player) {
 	p->visited = false;
 	return p;
 }
-unode_t* ufind(unode_t* element) {
+struct unode* ufind(struct unode* element) {
 	if(element == NULL) return NULL;
-	unode_t* original_element = element;
+	struct unode* original_element = element;
 	while(element->parent != NULL)
 		element = element->parent;
 	if(element != original_element->parent && element != original_element)
 		original_element->parent = element;
 	return element;
 }
-bool ujoin(unode_t* a, unode_t* b) {
+bool ujoin(struct unode* a, struct unode* b) {
 	if(a == NULL || b == NULL) return false;
-	unode_t* root_a = ufind(a);
-	unode_t* root_b = ufind(b);
+	struct unode* root_a = ufind(a);
+	struct unode* root_b = ufind(b);
 	if(root_a != root_b) {
 		if(root_a->depth > root_b->depth)
 			root_b->parent = root_a;
@@ -39,4 +49,19 @@ bool ujoin(unode_t* a, unode_t* b) {
 		}
 	}
 	return root_a != root_b;
+}
+void set_parent(struct unode* element, struct unode* parent) {
+	element->parent = parent;
+}
+uint32_t get_player(struct unode* element) {
+	return element->player;
+}
+void set_depth(struct unode* element, uint16_t depth) {
+	element->depth = depth;
+}
+void set_visited(struct unode* element, bool visited) {
+	element->visited = visited;
+}
+bool get_visited(struct unode* element) {
+	return element->visited;
 }

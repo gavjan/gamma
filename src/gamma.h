@@ -12,40 +12,9 @@
 #include "ufind.h"
 #include "list.h"
 
-/** @brief macro for no winner
+/** @brief typedef for gamma_t in order to hide it
  */
-#define NO_WINNER 0
-
-/** @brief macro for uint128_t
- */
-typedef unsigned __int128 uint128_t;
-
-/** @brief enum for directions
- */
-enum Direction {
-	UP,
-	DOWN,
-	LEFT,
-	RIGHT
-};
-
-/** @brief Structure storing the gamma game state
- */
-typedef struct gamma {
-	unode_t*** arr;               ///< Two dimensional array for storing the board state
-	uint32_t width;               ///< Width of the board
-	uint32_t height;              ///< Height of the board
-	uint32_t max_players;         ///< Maximum number of players allowed
-	uint32_t max_areas;           ///< Maximum number of areas a player can possess
-	uint64_t free_fields;         ///< Counter for free fields
-	uint64_t* player_area_count;  ///< Array of counters for taken areas
-	uint64_t* player_free_fields; ///< Array of counters for free adjacent fields
-	uint64_t* player_busy_fields; ///< Array of counters for taken fields
-	bool del_error_flag;          ///< Error flag used when Golden Move fails
-	bool* did_golden_move;        ///< Track of which player has already made a Golden move
-	bool game_over;               ///< Game Over Flag
-	bool status_changed;          ///< Flag that indicates if the game status has changed
-} gamma_t;
+typedef struct gamma gamma_t;
 
 /** @brief Creates a structure that stores the game state
  * Allocates memory to a new structure that stores the game state
@@ -184,6 +153,9 @@ void gamma_possible_moves(gamma_t* g, uint32_t player, bool** ans_arr);
  * @param [in, out] l  - list of players who drawn
  * @return Return number of the winning player, 0 if there is no winner
  */
-uint32_t gamma_winner(gamma_t* g, bool* draw, list_t** l);
+uint32_t gamma_winner(gamma_t* g, bool* draw, list_t** l, bool* successful_execution);
+uint32_t get_width(gamma_t* g);
+uint32_t get_height(gamma_t* g);
+uint32_t get_max_players(gamma_t* g);
 
 #endif /* GAMMA_H */

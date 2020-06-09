@@ -3,14 +3,12 @@
  * @author Gevorg Chobanyan
  * @date 25.05.2020
  */
+
 #ifndef GAMMA_LIST_H
 #define GAMMA_LIST_H
+
 #include <stdint.h>
 #include <stdbool.h>
-
-/** @brief Constant for indicating lack of available memory
- */
-#define NO_MEM 0
 
 /** @brief Structure for a linked list
  */
@@ -33,4 +31,4 @@ void list_free(list_t** l);
  */
 bool list_insert(list_t** l, uint32_t data);
 
-#endif //GAMMA_LIST_H
+#endif /* GAMMA_LIST_H */

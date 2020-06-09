@@ -151,11 +151,27 @@ void gamma_possible_moves(gamma_t* g, uint32_t player, bool** ans_arr);
  * @param [in] g - pointer to the structure that stores the game state,
  * @param [in] draw - game draw flag
  * @param [in, out] l  - list of players who drawn
+ * * @param [in] successful_execution - flag for indicating successful execution
  * @return Return number of the winning player, 0 if there is no winner
  */
 uint32_t gamma_winner(gamma_t* g, bool* draw, list_t** l, bool* successful_execution);
+
+/** @brief Get width
+ * @param [in] g - pointer to the structure that stores the game state,
+ * @return width field of @p g
+ */
 uint32_t get_width(gamma_t* g);
+
+/** @brief Get height
+ * @param [in] g - pointer to the structure that stores the game state,
+ * @return height field of @p g
+ */
 uint32_t get_height(gamma_t* g);
+
+/** @brief Get max_players
+ * @param [in] g - pointer to the structure that stores the game state,
+ * @return max_players field of @p g
+ */
 uint32_t get_max_players(gamma_t* g);
 
 #endif /* GAMMA_H */

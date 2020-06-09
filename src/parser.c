@@ -23,7 +23,6 @@ void reach_line_end() {
 	while((c = getchar()) != '\n' && c != EOF);
 	if(c == EOF) ungetc(c, stdin);
 }
-
 /** @brief Check if the remaining characters of the line are whitespace characters
  * @return @p true or @p false
  */
@@ -124,9 +123,3 @@ Command parse_command() {
 	command.type = UNRECOGNIZED;
 	return command;
 }
-
-
-
-
-
-

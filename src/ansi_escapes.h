@@ -4,8 +4,13 @@
  * @author Gevorg Chobanyan
  * @date 11.04.2020
  */
+
+#ifndef GAMMA_ANSI_ESCAPES_H
+#define GAMMA_ANSI_ESCAPES_H
+
 #include <stdio.h>
 #include <termios.h>
+
 /** @brief Macro for successful execution
  */
 #define SUCCESS 0
@@ -36,6 +41,7 @@ enum Keys {
 	KEY_CTRL_D,
 	UNKNOWN
 };
+
 /** @brief enum containing color codes
  */
 enum Colors {
@@ -72,7 +78,6 @@ void set_text_color(int code);
 /** @brief Return a pressed valid key
  * Check if the pressed key is valid and if it is return it
  * Return 0 otherwise
- * @param [in] t - structure containing interactive game's state
  * @param [in] c - flag for the last recognized key after escaping
  * @return a character if it's valid
  */
@@ -84,13 +89,14 @@ int get_key(int c);
 int getch();
 
 /** @brief Prepare console
- * @param [in] t - structure containing interactive game's state
+ * @param [in] original_terminal - save console's state here, before making a new one
+ * @param [in] new_terminal - make this pointer point to a new and ready terminal
  * @return 0 upon successful execution and -1 otherwise
  */
 int setup_console(struct termios* original_terminal, struct termios* new_terminal);
 
 /** @brief Restore the console's original state
- * @param [in] t - structure containing interactive game's state
+ * @param [in] original_terminal - console's original state
  * @return 0 upon successful execution and -1 otherwise
  */
 int restore_console(struct termios* original_terminal);
@@ -124,3 +130,5 @@ void cursor_left();
  * @param [in] column - column number
  */
 void move_to(int row, int column);
+
+#endif /* GAMMA_ANSI_ESCAPES_H */

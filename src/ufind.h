@@ -3,8 +3,10 @@
  * @author Gevorg Chobanyan
  * @date 11.04.2020
  */
+
 #ifndef GAMMA_UFIND_H
 #define GAMMA_UFIND_H
+
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -81,4 +83,4 @@ uint32_t get_player(unode_t* element);
  */
 bool get_visited(unode_t* element);
 
-#endif //GAMMA_UFIND_H
+#endif /* GAMMA_UFIND_H */

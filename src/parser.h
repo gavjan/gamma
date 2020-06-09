@@ -3,6 +3,7 @@
  * @author Gevorg Chobanyan
  * @date 27.04.2020
  */
+
 #ifndef GAMMA_PARSER_H
 #define GAMMA_PARSER_H
 
@@ -11,6 +12,7 @@
 /** @brief Macro for Max digit count of UINT32_MAX
  */
 #define UINT32_MAX_LENGTH 10
+
 /** @brief enum for supported commands
  */
 enum Command {
@@ -62,4 +64,4 @@ void reach_line_end();
  */
 int fpeek();
 
-#endif //GAMMA_PARSER_H
+#endif /* GAMMA_PARSER_H */
